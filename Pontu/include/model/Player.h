@@ -21,7 +21,7 @@ typedef struct {
 	char pseudo[PSEUDO_LENMAX]; //< The player's pseudo
 	SDL_Color color; //< The player's Piece' color
 	int rank; //< The player's rank (0 if the player isn't out yet)
-} Joueur;
+} Player;
 
 /**
  * \brief Creates a new Player

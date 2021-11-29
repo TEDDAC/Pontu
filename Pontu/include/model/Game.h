@@ -29,7 +29,7 @@ typedef struct {
 	int currentPlayerID; ///< The ID of the one currently playing
 	int nb_rounds; ///< The number of rounds so far
 	//TODO duree
-	State state; ///< The current state of the game
+	Phase phase; ///< The current state of the game
 	Player arrPlayers[4]; ///< The array of all the players in this game
 	Board board; ///< The board for this game
 } Game;

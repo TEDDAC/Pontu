@@ -5,12 +5,12 @@ Game newGame(int nbPlayers) {
 	// In Placement phase, the last player initialized is the 1st to play
 	g.currentPlayerID = nbPlayers - 1;
 	g.nb_rounds = 0;
-	g.state = PLACEMENT;
+	g.phase = PLACEMENT;
 	g.board = newBoard(nbPlayers);
 	
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
-	SDL_Color colors[4] {
+	SDL_Color colors[4] = {
 		{255,0  ,0  ,255},
 		{0  ,255,0  ,255},
 		{0  ,0  ,255,255},
