@@ -1,8 +1,10 @@
 #ifndef BUTTON_INCLUDED
 #define BUTTON_INCLUDED
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/sdl.h>
+
+
 typedef struct
 {
 	SDL_Texture* texture; // sprite ou texture de fond
