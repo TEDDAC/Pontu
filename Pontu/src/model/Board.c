@@ -2,11 +2,11 @@
 
 Board newBoard(int nbPlayers) {
 	Board board;
-	int nbPiecesPerPlayer = (nbPlayer == 4) ? 2 : 3;
+	int nbPiecesPerPlayer = (nbPlayers == 4) ? 2 : 3;
 	int pieceIndex = 0;
 
 	// Init pieces
-	for (int player_i = 0; i < nbPlayers; player_i++) {
+	for (int player_i = 0; player_i < nbPlayers; player_i++) {
 		for (int piece_i = 0; i < nbPiecesPerPlayer; piece_i++) {
 			board.arrPieces[pieceIndex] = newPiece(player_i);
 			pieceIndex++;
