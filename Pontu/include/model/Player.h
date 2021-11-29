@@ -10,7 +10,7 @@
 
 #define PSEUDO_LENMAX 50
 
-#include <SDL_pixels.h>
+#include <SDL2/SDL_pixels.h>
 #include <string.h>
 
 /**
