@@ -1,0 +1,50 @@
+enum etat: PLACEMENT, JEU, CONFIGURATION
+
+Plateau:
+	Pions: collection Pion
+	Pont:
+		verti: bool[4][5]
+		horiz: bool[5][4]
+
+Partie:
+	tabJoueurs: joueur
+	nbJoueurs: int
+	plateau: Plateau
+	joueurActuel: joueurs //index
+	nbTours: int
+	durée: int
+	etat: Etat //enumeration
+
+Ile:
+	x:int
+	y:int
+
+Pion:
+	indexJoueurs: int //index du joueurs dans le tableau
+	coordonnées: ile
+	isBloque: bool
+	
+Joueur:
+	numJoueur (1,2,3,4) {unique par partie}
+	couleur: enum couleur
+	classement: int
+
+Moteur:
+	bouton extends rectangle:
+
+
+fenêtre option: new SDL_Windows modal
+sélection au click
+ile = coordonnées
+personnage: elfe, chapeau change de couleur
+
+getIlesAccessible:Pion, plateau -> tab iles //retourne les iles accessibles depuis un
+deplacerPion: pion*, ilesDestination -> boolErreur (juste pour la prog)
+retirerPont: pont -> bool (possible ou non, selon si déjà retirer)
+	au click: soit conversion de coordonnées pour vérifié si pont cliqué
+	soit rectangle invisible qui sert de hit box
+getPionByIsle: plateau,Ile -> pions //regarde si un pions est présent à des coordonnées
+hitbox sur ile adjacente et pas toutes les iles
+
+au bout de 30s si pas de connection:
+	annulation partie
