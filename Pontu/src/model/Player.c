@@ -6,5 +6,7 @@ Player newPlayer(char      pseudo[PSEUDO_LENMAX],
 	strcpy(player.pseudo, pseudo);
 	player.color = color;
 	player.rank = 0;
+
+	return player;
 }
 
