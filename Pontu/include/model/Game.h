@@ -10,7 +10,7 @@
 
 #include "model/Player.h"
 #include "model/Board.h"
-
+#include <SDL2/SDL_pixels.h>
 
 /**
  * \enum Phase
