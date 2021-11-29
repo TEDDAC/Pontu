@@ -19,3 +19,16 @@ Nous développerons successivement les versions suivantes :
 * 1 contre 1 sue le même PC
 * contre une IA (sur le même PC)
 * 1 contre 1 en réseau sur un seveur de mise en relation (attendre qu'un adversaire se connecte)
+
+## How to get, build and run
+
+* git clone [urlToThisRepo]
+* cd [thisRepo]
+* git submodule init
+* git submodule update
+* mkdir bin
+* cd bin
+* cmake ..
+* make (mingw32-make for mingw's users)
+* ./Pontu
+
