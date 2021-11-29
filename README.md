@@ -1,4 +1,4 @@
-# Projet Tutoré : Développement D'Un Jeu De Type Arcade
+# Projet Tutoré : Développement d'Un Jeu De Type Arcade
 
 ## Objectif Pédagogique
 
