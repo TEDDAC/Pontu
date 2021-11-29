@@ -7,7 +7,7 @@ Board newBoard(int nbPlayers) {
 
 	// Init pieces
 	for (int player_i = 0; player_i < nbPlayers; player_i++) {
-		for (int piece_i = 0; i < nbPiecesPerPlayer; piece_i++) {
+		for (int piece_i = 0; piece_i < nbPiecesPerPlayer; piece_i++) {
 			board.arrPieces[pieceIndex] = newPiece(player_i);
 			pieceIndex++;
 		}
