@@ -1,25 +1,25 @@
 /**
- * \file Partie.h
- * \brief Gestion de la partie
+ * \file Game.h
+ * \brief Management of a Game
  * \author Théotime Maillarbaux
  * \date 29/11/2021
  */
 
-#ifndef PARTIE_H
-#define PARTIE_H
+#ifndef GAME_H
+#define GAME_H
 
 #include "model/Player.h"
 #include "model/Board.h"
 
 
 /**
- * \enum Etat
- * \brief Représente l'état de la partie en cours
+ * \enum Phase
+ * \brief Represents the phase of the current game
  */
 typedef enum {
 	PLACEMENT,
 	GAME
-} State;
+} Phase;
 
 /**
  * \struct Game
