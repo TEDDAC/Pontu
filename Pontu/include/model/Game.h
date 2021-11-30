@@ -39,6 +39,7 @@ typedef struct {
  * \param[in]	nbPlayers	The number of players for this game
  * \return A struct representing the game
  */
-Game newGame(int nbPlayers);
+Game newGame(const int nbPlayers, const char* pseudos[]);
+
 
 #endif //PARTIE_H

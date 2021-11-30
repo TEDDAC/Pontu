@@ -27,6 +27,6 @@ typedef struct {
 	Piece arrPieces[9]; ///< Array of pieces on the Board.
 } Board;
 
-Board newBoard(int nbPlayers);
+Board newBoard(const int nbPlayers);
 
 #endif // BOARD_H

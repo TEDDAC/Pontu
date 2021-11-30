@@ -29,7 +29,7 @@ typedef struct {
  * \param[in]	color	The color of the new Player's Piece
  * \return A struct representing the new Player
  */
-Player newPlayer(char pseudo[PSEUDO_LENMAX], SDL_Color color);
+Player newPlayer(const char pseudo[PSEUDO_LENMAX], const SDL_Color color);
 
 
 #endif // JOUEUR_H

@@ -33,9 +33,9 @@ typedef struct
  * \pre At least text or texture must be defined, or an error will be printed in STDERR.
  * \return a button created with the specs passed as params, or NULL if there was an error.
  */
-P_Button createButton(SDL_Texture* texture, int coordx, int coordy, int sizex, int sizey, void (*onClick)(void));
+P_Button createButton(const SDL_Texture* texture, const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(void));
 // texture: design du bouton, si rien n'est passer, le bouton sera générer dans la fonction.
 
-SDL_bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button);
+//SDL_bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button);
 
 #endif

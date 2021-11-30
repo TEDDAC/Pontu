@@ -1,6 +1,6 @@
 #include "model/Game.h"
 
-Game newGame(int nbPlayers) {
+Game newGame(const int nbPlayers, const char* pseudos[]) {
 	Game g;
 	// In Placement phase, the last player initialized is the 1st to play
 	g.currentPlayerID = nbPlayers - 1;
@@ -17,9 +17,8 @@ Game newGame(int nbPlayers) {
 		{255,255,0  ,255}
 	};
 
-	// TODO récup pseudos
 	for (int player_i = 0; player_i < nbPlayers; player_i++) {
-		g.arrPlayers[player_i] = newPlayer("Pseudo",colors[player_i]);
+		g.arrPlayers[player_i] = newPlayer(pseudos[player_i] ,colors[player_i]);
 	}
 	
 	return g;
