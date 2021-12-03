@@ -24,3 +24,14 @@ Board newBoard(const int nbPlayers) {
 	}
 	return board;
 }
+
+void availablePieces(int nbPlayers, Board board, Piece result[9]) {
+	int cpt = 0;
+	for (int i = 0; i < nbPlayers; i++) {
+		if (board.arrPieces[i].stuck == true) {
+			result[cpt] = board.arrPieces[i];
+			cpt++;
+		}
+	}
+}
+
