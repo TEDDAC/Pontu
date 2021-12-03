@@ -22,6 +22,8 @@ Nous développerons successivement les versions suivantes :
 
 ## How to get, build and run
 
+### On Linux:
+
 * git clone [urlToThisRepo]
 * cd [thisRepo]
 * git submodule init
@@ -29,6 +31,17 @@ Nous développerons successivement les versions suivantes :
 * mkdir bin
 * cd bin
 * cmake ..
-* make (mingw32-make for mingw's users)
+* make
 * ./Pontu
 
+### On Windows:
+
+* git clone [urlToThisRepo]
+* cd [thisRepo]
+* git submodule init
+* git submodule update
+* mkdir bin
+* cd bin
+* cmake ..
+* mingw32-make
+* ./Pontu
