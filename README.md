@@ -13,7 +13,7 @@ Le plateau est une grille d'iles 5 par 5 reliées par des ponts sur laquelle les
 * Un joueur est éliminé losque tous ses pions sont isoler.
 * Si un joueur ne peux pas déplacer de pion sans être éliminé, il retire uniquement un pont. 
 
-## Version du projet
+## Versions du projet
 
 Nous développerons successivement les versions suivantes :
 * Jouer sur un même ordinateur à plusieurs
