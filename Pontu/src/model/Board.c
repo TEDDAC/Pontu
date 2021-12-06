@@ -5,7 +5,7 @@ Board newBoard(const int nbPlayers) {
 	int nbPiecesPerPlayer = (nbPlayers == 4) ? 2 : 3;
 	int pieceIndex = 0;
 
-	// Init pieces
+	// Init pieces for each player
 	for (int player_i = 0; player_i < nbPlayers; player_i++) {
 		for (int piece_i = 0; piece_i < nbPiecesPerPlayer; piece_i++) {
 			board.arrPieces[pieceIndex] = newPiece(player_i);
@@ -19,8 +19,12 @@ Board newBoard(const int nbPlayers) {
 	for (int vy = 0; vy < 4; vy++) {
 		for (int vx = 0; vx < 5; vx++) {
 			board.vBridges[vy][vx] = true;
-			board.hBridges[vx][vy] = false;
+			board.hBridges[vx][vy] = true;
 		}
 	}
 	return board;
 }
+
+
+
+

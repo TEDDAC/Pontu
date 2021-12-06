@@ -1,7 +1,7 @@
 /**
  *\file Piece.h
  *\brief Piece's model       
- *\author Jacques
+ *\author Jacques Thomas
  *\date 29/11/2021 
  */
 
