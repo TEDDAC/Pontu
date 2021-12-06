@@ -24,3 +24,16 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 	return g;
 }
 
+bool checkBridge(Coord* coords, Board* board)
+{
+	if((coords->x%2 == 1) && (coords->y%2 == 0))
+	{
+		return board->hBridge[coord->y][coord->x];
+	}
+	if((coords->x%2 == 0) && (coords->y%2 == 1))
+	{
+		return board->vBridge[coord->y][coord->x];
+	}
+	return false;
+}
+

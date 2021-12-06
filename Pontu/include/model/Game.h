@@ -11,6 +11,7 @@
 #include "model/Player.h"
 #include "model/Board.h"
 #include <SDL2/SDL_pixels.h>
+#include <stdbool.h>
 
 /**
  * \enum Phase
@@ -41,5 +42,21 @@ typedef struct {
  */
 Game newGame(const int nbPlayers, const char* pseudos[]);
 
+
+/**
+ * \biref Check if there is a bridge at (coord->x; coord->y)
+ * \param[in]	coords	Coords to test
+ * \param[in]	board	Actual game board
+ * \return True if there is a bridge. Else return false.
+ */
+bool checkBridge(Coord* coords, Board* board);
+
+/**
+ * \brief Remove bridge from board at (coord->x; coord->y)
+ * \param[in]	coords	Bridge's coords to remove
+ * \param[in]	board	Actual game board
+ * \return True on succsess. Else return false.
+ */
+bool rmBridge(Coord* coords, Board* board);
 
 #endif //PARTIE_H
