@@ -2,9 +2,9 @@
 
 /*
  * Return : 	a button within written <text>, placed in (<coordx>; <coordy>), sized <sizex>x<sizey>. The button returned will do <onClick> when it will be clicked
- * 		If text and texture are not define, the function will return NULL and an error is printed in STDERR.
+ * 		If texture is not define, the function will return NULL and an error is printed in STDERR. 
  *
- * Params :	texture	=> background image for the button (can be NULL)
+ * Params :	texture	=> image for the button
  * 		coordx	=> placement in width
  *		coordy	=> placement in height
  *		sizex	=> button's width
@@ -37,8 +37,9 @@ P_Button* createButton(SDL_Texture* texture, int coorx, int coordy, int sizex, i
 
 	return b;
 }
-
+ 
 SDL_Bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button)
 {
-	
+	return SDL_TRUE;
 }
+
