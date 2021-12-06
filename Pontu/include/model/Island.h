@@ -1,7 +1,7 @@
 /**
  *\file Island.h
  *\brief Island's model       
- *\author Jacques
+ *\author Jacques Thomas
  *\date 29/11/2021 
  */
 

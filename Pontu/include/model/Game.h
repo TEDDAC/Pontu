@@ -1,7 +1,7 @@
 /**
  * \file Game.h
  * \brief Management of a Game
- * \author Théotime Maillarbaux
+ * \author Théotime Maillarbaux, Jacques Thomas
  * \date 29/11/2021
  */
 
@@ -11,6 +11,7 @@
 #include "model/Player.h"
 #include "model/Board.h"
 #include <SDL2/SDL_pixels.h>
+#include <stdbool.h> 
 
 /**
  * \enum Phase
@@ -40,6 +41,24 @@ typedef struct {
  * \return A struct representing the game
  */
 Game newGame(const int nbPlayers, const char* pseudos[]);
+
+/**
+ * \brief Move a piece to an island
+ * \param[in] p the piece to move
+ * \param[in] i island target
+ * \return True if the piece can be move otherwise false
+ */
+
+bool movePiece(Piece p, Island i);
+
+
+/**
+ * \brief Check if the the island is attainable from the piece's position (no player on the island)
+ * \param[in] p the piece to move
+ * \param[in] i island target
+ * \return True if the island is attainable (no player on the island) otherwise false
+ */
+bool checkIsland(Piece p, Island i);
 
 
 #endif //PARTIE_H
