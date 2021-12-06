@@ -37,5 +37,7 @@ P_Button createButton(const SDL_Texture* texture, const int coordx, const int co
 // texture: design du bouton, si rien n'est passer, le bouton sera générer dans la fonction.
 
 //SDL_bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button);
+// function isHover(int x,int y) : bool, dit si le bouton est survolé en donnant les coordonnées x,y
+// function isClicked(int x,int y) : void (appel isHover et éxecute button.onClick())
 
 #endif
