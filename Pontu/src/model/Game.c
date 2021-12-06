@@ -24,6 +24,7 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 	return g;
 }
 
+
 bool movePiece(Piece p, Island i)
 {
 	return checkIsland(p,i) && checkBridge(p,i); //Otherwise call one function before one other
@@ -49,3 +50,18 @@ bool checkIsland(Piece p, Island i)
 	return false;
 
 }
+
+bool checkBridge(Coord* coords, Board* board)
+{
+	if((coords->x%2 == 1) && (coords->y%2 == 0))
+	{
+		return board->hBridge[coord->y][coord->x];
+	}
+	if((coords->x%2 == 0) && (coords->y%2 == 1))
+	{
+		return board->vBridge[coord->y][coord->x];
+	}
+	return false;
+}
+
+

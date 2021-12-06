@@ -61,4 +61,20 @@ bool movePiece(Piece p, Island i);
 bool checkIsland(Piece p, Island i);
 
 
+/**
+ * \biref Check if there is a bridge at (coord->x; coord->y)
+ * \param[in]	coords	Coords to test
+ * \param[in]	board	Actual game board
+ * \return True if there is a bridge. Else return false.
+ */
+bool checkBridge(Coord* coords, Board* board);
+
+/**
+ * \brief Remove bridge from board at (coord->x; coord->y)
+ * \param[in]	coords	Bridge's coords to remove
+ * \param[in]	board	Actual game board
+ * \return True on succsess. Else return false.
+ */
+bool rmBridge(Coord* coords, Board* board);
+
 #endif //PARTIE_H
