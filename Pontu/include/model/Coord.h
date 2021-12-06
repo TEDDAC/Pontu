@@ -16,12 +16,7 @@ typedef struct {
 } Coord;
 
 
-bool coordValide(const Coord coord) {
-    return coord.x>=0 && coord.y>=0;
-}
-
-bool coordEqual(const Coord a, const Coord b) {
-    return a.x == b.x && a.y == b.y;
-}
+bool coordValide(const Coord coord);
+bool coordEqual(const Coord a, const Coord b);
 
 #endif //COORD_INCLUDED

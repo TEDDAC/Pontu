@@ -1,4 +1,4 @@
-#include "InputElement.h"
+#include "engine/InputElement.h"
 
 
 
@@ -13,12 +13,12 @@ InputElement createInputElementUIQuit() {
     return i;
 }
 
-InputElement createInputElementClickBoard(const struct p_coord newCoord) {
+InputElement createInputElementClickBoard(const Coord newCoord) {
     InputElement i = {.type=InputType_ClickGame, .data.coord = newCoord};
     return i;
 }
 
-InputElement createInputElementMoveBoard(const struct p_coord start, const struct p_coord end) {
+InputElement createInputElementMoveBoard(const Coord start, const Coord end) {
     InputElement i = {.type=InputType_MoveGame, .data.move={.start=start, .end=end}};
     return i;
 }

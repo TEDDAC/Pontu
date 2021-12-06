@@ -29,7 +29,8 @@ P_Button createButton(SDL_Texture* texture, const int coordx,
 	return b;
 }
 
-SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer,const P_Button* button)
+bool drawButtonOnRenderer(SDL_Renderer* renderer,const P_Button* button)
 {
 	SDL_RenderCopy(renderer,button->texture,NULL,&(button->rect));
+	return true; // Que doit retourner cette fonction ?
 }

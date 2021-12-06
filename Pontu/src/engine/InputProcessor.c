@@ -1,10 +1,11 @@
-#include "InputProcessor.h"
+#include "engine/InputProcessor.h"
 
-struct p_coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect){
-	struct p_coord coord = {
-		coord.x = (point->x-boardRect->x)*9/boardRect->w;
-		coord.x = (point->y-boardRect->y)*9/boardRect->h;
-	}
+Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect){
+	Coord coord = {
+		coord.x = (point->x-boardRect->x)*9/boardRect->w,
+		coord.x = (point->y-boardRect->y)*9/boardRect->h
+	};
+	return coord;
 }
 
 
@@ -25,7 +26,7 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
 		if (SDL_PointInRect(&mousePoint, boardRect))
 		{
-			inputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint);
+			inputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
 		}
 		else
 		{
@@ -39,7 +40,7 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		{
 			if (coordValide(inputProcessor->selectedCase))
 			{
-				struct p_coord newCoord = screenCoordToGameCoord(&mousePoint);
+				Coord newCoord = screenCoordToGameCoord(&mousePoint, boardRect);
 				if (coordEqual(inputProcessor->selectedCase, newCoord)) {
 					return createInputElementClickBoard(newCoord);
 				}
@@ -52,12 +53,16 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		else
 		{
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
-				if (SDL_PointInRect(&mousePoint, &inputProcessor->tabButton.button[i].rect)) {
-
+				if (SDL_PointInRect(&mousePoint, &inputProcessor->tabButton.buttons[i].rect)) {
+					// ...
 				}
 			}
+			return createInputElementNone();
+		}
+		break;
 		}
 	}
-	}
+
+	return createInputElementNone();
 }
 

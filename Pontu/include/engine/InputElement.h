@@ -4,13 +4,24 @@
  * \author Martin Rouault
  * \date 06/12/2021
  */
+
 #ifndef INPUT_ELEMENT_INCLUDED
 #define INPUT_ELEMENT_INCLUDED
 
 
-#include "Coord.h"
+#include "model/Coord.h"
 
+
+/**
+ * \enum InputType
+ * \brief Different types for input
+*/
 typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI} InputType;
+
+/**
+ * \enum UIAction
+ * \brief Les differentes actions accessible via l'interface utilisateur
+*/
 typedef enum {UIAction_Validate, UIAction_Cancel, UIAction_Quit } UIAction;
 
 /**
@@ -18,16 +29,20 @@ typedef enum {UIAction_Validate, UIAction_Cancel, UIAction_Quit } UIAction;
  * \brief Represent a input element 
  */
 typedef struct {
-    union
+    /**
+     * \union data
+     * \brief Either a coord, a starting and ending coords, or an action for general UI
+    */
+    union data
     {
-        struct p_coord coord; ///< Coordinate for simple click on the board
+        Coord coord; ///< Coordinate for simple click on the board
 
-        struct {
-            struct p_coord start;
-            struct p_coord end;
+        struct move {
+            Coord start;
+            Coord end;
         } move; ///< Pair of coordinates for move on the board
         
-        UIAction uiAction;
+        UIAction uiAction; ///< L'action 
     } data; ///< Informations about the input
     
     InputType type; ///< Type of input
@@ -44,7 +59,20 @@ InputElement createInputElementNone();
  * \return A quit input element
 */
 InputElement createInputElementUIQuit();
-InputElement createInputElementClickBoard(const struct p_coord newCoord);
-InputElement createInputElementMoveBoard(const struct p_coord start, const struct p_coord end);
+
+/**
+ * \brief Create a click on board input element
+ * \param [in] newCoord The board's square which is clicked
+ * \return A click on board input element
+*/
+InputElement createInputElementClickBoard(const Coord newCoord);
+
+/**
+ * \brief Create a move on board input element
+ * \param [in] start The board's square where the movement starts
+ * \param [in] end The board's square where the movement ends
+ * \return A move on board input element
+*/
+InputElement createInputElementMoveBoard(const Coord start, const Coord end);
 
 #endif // INPUT_ELEMENT_INCLUDED
