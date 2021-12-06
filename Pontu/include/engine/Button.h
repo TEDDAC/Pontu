@@ -9,7 +9,6 @@
 #define BUTTON_INCLUDED
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 
 /**
  * \struct P_Button
@@ -36,6 +35,8 @@ typedef struct
 P_Button createButton(const SDL_Texture* texture, const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(void));
 // texture: design du bouton, si rien n'est passer, le bouton sera générer dans la fonction.
 
-
+void changeButtonTexture(P_Button* button, const SDL_Texture* texture);
+SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
+bool isHover(int x,int y); // dit si le bouton est survolé en donnant les coordonnées x,y
 
 #endif
