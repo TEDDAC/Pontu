@@ -32,11 +32,11 @@ typedef struct
  * \pre At least text or texture must be defined, or an error will be printed in STDERR.
  * \return a button created with the specs passed as params, or NULL if there was an error.
  */
-P_Button createButton(const SDL_Texture* texture, const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(void));
+P_Button createButton(SDL_Texture* texture, const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(void));
 // texture: design du bouton, si rien n'est passer, le bouton sera générer dans la fonction.
 
 void changeButtonTexture(P_Button* button, const SDL_Texture* texture);
-SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
+bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
 bool isHover(int x,int y); // dit si le bouton est survolé en donnant les coordonnées x,y
 
 #endif
