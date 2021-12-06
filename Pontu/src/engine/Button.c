@@ -14,4 +14,4 @@ P_Button createButton(const SDL_Texture* texture, const int coordx,
 	return b;
 }
 
-//SDL_bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button) {}
+//SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button) {}
