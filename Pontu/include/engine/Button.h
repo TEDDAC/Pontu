@@ -36,6 +36,6 @@ typedef struct
 P_Button createButton(const SDL_Texture* texture, const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(void));
 // texture: design du bouton, si rien n'est passer, le bouton sera générer dans la fonction.
 
-//SDL_bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button* button);
+
 
 #endif
