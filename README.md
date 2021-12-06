@@ -1,21 +1,47 @@
-# Projet Tutoré : Développement D'Un Jeu De Type Arcade
+# Projet Tutoré : Développement d'Un Jeu De Type Arcade
 
 ## Objectif Pédagogique
 
 Développer dans un contexte professionel un mini-jeu de type Arcade en C/SDL (git, make, documentations).
 
-## Détails
+## Le jeu
+Nous implémentons le jeu *Pontu*, un jeu de plateau de 2 à 4 joueurs.
+### Les rêgles principales
+Le plateau est une grille d'iles 5 par 5 reliées par des ponts sur laquelle les joueurs disposent de 3 pions (2 à 4 joueurs). L'objectif est d'isoler les pions adverses avant de voir les siens isolés. Pour cela, le tour d'un joueur est composé de 2 actions: déplacer un de ses pions (en passant par un pont) puis retirer un pont du jeu.
+### Précisions
+* Un pion est isolé si aucun pont ne par l'île sur laquelle il est.
+* Un joueur est éliminé losque tous ses pions sont isoler.
+* Si un joueur ne peux pas déplacer de pion sans être éliminé, il retire uniquement un pont. 
 
-Nous nous intéressrons au jeu *le quize vainc* qui est une variante du morpion connu aussi sous le nom de TIC-TAC-TOE ou OXO.
-
-
-Le principe du *quize vainc* est simple. 2 joueurs munis de 3 pions (de couleurs differentes) posent tour à tour un pion sur une case vide d'un tableau de 9 cases numérotés de 1 à 9. Le pion prend alors la valeur de la case. Si la somme des 3 pions d'un joueur est égale à 15, ce joueur gagne, il vainc !
-
-
-Si aucun joueur n'as totalisé 15 quand les 6 pions ont été posés, chaque joueur déplace alors lors de son tour un pion dans une case vide adjacente. La partie s'arrete quand un joueur totalise 15.
-
+## Versions du projet
 
 Nous développerons successivement les versions suivantes :
-* 1 contre 1 sue le même PC
-* contre une IA (sur le même PC)
-* 1 contre 1 en réseau sur un seveur de mise en relation (attendre qu'un adversaire se connecte)
+* Jouer sur un même ordinateur à plusieurs
+* Jouer contre des IAs (eventuellement mixées avec des joueurs)
+* Jouer en réseau sur un seveur de mise en relation (attendre qu'un adversaire se connecte)
+
+## How to get, build and run
+
+### On Linux:
+
+* git clone [urlToThisRepo]
+* cd [thisRepo]
+* git submodule init
+* git submodule update
+* mkdir bin
+* cd bin
+* cmake ..
+* make
+* ./Pontu
+
+### On Windows:
+
+* git clone [urlToThisRepo]
+* cd [thisRepo]
+* git submodule init
+* git submodule update
+* mkdir bin
+* cd bin
+* cmake ..
+* mingw32-make
+* ./Pontu

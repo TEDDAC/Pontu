@@ -1,18 +1,30 @@
 cmake_minimum_required(VERSION 3.13)
 
-SET(ProjetName Pontu)
-#SET(TestTargetName )
+SET(PROJECT_NAME Pontu)
 
-
-
-project(${ProjetName})
+project(${PROJECT_NAME})
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
-add_executable(${ProjetName} ${MY_SOURCES})
+add_executable(${PROJECT_NAME} ${MY_SOURCES})
 
 
-SET(WarningGCC -Wall -Wextra -pedantic -Wconversion -std=c17 -D_REENTRANT)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-target_compile_options(${ProjetName} PRIVATE ${WarningGCC} -Og -fdiagnostics-color=always)
-target_link_libraries(${ProjetName} SDL2)
-target_include_directories(${ProjetName} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include /usr/include/SDL2)
+find_package(SDL2 REQUIRED)
+#find_package(SDL2_ttf REQUIRED)
+#find_package(SDL2_net REQUIRED)
+#find_package(SDL2_image REQUIRED)
+
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
+
+SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17)
+
+if (MINGW)
+    target_link_options(${PROJECT_NAME} PRIVATE -lmingw32 -lSDL2main -lSDL2 -mwindows)
+    target_compile_options(${PROJECT_NAME} PRIVATE ${OptionGCC} -Dmain=SDL_main -fdiagnostics-color=always)
+elseif(UNIX)
+    target_compile_options(${PROJECT_NAME} PRIVATE ${OptionGCC} -D_REENTRANT)
+endif()
+
+target_link_libraries(${PROJECT_NAME} SDL2::Main)

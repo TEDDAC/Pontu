@@ -1,4 +1,6 @@
-#include "../moteur/boutton.h"
+#include "engine/Button.h"
+#include <stdio.h>
+#include <assert.h>
 
 /*
  * Return : 	a button within written <text>, placed in (<coordx>; <coordy>), sized <sizex>x<sizey>. The button returned will do <onClick> when it will be clicked
@@ -13,27 +15,14 @@
  *
  * Finality :	Create a brand new button with specs
 */
-P_Button* createButton(SDL_Texture* texture, int coorx, int coordy, int sizex, int sizey, void (*onClick)(void))
+P_Button createButton(const SDL_Texture* texture, const int coordx,
+				const int coordy, const int sizex, const int sizey,
+				void (*onClick)(void))
 {
 	// Declarations
-	P_Button* b;
-	SDL_Rect rect;
+	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick };
 
-	if(texture == NULL)
-	{
-		fprintf(stderr,"WARNING: Button created without texture");
-		return NULL;
-	}
-	
-	// Rect specs
-	rect.x = coordx;
-	rect.y = coordy;
-	rect.w = sizex;
-	rect.h = sizey;
-	
-	// Button specs
-	b->onClick = onClick;
-	b->rect = rect;
+	assert(texture != NULL && "WARNING: Button created without texture");
 
 	return b;
 }
@@ -42,4 +31,3 @@ SDL_Bool putButtonOnRenderer(SDL_Renderer* renderer, TTF_Font* police, P_Button*
 {
 	return SDL_TRUE;
 }
-

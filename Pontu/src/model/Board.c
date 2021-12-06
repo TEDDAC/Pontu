@@ -1,6 +1,6 @@
 #include "model/Board.h"
 
-Board newBoard(int nbPlayers) {
+Board newBoard(const int nbPlayers) {
 	Board board;
 	int nbPiecesPerPlayer = (nbPlayers == 4) ? 2 : 3;
 	int pieceIndex = 0;

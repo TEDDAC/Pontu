@@ -27,6 +27,6 @@ typedef struct
  * \brief Creates a new Piece
  * \param[in]	idJ	The ID (index in array) of the Player owning the Piece
  */
-Piece newPiece(int idJ);
+Piece newPiece(const int idJ);
 
 #endif // PIECE_H

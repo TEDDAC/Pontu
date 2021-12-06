@@ -17,6 +17,6 @@ typedef struct
 {
 	int x;///< Coordinate : absciss
 	int y;///< Coordinate : ordinate
-}Island;
+} Island;
 
 #endif 

@@ -21,7 +21,7 @@ typedef struct {
 	char pseudo[PSEUDO_LENMAX]; //< The player's pseudo
 	SDL_Color color; //< The player's Piece' color
 	int rank; //< The player's rank (0 if the player isn't out yet)
-} Joueur;
+} Player;
 
 /**
  * \brief Creates a new Player
@@ -29,7 +29,7 @@ typedef struct {
  * \param[in]	color	The color of the new Player's Piece
  * \return A struct representing the new Player
  */
-Player newPlayer(char pseudo[PSEUDO_LENMAX], SDL_Color color);
+Player newPlayer(const char pseudo[PSEUDO_LENMAX], const SDL_Color color);
 
 
 #endif // JOUEUR_H
