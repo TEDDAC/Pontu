@@ -51,7 +51,7 @@ Game newGame(const int nbPlayers, const char* pseudos[]);
  * \return True if the piece can be move otherwise false
  */
 
-bool movePiece(Piece* p, Island* i, Board b);
+bool movePiece(Piece* p, Island* i, const Board* b);
 
 
 /**
@@ -70,7 +70,7 @@ bool checkIsland(Piece p, Island i);
  * \param[in]	b	The Board for this Game.
  * \return true if there is a bridge, else false.
  */
-bool checkBridge(Island start, Island target, Board b);
+bool checkBridge(Island start, Island target, const Board* b);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
@@ -78,6 +78,7 @@ bool checkBridge(Island start, Island target, Board b);
  * \param[in]	board	Actual game board
  * \return True on succsess. Else return false.
  */
-bool rmBridge(Coord* coords, Board* board);
+bool rmBridge(Coord coords, Board* board);
 
 #endif //PARTIE_H
+

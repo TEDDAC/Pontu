@@ -25,7 +25,7 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 }
 
 
-bool movePiece(Piece* p, Island* i, Board b)
+bool movePiece(Piece* p, Island* i, const Board* b)
 {
 	if (checkIsland(*p,*i) && checkBridge(p->island,*i,b)) {
 		p->island.hasPiece = false;
@@ -57,7 +57,7 @@ bool checkIsland(Piece p, Island i)
 
 }
 
-bool checkBridge(Island start, Island target, Board b)
+bool checkBridge(Island start, Island target, const Board* b)
 {
 	// Horizontal movement to get to the target Island.
 	// If xdiff is negative, then the Piece will move left.
@@ -83,4 +83,20 @@ bool checkBridge(Island start, Island target, Board b)
 	}
 }
 
+bool rmBridge(Coord coord, Board* board) {
+	IslandOrBridge bridge = IslandOrBridge(coord);
+
+	if (bridge.type == HBRIDGE) {
+		if (board->hBridges[bridge.y][bridge.x]) {
+			board->hBridges[bridge.y][bridge.x] = false;
+			return true;
+		}
+	} else (bridge.type == VBRIDGE) {
+		if (board->vBridges[bridge.y][bridge.x]) {
+			board->vBridges[bridge.y][bridge.x] = false;
+			return true;
+		}
+	}
+	return false;
+}
 
