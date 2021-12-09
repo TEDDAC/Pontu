@@ -24,3 +24,44 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 	return g;
 }
 
+
+bool movePiece(Piece p, Island i)
+{
+	return checkIsland(p,i) && checkBridge(p,i); //Otherwise call one function before one other
+}
+
+//Not yet over
+bool checkIsland(Piece p, Island i)
+{
+	bool check;
+	int diff;
+	if(p.island.x==i.x) //piece and island are on the same x axe
+	{
+		diff=p.island.y-i.y;
+		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 y on the y axe 
+			
+	}
+	else if (p.island.y==i.y) //piece and island are on the same y axe
+	{
+		diff=p.island.x-i.y;
+		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 x on the x axe 
+	}
+
+	return false;
+
+}
+
+bool checkBridge(Coord* coords, Board* board)
+{
+	if((coords->x%2 == 1) && (coords->y%2 == 0))
+	{
+		return board->hBridge[coord->y][coord->x];
+	}
+	if((coords->x%2 == 0) && (coords->y%2 == 1))
+	{
+		return board->vBridge[coord->y][coord->x];
+	}
+	return false;
+}
+
+

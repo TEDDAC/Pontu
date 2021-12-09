@@ -9,6 +9,7 @@
 #define BUTTON_INCLUDED
 
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 
 /**
  * \struct P_Button
