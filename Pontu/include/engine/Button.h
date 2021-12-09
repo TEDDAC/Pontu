@@ -39,9 +39,8 @@ P_Button createButton(SDL_Texture* texture, const int coordx, const int coordy, 
  * \param[in]   renderer	the renderer you want to draw the button on
  * \param[in]   button	the button you want to draw
  * \pre At least text or texture must be defined, or an error will be printed in STDERR.
- * \return SDL_FALSE if the function failed, else SDL_TRUE
  */
-SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer, const P_Button* button);
+void drawButtonOnRenderer(SDL_Renderer* renderer, const P_Button* button);
 
 /**
  * \brief Test if a point is on a button

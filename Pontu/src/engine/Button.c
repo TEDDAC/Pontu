@@ -9,16 +9,20 @@ P_Button createButton(SDL_Texture* texture, const int coordx,
 	// Declarations
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick };
 
-	assert(texture != NULL && "WARNING: Button created without texture");
+	assert(texture != NULL && "ERROR: Button created without texture");
 
 	b.texture = texture;
 
 	return b;
 }
 
-SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer,const P_Button* button)
+void drawButtonOnRenderer(SDL_Renderer* renderer,const P_Button* button)
 {
-	return SDL_RenderCopy(renderer,button->texture,NULL,&(button->rect));
+	if(SDL_RenderCopy(renderer,button->texture,NULL,&(button->rect)))
+	{
+		fprintf(stderr,"Error: %s\n",SDL_GetError());
+		exit(1);
+	}
 }
 
 SDL_bool isHover(const P_Button button,const int x,const int y)
