@@ -37,6 +37,6 @@ P_Button createButton(SDL_Texture* texture, const int coordx, const int coordy, 
 
 void changeButtonTexture(P_Button* button, const SDL_Texture* texture);
 SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer, const P_Button* button);
-// function isHover(int x,int y) : bool, dit si le bouton est survolé en donnant les coordonnées x,y
+SDL_bool isHover(P_Button button, int x,int y);// dit si le bouton est survolé en donnant les coordonnées x,y
 
 #endif

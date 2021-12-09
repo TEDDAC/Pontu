@@ -33,3 +33,11 @@ SDL_bool drawButtonOnRenderer(SDL_Renderer* renderer,const P_Button* button)
 {
 	SDL_RenderCopy(renderer,button->texture,NULL,&(button->rect));
 }
+
+SDL_bool isHover(const P_Button button,const int x,const int y)
+{
+	SDL_Point coord;
+	coord.x = x;
+	coord.y = y;
+	return SDL_PointInRect(&coord,&(button.rect));
+}
