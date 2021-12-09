@@ -25,9 +25,15 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 }
 
 
-bool movePiece(Piece p, Island i)
+bool movePiece(Piece* p, Island* i, Board b)
 {
-	return checkIsland(p,i) && checkBridge(p,i); //Otherwise call one function before one other
+	if (checkIsland(*p,*i) && checkBridge(p->island,*i,b)) {
+		p->island.hasPiece = false;
+		p->island = *i;
+		i->hasPiece = true;
+		
+		return true;
+	} else return false;
 }
 
 //Not yet over
@@ -35,33 +41,46 @@ bool checkIsland(Piece p, Island i)
 {
 	bool check;
 	int diff;
-	if(p.island.x==i.x) //piece and island are on the same x axe
+	if(p.island.x==i.x) //piece and island are on the same x axis
 	{
 		diff=p.island.y-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 y on the y axe 
+		return -1<diff && diff<1 && !(i.hasPiece); //Island is atteinable if the difference is between -1 and 1 y on the y axis
 			
 	}
 	else if (p.island.y==i.y) //piece and island are on the same y axe
 	{
 		diff=p.island.x-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 x on the x axe 
+		return -1<diff && diff<1 && !(i.hasPiece); //Island is atteinable if the difference is between -1 and 1 x on the x axis
 	}
 
 	return false;
 
 }
 
-bool checkBridge(Coord* coords, Board* board)
+bool checkBridge(Island start, Island target, Board b)
 {
-	if((coords->x%2 == 1) && (coords->y%2 == 0))
-	{
-		return board->hBridge[coord->y][coord->x];
+	// Horizontal movement to get to the target Island.
+	// If xdiff is negative, then the Piece will move left.
+	// If xdiff is positive, then the Piece will move right.
+	// If xdiff is 0, then the Piece won't move horizontally.
+	xdiff = target.x - start.x;
+	// Vertical movement to get to the target Island.
+	// Works similarly to xdiff, except negative and positive values
+	// indicate that the Piece will move upwards and downwards respectively.
+	ydiff = target.y - start.y;
+
+	// Vertical move
+	if (abs(xdiff) == 0 && abs(ydiff) == 1) {
+		return board.vBridges[start.y+ydiff][start.x];
 	}
-	if((coords->x%2 == 0) && (coords->y%2 == 1))
-	{
-		return board->vBridge[coord->y][coord->x];
+	// Horizontal move
+	else if (abs(xdiff) == 1 && abs(ydiff) == 0) {
+		return board.hBridges[start.y][start.x+xdiff];
 	}
-	return false;
+	// Illegal move
+	else {
+		return false;
+	}
 }
 
 

@@ -8,6 +8,8 @@
 #ifndef ISLAND_H
 #define ISLAND_H
 
+#include <stdbool.h>
+
 /**
  *\struct  Island
  *\brief Island representation 
@@ -17,6 +19,7 @@ typedef struct
 {
 	int x;///< Coordinate : absciss
 	int y;///< Coordinate : ordinate
+	bool hasPiece; ///< Indicates if there is a Piece on this Island
 } Island;
 
 #endif 

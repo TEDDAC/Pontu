@@ -10,6 +10,7 @@
 
 #include "model/Player.h"
 #include "model/Board.h"
+#include "model/Island.h"
 #include <SDL2/SDL_pixels.h>
 #include <stdbool.h> 
 
@@ -44,12 +45,13 @@ Game newGame(const int nbPlayers, const char* pseudos[]);
 
 /**
  * \brief Move a piece to an island
- * \param[in] p the piece to move
- * \param[in] i island target
+ * \param[in,out]	p the piece to move
+ * \param[in,out]		i island target
+ * \param[in]		b The Board for this Game
  * \return True if the piece can be move otherwise false
  */
 
-bool movePiece(Piece p, Island i);
+bool movePiece(Piece* p, Island* i, Board b);
 
 
 /**
@@ -62,12 +64,13 @@ bool checkIsland(Piece p, Island i);
 
 
 /**
- * \biref Check if there is a bridge at (coord->x; coord->y)
- * \param[in]	coords	Coords to test
- * \param[in]	board	Actual game board
- * \return True if there is a bridge. Else return false.
+ * \bref Check if there is a bridge between two Island.
+ * \param[in]	start	The Island from which a Piece would go.
+ * \param[in]	target	The Island a Piece would try to go to.
+ * \param[in]	b	The Board for this Game.
+ * \return true if there is a bridge, else false.
  */
-bool checkBridge(Coord* coords, Board* board);
+bool checkBridge(Island start, Island target, Board b);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
