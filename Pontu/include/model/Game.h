@@ -44,6 +44,17 @@ typedef struct {
  */
 Game newGame(const int nbPlayers, const char* pseudos[]);
 
+
+/**
+ * \brief Place a piece into the board
+ * 
+ * \param [in, out] p The piece to place
+ * \param [in] island The island where the piece is placed
+ * \param [in] b The board in which the piece is placed
+ * \return true If the pieces is placed
+ */
+bool placePiece(Piece* p, const Island island, const Board* b);
+
 /**
  * \brief Move a piece to an island
  * \param[in,out]	p the piece to move
@@ -69,15 +80,15 @@ bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nb
  * \param[in] i island target
  * \return True if the island is adjacent to the piece otherwise false
  */
-bool checkPieceAdjacentToIsland(Piece p, Island i);
+bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
 
 /**
  * \bref Check if there is a bridge between two Island.
- * \param[in]	start	The Island from which a Piece would go.
- * \param[in]	target	The Island a Piece would try to go to.
+ * \param[in]	start	On island were the bridge ends
+ * \param[in]	target	The other island were the bridge ends
  * \param[in]	b	The Board for this Game.
- * \return true if there is a bridge, else false.
+ * \return true if there is a bridge, false otherwise.
  */
 bool checkBridge(const Island start, const Island target, const Board* b);
 

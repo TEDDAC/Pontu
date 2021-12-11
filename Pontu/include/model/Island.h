@@ -22,6 +22,6 @@ typedef struct
 	// bool hasPiece; ///< Indicates if there is a Piece on this Island
 } Island;
 
-bool IslandEqual(const Island a, const Island b);
+bool islandEqual(const Island a, const Island b);
 
 #endif 

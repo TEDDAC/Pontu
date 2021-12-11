@@ -26,11 +26,19 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 	return g;
 }
 
+bool placePiece(Piece* p, const Island island, const Board* b) {
+	if (isIslandEmpty(island, b->arrPieces, b->nbPieces)) {
+		p->island = island;
+		return true;
+	}
+
+	return false;
+}
 
 bool movePiece(Piece* p, const Island i, const Board* b)
 {
 	if (isIslandEmpty(i, b->arrPieces, b->nbPieces) 
-			&& checkPieceAdjacentToIsland(*p, i) 
+			&& isPieceAdjacentToIsland(*p, i) 
 			&& checkBridge(p->island, i, b)) {
 		p->island = i;
 		
@@ -41,7 +49,7 @@ bool movePiece(Piece* p, const Island i, const Board* b)
 bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces) {
 	for (size_t i = 0; i < nbPieces; ++i)
 	{
-		if (IslandEqual(island, arrPieces[i].island)) {
+		if (islandEqual(island, arrPieces[i].island)) {
 			return false;
 		}
 	}
@@ -49,17 +57,17 @@ bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nb
 	return true;
 }
 
-bool checkPieceAdjacentToIsland(const Piece p, const Island i)
+bool isPieceAdjacentToIsland(const Piece p, const Island i)
 {
 	if(p.island.x==i.x) //piece and island are on the same x axis
 	{
 		const int diff=p.island.y-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 y on the y axis
+		return -1==diff || diff==1; //Island is adjacent if the difference is equal -1 or 1 on the y axis
 	}
 	else if (p.island.y==i.y) //piece and island are on the same y axe
 	{
-		const int diff=p.island.x-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 x on the x axis
+		const int diff=p.island.x-i.x;
+		return -1==diff || diff==1; //Island is adjacent if the difference is equal to -1 or 1 on the x axis
 	}
 
 	return false;
@@ -67,25 +75,25 @@ bool checkPieceAdjacentToIsland(const Piece p, const Island i)
 
 bool checkBridge(const Island start, const Island target, const Board* board)
 {
-	// Horizontal movement to get to the target Island.
-	// If xdiff is negative, then the Piece will move left.
-	// If xdiff is positive, then the Piece will move right.
-	// If xdiff is 0, then the Piece won't move horizontally.
+	// Horizontal difference between start and target.
+	// If xdiff is negative, then target is on the left of start.
+	// If xdiff is positive, then target is on the right of start.
+	// If xdiff is 0, then target and start are aligned horizontally.
 	const int xdiff = target.x - start.x;
-	// Vertical movement to get to the target Island.
+	// Vertical difference between start and target.
 	// Works similarly to xdiff, except negative and positive values
-	// indicate that the Piece will move upwards and downwards respectively.
+	// indicate that target is above start and bellow start respectively.
 	const int ydiff = target.y - start.y;
 
-	// Vertical move
-	if (abs(xdiff) == 0 && abs(ydiff) == 1) {
+	// Vertical bridge
+	if (xdiff == 0 && abs(ydiff) == 1) {
 		return board->vBridges[start.y+ydiff][start.x];
 	}
-	// Horizontal move
-	else if (abs(xdiff) == 1 && abs(ydiff) == 0) {
+	// Horizontal bridge
+	else if (abs(xdiff) == 1 && ydiff == 0) {
 		return board->hBridges[start.y][start.x+xdiff];
 	}
-	// Illegal move
+	// Not a bridge
 	else {
 		return false;
 	}
