@@ -22,6 +22,21 @@ typedef struct
 	// bool hasPiece; ///< Indicates if there is a Piece on this Island
 } Island;
 
+/**
+ * \brief Check if two islands are equal
+ * 
+ * \param a An island
+ * \param b An island
+ * \return true if a and b are equal
+ */
 bool islandEqual(const Island a, const Island b);
+
+/**
+ * \brief Check if an island is in board bounds
+ * 
+ * \param island the island to check
+ * \return true is the island is in board bounds
+ */
+bool islandValid(const Island island);
 
 #endif 

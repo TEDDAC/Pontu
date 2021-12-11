@@ -96,7 +96,7 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  * \brief Remove bridge from board at (coord->x; coord->y)
  * \param[in]	coords	Bridge's coords to remove
  * \param[in]	board	Actual game board
- * \return True on succsess. Else return false.
+ * \return True on success. Else return false.
  */
 bool rmBridge(Coord coords, Board* board);
 

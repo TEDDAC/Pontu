@@ -54,13 +54,15 @@ void testPlacePiece() {
 }
 
 void testCheckBridge() {
-	
+	Board board = newBoard(2);
+
 }
 
 int main(int argc, char * argv[]) {
 	testIsIslandEmpty();
 	testIsPieceAdjacentToIsland();
 	testPlacePiece();
-	
+	testCheckBridge();
+
 	return 0;
 }

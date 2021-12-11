@@ -1,5 +1,6 @@
 #include "model/Game.h"
 #include "model/IslandOrBridge.h"
+#include <assert.h>
 
 Game newGame(const int nbPlayers, const char* pseudos[]) {
 	Game g = {
@@ -47,6 +48,8 @@ bool movePiece(Piece* p, const Island i, const Board* b)
 }
 
 bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces) {
+	assert(islandValid(island) && "Pass invalid island to isIslandEmpty");
+
 	for (size_t i = 0; i < nbPieces; ++i)
 	{
 		if (islandEqual(island, arrPieces[i].island)) {
@@ -59,6 +62,11 @@ bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nb
 
 bool isPieceAdjacentToIsland(const Piece p, const Island i)
 {
+	//Maybe turn this into an if (with message on stderr)
+	assert(islandValid(i) && "Send invalid island to isPieceAdjacentToIsland");
+	assert(islandValid(p.island) && "Send invalid piece island to isPieceAdjacentToIsland");
+
+
 	if(p.island.x==i.x) //piece and island are on the same x axis
 	{
 		const int diff=p.island.y-i.y;
@@ -75,6 +83,9 @@ bool isPieceAdjacentToIsland(const Piece p, const Island i)
 
 bool checkBridge(const Island start, const Island target, const Board* board)
 {
+	//Maybe turn this into an if (with message on stderr)
+	assert(islandValid(start) && islandValid(target) && "Send invalid island to checkBridge");
+
 	// Horizontal difference between start and target.
 	// If xdiff is negative, then target is on the left of start.
 	// If xdiff is positive, then target is on the right of start.
