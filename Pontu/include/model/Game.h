@@ -47,21 +47,29 @@ Game newGame(const int nbPlayers, const char* pseudos[]);
 /**
  * \brief Move a piece to an island
  * \param[in,out]	p the piece to move
- * \param[in,out]		i island target
+ * \param[in]		i island target
  * \param[in]		b The Board for this Game
  * \return True if the piece can be move otherwise false
  */
-
-bool movePiece(Piece* p, Island* i, const Board* b);
-
+bool movePiece(Piece* p, const Island i, const Board* b);
 
 /**
- * \brief Check if the the island is attainable from the piece's position (no player on the island)
- * \param[in] p the piece to move
- * \param[in] i island target
- * \return True if the island is attainable (no player on the island) otherwise false
+ * \brief Check if an island is empty 
+ * 
+ * \param [in] island The island to check
+ * \param [in] arrPieces the array of piece from the board
+ * \param [in] nbPieces number of pieces 
+ * \return true if none of the pieces is on th island, false otherwise
  */
-bool checkIsland(Piece p, Island i);
+bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces);
+
+/**
+ * \brief Check if the the island is adjacent to the piece
+ * \param[in] p the piece
+ * \param[in] i island target
+ * \return True if the island is adjacent to the piece otherwise false
+ */
+bool checkPieceAdjacentToIsland(Piece p, Island i);
 
 
 /**
@@ -71,7 +79,7 @@ bool checkIsland(Piece p, Island i);
  * \param[in]	b	The Board for this Game.
  * \return true if there is a bridge, else false.
  */
-bool checkBridge(Island start, Island target, const Board* b);
+bool checkBridge(const Island start, const Island target, const Board* b);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)

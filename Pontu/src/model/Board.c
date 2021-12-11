@@ -1,8 +1,8 @@
 #include "model/Board.h"
 
 Board newBoard(const int nbPlayers) {
-	Board board;
-	int nbPiecesPerPlayer = (nbPlayers == 4) ? 2 : 3;
+	const int nbPiecesPerPlayer = (nbPlayers == 4) ? 2 : 3;
+	Board board = {.nbPieces = nbPiecesPerPlayer*nbPlayers};
 	int pieceIndex = 0;
 
 	// Init pieces for each player

@@ -19,7 +19,9 @@ typedef struct
 {
 	int x;///< Coordinate : absciss
 	int y;///< Coordinate : ordinate
-	bool hasPiece; ///< Indicates if there is a Piece on this Island
+	// bool hasPiece; ///< Indicates if there is a Piece on this Island
 } Island;
+
+bool IslandEqual(const Island a, const Island b);
 
 #endif 

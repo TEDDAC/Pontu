@@ -2,12 +2,13 @@
 #include "model/IslandOrBridge.h"
 
 Game newGame(const int nbPlayers, const char* pseudos[]) {
-	Game g;
-	// In Placement phase, the last player initialized is the 1st to play
-	g.currentPlayerID = nbPlayers - 1;
-	g.nb_rounds = 0;
-	g.phase = PLACEMENT;
-	g.board = newBoard(nbPlayers);
+	Game g = {
+		// In Placement phase, the last player initialized is the 1st to play
+		.currentPlayerID = nbPlayers - 1,
+		.nb_rounds = 0,
+		.phase = PLACEMENT,
+		.board = newBoard(nbPlayers)
+	};
 	
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
@@ -26,39 +27,45 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 }
 
 
-bool movePiece(Piece* p, Island* i, const Board* b)
+bool movePiece(Piece* p, const Island i, const Board* b)
 {
-	if (checkIsland(*p,*i) && checkBridge(p->island,*i,b)) {
-		p->island.hasPiece = false;
-		p->island = *i;
-		i->hasPiece = true;
+	if (isIslandEmpty(i, b->arrPieces, b->nbPieces) 
+			&& checkPieceAdjacentToIsland(*p, i) 
+			&& checkBridge(p->island, i, b)) {
+		p->island = i;
 		
 		return true;
 	} else return false;
 }
 
-//Not yet over
-bool checkIsland(Piece p, Island i)
+bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces) {
+	for (size_t i = 0; i < nbPieces; ++i)
+	{
+		if (IslandEqual(island, arrPieces[i].island)) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+bool checkPieceAdjacentToIsland(const Piece p, const Island i)
 {
-	bool check;
-	int diff;
 	if(p.island.x==i.x) //piece and island are on the same x axis
 	{
-		diff=p.island.y-i.y;
-		return -1<diff && diff<1 && !(i.hasPiece); //Island is atteinable if the difference is between -1 and 1 y on the y axis
-			
+		const int diff=p.island.y-i.y;
+		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 y on the y axis
 	}
 	else if (p.island.y==i.y) //piece and island are on the same y axe
 	{
-		diff=p.island.x-i.y;
-		return -1<diff && diff<1 && !(i.hasPiece); //Island is atteinable if the difference is between -1 and 1 x on the x axis
+		const int diff=p.island.x-i.y;
+		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 x on the x axis
 	}
 
 	return false;
-
 }
 
-bool checkBridge(Island start, Island target, const Board* board)
+bool checkBridge(const Island start, const Island target, const Board* board)
 {
 	// Horizontal movement to get to the target Island.
 	// If xdiff is negative, then the Piece will move left.
