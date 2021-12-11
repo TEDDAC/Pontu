@@ -52,11 +52,11 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		}
 		else
 		{
-			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
+			/*for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				if (SDL_PointInRect(&mousePoint, &inputProcessor->tabButton.buttons[i].rect)) {
 					// ...
 				}
-			}
+			}*/
 			return createInputElementNone();
 		}
 		break;

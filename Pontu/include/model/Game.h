@@ -11,6 +11,7 @@
 #include "model/Player.h"
 #include "model/Board.h"
 #include "model/Island.h"
+#include "model/Coord.h"
 #include <SDL2/SDL_pixels.h>
 #include <stdbool.h> 
 

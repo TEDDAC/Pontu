@@ -1,4 +1,5 @@
 #include "model/Game.h"
+#include "model/IslandOrBridge.h"
 
 Game newGame(const int nbPlayers, const char* pseudos[]) {
 	Game g;
@@ -57,25 +58,25 @@ bool checkIsland(Piece p, Island i)
 
 }
 
-bool checkBridge(Island start, Island target, const Board* b)
+bool checkBridge(Island start, Island target, const Board* board)
 {
 	// Horizontal movement to get to the target Island.
 	// If xdiff is negative, then the Piece will move left.
 	// If xdiff is positive, then the Piece will move right.
 	// If xdiff is 0, then the Piece won't move horizontally.
-	xdiff = target.x - start.x;
+	const int xdiff = target.x - start.x;
 	// Vertical movement to get to the target Island.
 	// Works similarly to xdiff, except negative and positive values
 	// indicate that the Piece will move upwards and downwards respectively.
-	ydiff = target.y - start.y;
+	const int ydiff = target.y - start.y;
 
 	// Vertical move
 	if (abs(xdiff) == 0 && abs(ydiff) == 1) {
-		return board.vBridges[start.y+ydiff][start.x];
+		return board->vBridges[start.y+ydiff][start.x];
 	}
 	// Horizontal move
 	else if (abs(xdiff) == 1 && abs(ydiff) == 0) {
-		return board.hBridges[start.y][start.x+xdiff];
+		return board->hBridges[start.y][start.x+xdiff];
 	}
 	// Illegal move
 	else {
@@ -84,14 +85,15 @@ bool checkBridge(Island start, Island target, const Board* b)
 }
 
 bool rmBridge(Coord coord, Board* board) {
-	IslandOrBridge bridge = IslandOrBridge(coord);
+	IslandOrBridge bridge = coordToEntity(coord);
 
 	if (bridge.type == HBRIDGE) {
 		if (board->hBridges[bridge.y][bridge.x]) {
 			board->hBridges[bridge.y][bridge.x] = false;
 			return true;
 		}
-	} else (bridge.type == VBRIDGE) {
+	} 
+	else if (bridge.type == VBRIDGE) {
 		if (board->vBridges[bridge.y][bridge.x]) {
 			board->vBridges[bridge.y][bridge.x] = false;
 			return true;
