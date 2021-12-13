@@ -4,8 +4,9 @@
 
 //gcc test.c -I ../include $(sdl2-config --cflags --libs)
 
-void action(){
+void action(P_ButtonArg* arg){
     printf("Clické\n");
+    changeButtonTexture(arg->buttonCaller,arg->texture);
 }
 
 int main(int argc, char const *argv[]) {
@@ -61,10 +62,26 @@ int main(int argc, char const *argv[]) {
     SDL_Texture* buttonTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
     SDL_SetRenderTarget(renderer, buttonTexture);
     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-    SDL_Rect buttonRect = {.x = 0,.y = 0,.w = 20,.h = 20};
+    SDL_Rect buttonRect = {.x = 0,.y = 0,.w = 50,.h = 70};
     SDL_RenderFillRect(renderer, &buttonRect);
-    P_Button button = createButton(buttonTexture, 10, 10, 20, 20, &action);
+
+    SDL_Texture* blueTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
+    SDL_SetRenderDrawColor(renderer, 0,0,255,255);
+    SDL_SetRenderTarget(renderer, blueTexture);
+    SDL_RenderFillRect(renderer, &buttonRect);
+
+    P_Button button = createButton(buttonTexture,blueTexture ,20, 20, 70, 50, &action);
+    P_ButtonArg arg;
+    arg.buttonCaller = &button;
+
+    SDL_Texture* violetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
+    SDL_SetRenderDrawColor(renderer, 150,75,200,255);
+    SDL_SetRenderTarget(renderer, violetTexture);
+    SDL_RenderFillRect(renderer, &buttonRect);
+
     SDL_SetRenderTarget(renderer, NULL);
+    arg.texture = violetTexture;
+    button.hoverTexture = blueTexture;
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -75,9 +92,12 @@ int main(int argc, char const *argv[]) {
                 quit = SDL_TRUE;
                 break;
             case SDL_MOUSEBUTTONUP:
-                if(isHover(button,event.button.x,event.button.y))
-                button.onClick();
-
+                if(isHover(&button,event.button.x,event.button.y))
+                button.onClick(&arg);
+                break;
+            case SDL_MOUSEMOTION:
+                //on vérifie à chaque tour ou est la souris, drawButtonOnRenderer choisit la bonne texture à afficher
+                isHover(&button,event.motion.x,event.motion.y);
                 break;
             }
         }
