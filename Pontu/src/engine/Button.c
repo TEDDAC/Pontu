@@ -42,3 +42,12 @@ bool changeButtonTexture(P_Button* button, SDL_Texture* texture)
 	}
 	button->texture = texture;
 }
+
+bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
+{
+	if(texture == NULL){
+		fprintf(stderr,"Warning: button texture cannot change to NULL\n");
+		return false;
+	}
+	button->hoverTexture = texture;
+}
