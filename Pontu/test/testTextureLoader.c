@@ -1,17 +1,15 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
-#include "engine/Button.h"
+#include "engine/TextureLoader.h"
 
 //gcc test.c -I ../include $(sdl2-config --cflags --libs)
 
-void action(){
-    printf("Clické\n");
-}
-
-int main(int argc, char const *argv[]) {
+int testTextureLoader(void) {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
+    SDL_Texture* picture;
     int statut = EXIT_FAILURE;
+    char* path = "../rsrc/img/Lenna.png";
 
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
@@ -57,14 +55,8 @@ int main(int argc, char const *argv[]) {
     SDL_bool quit = SDL_FALSE;
     SDL_Event event;
 
-    //créer la texture du bonton
-    SDL_Texture* buttonTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
-    SDL_SetRenderTarget(renderer, buttonTexture);
-    SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-    SDL_Rect buttonRect = {.x = 0,.y = 0,.w = 20,.h = 20};
-    SDL_RenderFillRect(renderer, &buttonRect);
-    P_Button button = createButton(buttonTexture, 10, 10, 20, 20, &action);
-    SDL_SetRenderTarget(renderer, NULL);
+    
+	picture = createTextureFromPath(renderer, path);
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -75,13 +67,10 @@ int main(int argc, char const *argv[]) {
                 quit = SDL_TRUE;
                 break;
             case SDL_MOUSEBUTTONUP:
-                if(isHover(button,event.button.x,event.button.y))
-                button.onClick();
-
                 break;
             }
         }
-        drawButtonOnRenderer(renderer,&button);
+	SDL_RenderCopy(renderer, picture, NULL, NULL);
         SDL_RenderPresent(renderer);
 
         SDL_Delay(20);

@@ -123,6 +123,7 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
+<<<<<<< HEAD
 		if (islandOrBridge.type == BRIDGE)
 			Bridge bridge = islandOrBridge.data.bridge;
 			rmBridge(bridge,game->board)
@@ -130,6 +131,15 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 				
 			}
 		break;
+=======
+		break;
+		/*if (islandOrBridge.type == )
+			rmBridge
+			if (isIslandIsolated()) {
+				
+			}
+		break;*/
+>>>>>>> 51ba8313d772c70cec14296e7d012eba55fabb4b
 	default:
 		break;
 	}
@@ -170,14 +180,14 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game) {
 
 bool rmBridge(Bridge bridge, Board* board) {
 
-		if(brige.islandA.x==bridge.islandB.x) //Horizontal bridge
+		if(bridge.islandA.x==bridge.islandB.x) //Horizontal bridge
 		{
 			if(board->hBridges[bridge.islandA.y][bridge.islandA.x])
-				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //Brige coordinates equals to the islandA
+				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //bridge coordinates equals to the islandA
 				return true;
 		}
 
-		else if(brige.islandA.y==bridge.islandB.y){ //Vertical bridge 
+		else if(bridge.islandA.y==bridge.islandB.y){ //Vertical bridge 
 			if(board->vBridges[bridge.islandA.y][bridge.islandA.x]) {
 				board->vBridges[bridge.islandA.y][bridge.islandA.x] = false;
 				return true;
