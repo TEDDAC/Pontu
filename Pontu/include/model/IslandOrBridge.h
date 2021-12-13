@@ -17,8 +17,7 @@
 typedef enum {
 	WATER, ///< Nothing in particular was clicked
 	ISLAND, ///< An Island was clicked
-	VBRIDGE, ///< A vertical bridge was clicked
-	HBRIDGE ///< A horizontal bridge was clicked
+	BRIDGE, ///< A bridge was clicked
 } EntityType;
 
 /**
@@ -26,8 +25,12 @@ typedef enum {
  * \brief Represents a set of coordinates coherent with the CoordType.
  */
 typedef struct {
-	int x; ///< The coordinate on the X-axis.
-	int y; ///< The coordinate on the Y-axis.
+	union
+	{
+		Island island;
+		Bridge bridge;
+	} data;
+	
 	EntityType type; ///< The type of the entity clicked.
 } IslandOrBridge;
 
