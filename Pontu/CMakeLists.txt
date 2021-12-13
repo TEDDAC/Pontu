@@ -6,7 +6,7 @@ project(${PROJECT_NAME})
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 add_executable(${PROJECT_NAME} ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/main.c)
-add_executable(Test ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/test/test.c)
+add_executable(Test ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/test.c)
 
 
 
@@ -19,7 +19,7 @@ find_package(SDL2 REQUIRED)
 
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
-target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
+target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/test ${SDL2_INCLUDE_DIR})
 
 SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17)
 

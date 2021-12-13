@@ -3,11 +3,10 @@
 
 #include "model/Island.h"
 
-struct {
-    Island a;
-    Island b;
-    
-    bool vertical;
+typedef struct {
+    Island islandA;
+    Island islandB;
 } Bridge;
+
 
 #endif //BRIDGE_INCLUDED

@@ -21,7 +21,8 @@
  */
 typedef enum {
 	PLACEMENT,
-	GAME
+	MOVE_PIECE,
+	RM_BRIDGE
 } Phase;
 
 /**
@@ -98,7 +99,7 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  * \param[in]	board	Actual game board
  * \return True on success. Else return false.
  */
-bool rmBridge(Coord coords, Board* board);
+//bool rmBridge(Coord coords, Board* board);
 
-#endif //PARTIE_H
+#endif //GAME_H
 

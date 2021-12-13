@@ -119,25 +119,27 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 	{
 	case PLACEMENT:
 		if (islandOrBridge.type==ISLAND) {
-			placePiece(,islandOrBridge.x);
+			//placePiece(,islandOrBridge.x);
 		}
 		break;
 	case RM_BRIDGE:
-		
-		break;
+		/*if (islandOrBridge.type == )
+			rmBridge
+			if (isIslandIsolated()) {
+				
+			}
+		break;*/
 	default:
 		break;
 	}
-
-	
 }
 
 bool moveOnBoard(const Coord start, const Coord end, Game* game) {
 
 }
 
-
-bool rmBridge(Coord coord, Board* board) {
+/*
+bool rmBridge(Bridge bridge, Board* board) {
 
 	if (bridge.type == HBRIDGE) {
 		if (board->hBridges[bridge.y][bridge.x]) {
@@ -153,4 +155,4 @@ bool rmBridge(Coord coord, Board* board) {
 	}
 	return false;
 }
-
+*/
