@@ -19,7 +19,7 @@ find_package(SDL2 REQUIRED)
 
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
-target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/test ${SDL2_INCLUDE_DIR})
+target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
 
 SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17)
 
