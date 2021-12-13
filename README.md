@@ -24,24 +24,28 @@ Nous développerons successivement les versions suivantes :
 
 ### On Linux:
 
-* git clone [urlToThisRepo]
-* cd [thisRepo]
-* git submodule init
-* git submodule update
-* mkdir bin
-* cd bin
-* cmake ..
-* make
-* ./Pontu
+```BASH
+git clone [urlToThisRepo]
+cd [thisRepo]
+git submodule init
+git submodule update
+mkdir bin
+cd bin
+cmake ..
+make
+./Pontu
+```
 
 ### On Windows:
 
-* git clone [urlToThisRepo]
-* cd [thisRepo]
-* git submodule init
-* git submodule update
-* mkdir bin
-* cd bin
-* cmake ..
-* mingw32-make
-* ./Pontu
+```BASH
+git clone [urlToThisRepo]
+cd [thisRepo]
+git submodule init
+git submodule update
+mkdir bin
+cd bin
+cmake ..
+mingw32-make
+./Pontu
+```
