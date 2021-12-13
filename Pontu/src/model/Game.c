@@ -115,7 +115,7 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 bool cliqueOnBoard(const Coord coord, Game* game) {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
-	switch (game->phase)
+	switch(game->phase)
 	{
 	case PLACEMENT:
 		if (islandOrBridge.type==ISLAND) {
@@ -123,19 +123,30 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
+<<<<<<< HEAD
+		
+		
+		break;
+=======
 		/*if (islandOrBridge.type == )
 			rmBridge
 			if (isIslandIsolated()) {
 				
 			}
 		break;*/
+>>>>>>> cacb66ccf9c68400e71a998e9349c7dce919383f
 	default:
 		break;
 	}
 }
 
 bool moveOnBoard(const Coord start, const Coord end, Game* game) {
+	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
+	switch(game->phase)
+	{
+		case 
+	}
 }
 
 bool rmBridge(Bridge bridge, Board* board) {
