@@ -15,13 +15,13 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 #find_package(SDL2_ttf REQUIRED)
 #find_package(SDL2_net REQUIRED)
-#find_package(SDL2_image REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
 target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
 
-SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17)
+SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17 -Og -g)
 
 if (MINGW)
 	target_link_options(${PROJECT_NAME} PRIVATE -lmingw32 -lSDL2main -lSDL2 -mwindows)
@@ -35,3 +35,5 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
 target_link_libraries(Test SDL2::Main)
+target_link_libraries(${PROJECT_NAME} SDL2::Image)
+target_link_libraries(Test SDL2::Image)
