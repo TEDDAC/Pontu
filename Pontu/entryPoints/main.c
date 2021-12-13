@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include "engine/InputProcessor.h"
+#include "engine/InputElement.h"
 
 int main(int argc, char* argv[])
 {
@@ -27,12 +30,44 @@ int main(int argc, char* argv[])
 		goto Quit;
 	}
 
-	SDL_bool quit = SDL_FALSE;
+	InputProcessor inputProcessor = {.selectedCase = {.x=-1, .y=-1}};
+	SDL_Rect rectBoard = {.x=20, .y=20, .w=99, .h=99};
+
+	bool quit = false;
 	while(!quit)
 	{
 		// Event handling
+		InputElement inputElement;
+		while (InputType_None != (inputElement = proccessInput(&inputProcessor, &rectBoard)).type) {
+			
+			switch (inputElement.type)
+			{
+			case InputType_ActivateUI:
+				switch (inputElement.data.uiAction)
+				{
+				case UIAction_Quit:
+					quit = true;
+					break;
+				case UIAction_Validate:
+					break;
+				case UIAction_Cancel:
+					break;
+				default:
+					break;
+				}
+				break;
+			case InputType_MoveGame:
+
+				break;
+			case InputType_ClickGame:
+				break;
+			case InputType_None:
+			default:
+				break;
+			}
+		}
 		
-		
+
 
 		// Drawing
 		

@@ -17,7 +17,7 @@
  */
 typedef struct
 {
-	ArrayButton tabButton;
+	//ArrayButton tabButton;
 	Coord selectedCase; ///< Board , (-1;-1) si inexistant
 } InputProcessor;
 

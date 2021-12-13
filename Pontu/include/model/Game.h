@@ -10,6 +10,8 @@
 
 #include "model/Player.h"
 #include "model/Board.h"
+#include "model/Island.h"
+#include "model/Coord.h"
 #include <SDL2/SDL_pixels.h>
 #include <stdbool.h> 
 
@@ -42,39 +44,61 @@ typedef struct {
  */
 Game newGame(const int nbPlayers, const char* pseudos[]);
 
+
+/**
+ * \brief Place a piece into the board
+ * 
+ * \param [in, out] p The piece to place
+ * \param [in] island The island where the piece is placed
+ * \param [in] b The board in which the piece is placed
+ * \return true If the pieces is placed
+ */
+bool placePiece(Piece* p, const Island island, const Board* b);
+
 /**
  * \brief Move a piece to an island
- * \param[in] p the piece to move
- * \param[in] i island target
+ * \param[in,out]	p the piece to move
+ * \param[in]		i island target
+ * \param[in]		b The Board for this Game
  * \return True if the piece can be move otherwise false
  */
-
-bool movePiece(Piece p, Island i);
-
+bool movePiece(Piece* p, const Island i, const Board* b);
 
 /**
- * \brief Check if the the island is attainable from the piece's position (no player on the island)
- * \param[in] p the piece to move
+ * \brief Check if an island is empty 
+ * 
+ * \param [in] island The island to check
+ * \param [in] arrPieces the array of piece from the board
+ * \param [in] nbPieces number of pieces 
+ * \return true if none of the pieces is on th island, false otherwise
+ */
+bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces);
+
+/**
+ * \brief Check if the the island is adjacent to the piece
+ * \param[in] p the piece
  * \param[in] i island target
- * \return True if the island is attainable (no player on the island) otherwise false
+ * \return True if the island is adjacent to the piece otherwise false
  */
-bool checkIsland(Piece p, Island i);
+bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
 
 /**
- * \biref Check if there is a bridge at (coord->x; coord->y)
- * \param[in]	coords	Coords to test
- * \param[in]	board	Actual game board
- * \return True if there is a bridge. Else return false.
+ * \bref Check if there is a bridge between two Island.
+ * \param[in]	start	On island were the bridge ends
+ * \param[in]	target	The other island were the bridge ends
+ * \param[in]	b	The Board for this Game.
+ * \return true if there is a bridge, false otherwise.
  */
-bool checkBridge(Coord* coords, Board* board);
+bool checkBridge(const Island start, const Island target, const Board* b);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
  * \param[in]	coords	Bridge's coords to remove
  * \param[in]	board	Actual game board
- * \return True on succsess. Else return false.
+ * \return True on success. Else return false.
  */
-bool rmBridge(Coord* coords, Board* board);
+bool rmBridge(Coord coords, Board* board);
 
 #endif //PARTIE_H
+

@@ -1,6 +1,6 @@
 #include "model/IslandOrBridge.h"
 
-IslandOrBridge(Coord c) {
+IslandOrBridge coordToEntity(Coord c) {
 	IslandOrBridge res;
 
 	if (c.x % 2 == 0) {

@@ -3,8 +3,9 @@
 Piece newPiece(const int idJ) {
 	Piece piece = { 
 		.idJ = idJ,
-		.stuck = false
-	} ;
+		.stuck = false,
+		.island = {.x = -1, .y=-1}
+	};
 	return piece;
 }
 

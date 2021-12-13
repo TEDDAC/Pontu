@@ -1,12 +1,15 @@
 #include "model/Game.h"
+#include "model/IslandOrBridge.h"
+#include <assert.h>
 
 Game newGame(const int nbPlayers, const char* pseudos[]) {
-	Game g;
-	// In Placement phase, the last player initialized is the 1st to play
-	g.currentPlayerID = nbPlayers - 1;
-	g.nb_rounds = 0;
-	g.phase = PLACEMENT;
-	g.board = newBoard(nbPlayers);
+	Game g = {
+		// In Placement phase, the last player initialized is the 1st to play
+		.currentPlayerID = nbPlayers - 1,
+		.nb_rounds = 0,
+		.phase = PLACEMENT,
+		.board = newBoard(nbPlayers)
+	};
 	
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
@@ -24,44 +27,104 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 	return g;
 }
 
+bool placePiece(Piece* p, const Island island, const Board* b) {
+	if (isIslandEmpty(island, b->arrPieces, b->nbPieces)) {
+		p->island = island;
+		return true;
+	}
 
-bool movePiece(Piece p, Island i)
-{
-	return checkIsland(p,i) && checkBridge(p,i); //Otherwise call one function before one other
+	return false;
 }
 
-//Not yet over
-bool checkIsland(Piece p, Island i)
+bool movePiece(Piece* p, const Island i, const Board* b)
 {
-	bool check;
-	int diff;
-	if(p.island.x==i.x) //piece and island are on the same x axe
+	if (isIslandEmpty(i, b->arrPieces, b->nbPieces) 
+			&& isPieceAdjacentToIsland(*p, i) 
+			&& checkBridge(p->island, i, b)) {
+		p->island = i;
+		
+		return true;
+	} else return false;
+}
+
+bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces) {
+	assert(islandValid(island) && "Pass invalid island to isIslandEmpty");
+
+	for (size_t i = 0; i < nbPieces; ++i)
 	{
-		diff=p.island.y-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 y on the y axe 
-			
+		if (islandEqual(island, arrPieces[i].island)) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+bool isPieceAdjacentToIsland(const Piece p, const Island i)
+{
+	//Maybe turn this into an if (with message on stderr)
+	assert(islandValid(i) && "Send invalid island to isPieceAdjacentToIsland");
+	assert(islandValid(p.island) && "Send invalid piece island to isPieceAdjacentToIsland");
+
+
+	if(p.island.x==i.x) //piece and island are on the same x axis
+	{
+		const int diff=p.island.y-i.y;
+		return -1==diff || diff==1; //Island is adjacent if the difference is equal -1 or 1 on the y axis
 	}
 	else if (p.island.y==i.y) //piece and island are on the same y axe
 	{
-		diff=p.island.x-i.y;
-		return -1<diff && diff<1; //Island is atteinable if the difference is between -1 and 1 x on the x axe 
+		const int diff=p.island.x-i.x;
+		return -1==diff || diff==1; //Island is adjacent if the difference is equal to -1 or 1 on the x axis
 	}
 
 	return false;
-
 }
 
-bool checkBridge(Coord* coords, Board* board)
+bool checkBridge(const Island start, const Island target, const Board* board)
 {
-	if((coords->x%2 == 1) && (coords->y%2 == 0))
-	{
-		return board->hBridge[coord->y][coord->x];
+	//Maybe turn this into an if (with message on stderr)
+	assert(islandValid(start) && islandValid(target) && "Send invalid island to checkBridge");
+
+	// Horizontal difference between start and target.
+	// If xdiff is negative, then target is on the left of start.
+	// If xdiff is positive, then target is on the right of start.
+	// If xdiff is 0, then target and start are aligned horizontally.
+	const int xdiff = target.x - start.x;
+	// Vertical difference between start and target.
+	// Works similarly to xdiff, except negative and positive values
+	// indicate that target is above start and bellow start respectively.
+	const int ydiff = target.y - start.y;
+
+	// Vertical bridge
+	if (xdiff == 0 && abs(ydiff) == 1) {
+		return board->vBridges[start.y+ydiff][start.x];
 	}
-	if((coords->x%2 == 0) && (coords->y%2 == 1))
-	{
-		return board->vBridge[coord->y][coord->x];
+	// Horizontal bridge
+	else if (abs(xdiff) == 1 && ydiff == 0) {
+		return board->hBridges[start.y][start.x+xdiff];
+	}
+	// Not a bridge
+	else {
+		return false;
+	}
+}
+
+bool rmBridge(Coord coord, Board* board) {
+	IslandOrBridge bridge = coordToEntity(coord);
+
+	if (bridge.type == HBRIDGE) {
+		if (board->hBridges[bridge.y][bridge.x]) {
+			board->hBridges[bridge.y][bridge.x] = false;
+			return true;
+		}
+	} 
+	else if (bridge.type == VBRIDGE) {
+		if (board->vBridges[bridge.y][bridge.x]) {
+			board->vBridges[bridge.y][bridge.x] = false;
+			return true;
+		}
 	}
 	return false;
 }
-
 
