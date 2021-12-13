@@ -115,7 +115,7 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 bool cliqueOnBoard(const Coord coord, Game* game) {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
-	switch (game->phase)
+	switch(game->phase)
 	{
 	case PLACEMENT:
 		if (islandOrBridge.type==ISLAND) {
@@ -123,6 +123,7 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
+		
 		
 		break;
 	default:
@@ -133,7 +134,12 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 }
 
 bool moveOnBoard(const Coord start, const Coord end, Game* game) {
+	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
+	switch(game->phase)
+	{
+		case 
+	}
 }
 
 
