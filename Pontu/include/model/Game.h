@@ -21,7 +21,8 @@
  */
 typedef enum {
 	PLACEMENT,
-	GAME
+	MOVE_PIECE,
+	RM_BRIDGE
 } Phase;
 
 /**
@@ -100,5 +101,5 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  */
 bool rmBridge(Bridge bridge, Board* board);
 
-#endif //PARTIE_H
+#endif //GAME_H
 

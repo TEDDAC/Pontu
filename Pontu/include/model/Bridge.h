@@ -19,4 +19,5 @@ typedef struct {
     Island islandB;///< Horizontal : right to islandA, Vertical : down to islandA
 } Bridge;
 
+
 #endif //BRIDGE_INCLUDED
