@@ -85,13 +85,26 @@ bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
 
 /**
- * \bref Check if there is a bridge between two Island.
+ * \brief Check if there is a bridge between two Island.
  * \param[in]	start	On island were the bridge ends
  * \param[in]	target	The other island were the bridge ends
  * \param[in]	b	The Board for this Game.
  * \return true if there is a bridge, false otherwise.
  */
 bool checkBridge(const Island start, const Island target, const Board* b);
+
+/**
+ * \brief Get piece from island
+ * \param[in] arrPieces Array of all pieces
+ * \param[in] logicalSize The logical size of arrPieces
+ * \param[in] island The island on the one we want to check the piece
+ */
+
+Piece* getPieceFromIsland(Piece arrPieces[9],int logicalSize, Island island);
+
+//NEED A COMMENTARY
+bool moveOnBoard(const Coord start, const Coord end, Game* game);
+
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)

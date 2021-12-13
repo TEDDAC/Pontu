@@ -123,29 +123,48 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
-<<<<<<< HEAD
-		
-		
-		break;
-=======
-		/*if (islandOrBridge.type == )
-			rmBridge
-			if (isIslandIsolated()) {
+		if (islandOrBridge.type == BRIDGE)
+			Bridge bridge = islandOrBridge.data.bridge;
+			rmBridge(bridge,game->board)
+			if (isPieceIsolated()) { //Check is a piece is isolated and then if the player is eliminated
 				
 			}
-		break;*/
->>>>>>> cacb66ccf9c68400e71a998e9349c7dce919383f
+		break;
 	default:
 		break;
 	}
 }
 
+Piece* getPieceFromIsland(Piece arrPieces[9],int logicalSize, Island island){
+	Piece *piece=NULL;
+	for(int i=0; i<logicalSize;i++)
+	{
+		if(islandEqual(arrPieces[i].island,island))
+		{
+			*piece=arrPieces[i];
+			return piece;
+		}
+	}
+}
+
 bool moveOnBoard(const Coord start, const Coord end, Game* game) {
-	const IslandOrBridge islandOrBridge = coordToEntity(coord);
+	const IslandOrBridge islandOrBridgeStart = coordToEntity(start);
+	const IslandOrBridge islandOrBridgeEnd = coordToEntity(end);
 
 	switch(game->phase)
 	{
-		case 
+		case MOVE_PIECE:
+			if(islandOrBridgeStart.type==ISLAND && islandOrBridgeEnd.type==ISLAND)
+			{
+				Piece *piece;
+				int idCurrentPlayer = game->currentPlayerID;
+				Island islandStart = islandOrBridgeStart.data.island;
+				Island islandEnd = islandOrBridgeEnd.data.island;
+				piece=getPieceFromIsland(game->arrPieces,game->board.nbPieces,islandStart);
+				if(idCurrentPlayer==piece->idJ) //Check if the current player id is the same than the piece selected by the player
+					return movePiece(piece, islandEnd, game->board);
+				return false;
+			}
 	}
 }
 

@@ -25,7 +25,7 @@ typedef struct {
 	bool vBridges[4][5]; ///< 2D-array of vertical bridges.
 	bool hBridges[5][4]; ///< 2D-array of horizontal bridges.
 	Piece arrPieces[9]; ///< Array of pieces on the Board.
-	const size_t nbPieces;
+	const size_t nbPieces; ///< Logical size of arrPieces
 } Board;
 
 Board newBoard(const int nbPlayers);
