@@ -110,21 +110,62 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 	}
 }
 
-bool rmBridge(Coord coord, Board* board) {
-	IslandOrBridge bridge = coordToEntity(coord);
 
-	if (bridge.type == HBRIDGE) {
-		if (board->hBridges[bridge.y][bridge.x]) {
-			board->hBridges[bridge.y][bridge.x] = false;
-			return true;
+
+bool cliqueOnBoard(const Coord coord, Game* game) {
+	const IslandOrBridge islandOrBridge = coordToEntity(coord);
+
+	switch(game->phase)
+	{
+	case PLACEMENT:
+		if (islandOrBridge.type==ISLAND) {
+			//placePiece(,islandOrBridge.x);
 		}
-	} 
-	else if (bridge.type == VBRIDGE) {
-		if (board->vBridges[bridge.y][bridge.x]) {
-			board->vBridges[bridge.y][bridge.x] = false;
-			return true;
-		}
+		break;
+	case RM_BRIDGE:
+<<<<<<< HEAD
+		
+		
+		break;
+=======
+		/*if (islandOrBridge.type == )
+			rmBridge
+			if (isIslandIsolated()) {
+				
+			}
+		break;*/
+>>>>>>> cacb66ccf9c68400e71a998e9349c7dce919383f
+	default:
+		break;
 	}
+}
+
+bool moveOnBoard(const Coord start, const Coord end, Game* game) {
+	const IslandOrBridge islandOrBridge = coordToEntity(coord);
+
+	switch(game->phase)
+	{
+		case 
+	}
+}
+
+bool rmBridge(Bridge bridge, Board* board) {
+
+		if(bridge.islandA.x==bridge.islandB.x) //Horizontal bridge
+		{
+			if(board->hBridges[bridge.islandA.y][bridge.islandA.x])
+				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //bridge coordinates equals to the islandA
+				return true;
+		}
+
+		else if(bridge.islandA.y==bridge.islandB.y){ //Vertical bridge 
+			if(board->vBridges[bridge.islandA.y][bridge.islandA.x]) {
+				board->vBridges[bridge.islandA.y][bridge.islandA.x] = false;
+				return true;
+			}
+	}
+
 	return false;
+
 }
 

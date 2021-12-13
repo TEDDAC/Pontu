@@ -1,4 +1,5 @@
 #include "model/Game.h"
+#include "model/IslandOrBridge.h"
 #include <assert.h>
 
 void testIsIslandEmpty() {
@@ -58,11 +59,57 @@ void testCheckBridge() {
 
 }
 
-int main(int argc, char * argv[]) {
+
+void testCoordToEntity() {
+	for (int iX = 0; iX < 9; iX+=2)
+	{
+		for (int iY = 0; iY < 9; iY+=2)
+		{
+			Coord c = {.x = iX, .y = iY};
+			Island i = {.x = iX/2, .y= iY/2};
+			assert(coordToEntity(c).type==ISLAND);
+			assert(islandEqual(i, coordToEntity(c).data.island));
+		}	
+	}
+
+	for (int wX = 1; wX < 9; wX+=2)
+	{
+		for (int wY = 1; wY < 9; wY+=2)
+		{
+			Coord c = {.x = wX, .y = wY};
+			assert(coordToEntity(c).type==WATER);
+		}	
+	}
+
+	for (int bX = 0; bX < 9; bX+=2)
+	{
+		for (int bY = 1; bY < 9; bY+=2)
+		{
+			Coord c = {.x = bX, .y = bY};
+			assert(coordToEntity(c).type==BRIDGE);
+		}
+	}
+
+	for (int bX = 1; bX < 9; bX+=2)
+	{
+		for (int bY = 0; bY < 9; bY+=2)
+		{
+			Coord c = {.x = bX, .y = bY};
+			assert(coordToEntity(c).type==BRIDGE);
+		}
+	}
+}
+
+
+
+int callAll() {
 	testIsIslandEmpty();
 	testIsPieceAdjacentToIsland();
 	testPlacePiece();
 	testCheckBridge();
+	testCoordToEntity();
 
 	return 0;
 }
+
+

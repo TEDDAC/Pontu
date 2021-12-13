@@ -6,7 +6,7 @@ project(${PROJECT_NAME})
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 add_executable(${PROJECT_NAME} ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/main.c)
-add_executable(Test ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/test/test.c)
+add_executable(Test ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/test.c)
 
 
 

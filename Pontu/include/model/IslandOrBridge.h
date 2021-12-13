@@ -1,7 +1,7 @@
 /**
  * \file IslandOrBridge.h
  * \brief Used to convert board coordinates into usable ones
- * \author Théotime Maillarbaux
+ * \author Théotime Maillarbaux And Martin Rouault
  * \date 06/12/2021
  */
 
@@ -9,6 +9,8 @@
 #define ISLANDORBRIDGE_H
 
 #include "model/Coord.h"
+#include "model/Bridge.h"
+#include "model/Island.h"
 
 /**
  * \enum EntityType
@@ -17,8 +19,7 @@
 typedef enum {
 	WATER, ///< Nothing in particular was clicked
 	ISLAND, ///< An Island was clicked
-	VBRIDGE, ///< A vertical bridge was clicked
-	HBRIDGE ///< A horizontal bridge was clicked
+	BRIDGE, ///< A bridge was clicked
 } EntityType;
 
 /**
@@ -26,8 +27,15 @@ typedef enum {
  * \brief Represents a set of coordinates coherent with the CoordType.
  */
 typedef struct {
-	int x; ///< The coordinate on the X-axis.
-	int y; ///< The coordinate on the Y-axis.
+	/**
+	 * \union data
+	 * \brief Either an island or a bridge
+	*/
+	union data {
+		Island island; ///< An island
+		Bridge bridge; ///< A bridge
+	} data; ///< Data filled in function of type
+	
 	EntityType type; ///< The type of the entity clicked.
 } IslandOrBridge;
 
