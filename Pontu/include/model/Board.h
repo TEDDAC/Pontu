@@ -16,7 +16,7 @@
  * \struct Board
  * \brief Represents a board for a Game.
  *
- * The bridges are represented by 2D-arrays of SDL_Bools.
+ * The bridges are represented by 2D-arrays of bools.
  * For a given set of coordinates, the value is TRUE if the bridge is there,
  * else false.
  */
