@@ -70,11 +70,19 @@ bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
 bool isHover(P_Button* button, int x,int y);// dit si le bouton est survolé en donnant les coordonnées x,y
 
 /**
- * \brief Test if a point is on a button
+ * \brief Change the texture of the button
  * \param[in]   button	the button target
  * \param[in]   texture	the texture you want to apply to the button
  * \return false	if the texture is NULL
  */
 bool changeButtonTexture(P_Button* button, SDL_Texture* texture);
+
+/**
+ * \brief Change the texture to use when the button is hovered
+ * \param[in]   button	the button target
+ * \param[in]   texture	the texture you want to apply to the button
+ * \return false	if the texture is NULL
+ */
+bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture);
 
 #endif
