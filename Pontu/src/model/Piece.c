@@ -1,6 +1,6 @@
 #include "model/Piece.h"
 
-Piece newPiece(const int idJ) {
+Piece newPiece(const size_t idJ) {
 	Piece piece = { 
 		.idJ = idJ,
 		.stuck = false,

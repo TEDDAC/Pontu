@@ -9,6 +9,7 @@
 #define BOARD_H
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "model/Piece.h"
 #include <SDL2/SDL_pixels.h> // SDL_Color
 
@@ -28,6 +29,6 @@ typedef struct {
 	const size_t nbPieces; ///< Logical size of arrPieces
 } Board;
 
-Board newBoard(const int nbPlayers);
+Board newBoard(const size_t nbPlayers);
 
 #endif // BOARD_H

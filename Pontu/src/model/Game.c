@@ -2,7 +2,7 @@
 #include "model/IslandOrBridge.h"
 #include <assert.h>
 
-Game newGame(const int nbPlayers, const char* pseudos[]) {
+Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 	Game g = {
 		// In Placement phase, the last player initialized is the 1st to play
 		.currentPlayerID = nbPlayers - 1,
@@ -20,7 +20,7 @@ Game newGame(const int nbPlayers, const char* pseudos[]) {
 		{255,255,0  ,255}
 	};
 
-	for (int player_i = 0; player_i < nbPlayers; player_i++) {
+	for (size_t player_i = 0; player_i < nbPlayers; player_i++) {
 		g.arrPlayers[player_i] = newPlayer(pseudos[player_i] ,colors[player_i]);
 	}
 	
@@ -111,6 +111,33 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 }
 
 
+bool isPieceIsolated(const Piece* piece, const Board* board) {
+	Island g = piece->island;
+	g.x-=1;
+	Island d = piece->island;
+	g.x+=1;
+	Island h = piece->island;
+	g.y-=1;
+	Island b = piece->island;
+	g.y+=1;
+
+	if (islandValid(g) && checkBridge(piece->island, g, board)) return false;
+	if (islandValid(d) && checkBridge(piece->island, d, board)) return false;
+	if (islandValid(h) && checkBridge(piece->island, h, board)) return false;
+	if (islandValid(b) && checkBridge(piece->island, b, board)) return false;
+	return true;
+}
+
+
+bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const size_t nbPieces) {
+	for (size_t i = 0; i<nbPieces; ++i) {
+		if (arrPieces[i].idJ == idJ && !arrPieces[i].stuck) {
+			return false;
+		}
+	}
+	return true;
+}
+
 
 bool cliqueOnBoard(const Coord coord, Game* game) {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
@@ -123,28 +150,46 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
-		if (islandOrBridge.type == BRIDGE)
+		if (islandOrBridge.type == BRIDGE) {
 			Bridge bridge = islandOrBridge.data.bridge;
-			rmBridge(bridge,game->board)
-			if (isPieceIsolated()) { //Check is a piece is isolated and then if the player is eliminated
-				
+			rmBridge(bridge,&game->board);
+			Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, bridge.islandA);
+			if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board)) { //Check is a piece is isolated and then if the player is eliminated
+				piecePotentialyIsolated->stuck=true;
+				if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
+					game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds;//TODO : See what we put in rank
+				}
 			}
+			
+			// To factorise
+			piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, bridge.islandB);
+			if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board)) { //Check is a piece is isolated and then if the player is eliminated
+				piecePotentialyIsolated->stuck=true;
+				if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
+					game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds;//See what we put in rank
+				}
+			}
+
+			return true;
+		}
+			
 		break;
 	default:
 		break;
 	}
+
+	return false;
 }
 
-Piece* getPieceFromIsland(Piece arrPieces[9],int logicalSize, Island island){
-	Piece *piece=NULL;
-	for(int i=0; i<logicalSize;i++)
+Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island){
+	for(size_t i=0; i<logicalSize;i++)
 	{
 		if(islandEqual(arrPieces[i].island,island))
 		{
-			*piece=arrPieces[i];
-			return piece;
+			return &arrPieces[i];
 		}
 	}
+	return NULL;
 }
 
 bool moveOnBoard(const Coord start, const Coord end, Game* game) {
@@ -157,26 +202,28 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game) {
 			if(islandOrBridgeStart.type==ISLAND && islandOrBridgeEnd.type==ISLAND)
 			{
 				Piece *piece;
-				int idCurrentPlayer = game->currentPlayerID;
+				size_t idCurrentPlayer = game->currentPlayerID;
 				Island islandStart = islandOrBridgeStart.data.island;
 				Island islandEnd = islandOrBridgeEnd.data.island;
-				piece=getPieceFromIsland(game->arrPieces,game->board.nbPieces,islandStart);
+				piece=getPieceFromIsland(game->board.arrPieces, game->board.nbPieces,islandStart);
 				if(idCurrentPlayer==piece->idJ) //Check if the current player id is the same than the piece selected by the player
-					return movePiece(piece, islandEnd, game->board);
+					return movePiece(piece, islandEnd, &game->board);
 				return false;
 			}
 	}
+
+	return false;
 }
 
 bool rmBridge(Bridge bridge, Board* board) {
 
 		if(bridge.islandA.x==bridge.islandB.x) //Horizontal bridge
 		{
-			if(board->hBridges[bridge.islandA.y][bridge.islandA.x])
+			if(board->hBridges[bridge.islandA.y][bridge.islandA.x]) {
 				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //bridge coordinates equals to the islandA
 				return true;
+			}
 		}
-
 		else if(bridge.islandA.y==bridge.islandB.y){ //Vertical bridge 
 			if(board->vBridges[bridge.islandA.y][bridge.islandA.x]) {
 				board->vBridges[bridge.islandA.y][bridge.islandA.x] = false;

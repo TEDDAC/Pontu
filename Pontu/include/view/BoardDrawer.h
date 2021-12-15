@@ -3,8 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include "model/Board.h"
 
-bool drawBoard(Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* island, SDL_Texture* bridge);
+bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge);
 
 
 #endif

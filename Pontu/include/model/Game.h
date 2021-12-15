@@ -31,7 +31,7 @@ typedef enum {
  * \brief Represents a game
  */
 typedef struct {
-	int currentPlayerID; ///< The ID of the one currently playing
+	size_t currentPlayerID; ///< The ID of the one currently playing
 	int nb_rounds; ///< The number of rounds so far
 	//TODO duree
 	Phase phase; ///< The current state of the game
@@ -44,7 +44,7 @@ typedef struct {
  * \param[in]	nbPlayers	The number of players for this game
  * \return A struct representing the game
  */
-Game newGame(const int nbPlayers, const char* pseudos[]);
+Game newGame(const size_t nbPlayers, const char* pseudos[]);
 
 
 /**
@@ -84,6 +84,9 @@ bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nb
  */
 bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
+bool isPieceIsolated(const Piece* piece, const Board* board);
+
+bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const size_t nbPieces);
 
 /**
  * \brief Check if there is a bridge between two Island.
@@ -100,8 +103,7 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  * \param[in] logicalSize The logical size of arrPieces
  * \param[in] island The island on the one we want to check the piece
  */
-
-Piece* getPieceFromIsland(Piece arrPieces[9],int logicalSize, Island island);
+Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island);
 
 //NEED A COMMENTARY
 bool moveOnBoard(const Coord start, const Coord end, Game* game);

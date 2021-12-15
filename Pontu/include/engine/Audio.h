@@ -9,7 +9,6 @@
 #define AUDIO_H
 
 #include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_thread>
 
 /**
  * \brief Fades out a music and plays another one.
@@ -19,6 +18,6 @@
  *
  * This function creates a thread that will detach on its own completion.
  */
-void switchMusic(Mix_Music* music, char[] path);
+void switchMusic(Mix_Music* music, char path[]);
 
 #endif // AUDIO_H

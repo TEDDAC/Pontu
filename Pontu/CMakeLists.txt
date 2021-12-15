@@ -16,6 +16,7 @@ find_package(SDL2 REQUIRED)
 #find_package(SDL2_ttf REQUIRED)
 #find_package(SDL2_net REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
@@ -37,3 +38,5 @@ target_link_libraries(${PROJECT_NAME} SDL2::Main)
 target_link_libraries(Test SDL2::Main)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
 target_link_libraries(Test SDL2::Image)
+target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
+target_link_libraries(Test SDL2::Mixer)
