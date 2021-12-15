@@ -123,7 +123,6 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 		}
 		break;
 	case RM_BRIDGE:
-<<<<<<< HEAD
 		if (islandOrBridge.type == BRIDGE)
 			Bridge bridge = islandOrBridge.data.bridge;
 			rmBridge(bridge,game->board)
@@ -131,15 +130,6 @@ bool cliqueOnBoard(const Coord coord, Game* game) {
 				
 			}
 		break;
-=======
-		break;
-		/*if (islandOrBridge.type == )
-			rmBridge
-			if (isIslandIsolated()) {
-				
-			}
-		break;*/
->>>>>>> 51ba8313d772c70cec14296e7d012eba55fabb4b
 	default:
 		break;
 	}
