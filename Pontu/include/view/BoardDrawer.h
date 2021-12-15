@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "model/Board.h"
 
-bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge);
+bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water);
 
 
 #endif

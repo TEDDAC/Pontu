@@ -23,6 +23,7 @@ bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button)
 		return false;
 	}
 	button->drawn = true;
+	return true;
 }
 
 bool isHover(P_Button* button,const int x,const int y)
@@ -41,6 +42,7 @@ bool changeButtonTexture(P_Button* button, SDL_Texture* texture)
 		return false;
 	}
 	button->texture = texture;
+	return true;
 }
 
 bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
@@ -50,4 +52,5 @@ bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
 		return false;
 	}
 	button->hoverTexture = texture;
+	return true;
 }

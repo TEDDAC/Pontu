@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include "engine/InputProcessor.h"
 #include "engine/InputElement.h"
+#include "engine/TextureHandler.h"
+#include "model/Game.h"
+#include "view/BoardDrawer.h"
 
 int main(int argc, char* argv[])
 {
@@ -31,14 +34,18 @@ int main(int argc, char* argv[])
 	}
 
 	InputProcessor inputProcessor = {.selectedCase = {.x=-1, .y=-1}};
-	SDL_Rect rectBoard = {.x=20, .y=20, .w=99, .h=99};
+	SDL_Rect boardRect = {.x=20, .y=20, .w=99*3, .h=99*3};
+	const char* pseudos[] = {"Azerty","Bépo"};
+	Game game = newGame(2, pseudos);
+	TextureHandler textureHandler = newTextureHandler(renderer);
+
 
 	bool quit = false;
 	while(!quit)
 	{
 		// Event handling
 		InputElement inputElement;
-		while (InputType_None != (inputElement = proccessInput(&inputProcessor, &rectBoard)).type) {
+		while (InputType_None != (inputElement = proccessInput(&inputProcessor, &boardRect)).type) {
 			
 			switch (inputElement.type)
 			{
@@ -70,7 +77,7 @@ int main(int argc, char* argv[])
 
 
 		// Drawing
-		
+		drawBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island],  textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
 
 		SDL_RenderPresent(renderer);
 
@@ -80,12 +87,14 @@ int main(int argc, char* argv[])
 	statut = EXIT_SUCCESS;
 
 Quit:
+	freeTextureHandler(&textureHandler);
 	if(renderer != NULL) {
 		SDL_DestroyRenderer(renderer);
 	}
 	if(window != NULL) {
 		SDL_DestroyWindow(window);
 	}
+	
 	SDL_Quit();
 	return statut;
 }
