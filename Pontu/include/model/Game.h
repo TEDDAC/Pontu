@@ -109,6 +109,8 @@ Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Is
 bool moveOnBoard(const Coord start, const Coord end, Game* game);
 
 
+bool cliqueOnBoard(const Coord coord, Game* game);
+
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
  * \param[in]	coords	Bridge to remove

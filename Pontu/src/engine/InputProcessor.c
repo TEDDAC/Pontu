@@ -3,7 +3,7 @@
 Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect){
 	Coord coord = {
 		coord.x = (point->x-boardRect->x)*9/boardRect->w,
-		coord.x = (point->y-boardRect->y)*9/boardRect->h
+		coord.y = (point->y-boardRect->y)*9/boardRect->h
 	};
 	return coord;
 }

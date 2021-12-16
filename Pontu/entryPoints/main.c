@@ -39,7 +39,6 @@ int main(int argc, char* argv[])
 	Game game = newGame(2, pseudos);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-
 	bool quit = false;
 	while(!quit)
 	{
@@ -64,9 +63,15 @@ int main(int argc, char* argv[])
 				}
 				break;
 			case InputType_MoveGame:
-
+				fprintf(stderr, "Move on board\n");
+				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 				break;
 			case InputType_ClickGame:
+				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
+				fflush(stderr);
+				if (cliqueOnBoard(inputElement.data.coord, &game)) {
+					inputProcessor.selectedCase = newCoord(-1,-1);
+				}
 				break;
 			case InputType_None:
 			default:

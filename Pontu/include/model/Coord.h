@@ -16,6 +16,7 @@ typedef struct {
 } Coord;
 
 
+Coord newCoord(const int x, const int y);
 bool coordValide(const Coord coord);
 bool coordEqual(const Coord a, const Coord b);
 

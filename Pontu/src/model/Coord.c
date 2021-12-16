@@ -1,5 +1,9 @@
 #include "model/Coord.h"
 
+Coord newCoord(const int x, const int y) {
+	Coord c = {.x = x, .y = y};
+	return c;
+}
 
 bool coordValide(const Coord coord)
 {

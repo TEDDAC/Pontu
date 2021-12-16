@@ -217,16 +217,16 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game) {
 
 bool rmBridge(Bridge bridge, Board* board) {
 
-		if(bridge.islandA.x==bridge.islandB.x) //Horizontal bridge
+		if(bridge.islandA.x==bridge.islandB.x) //Vertical bridge
 		{
-			if(board->hBridges[bridge.islandA.y][bridge.islandA.x]) {
-				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //bridge coordinates equals to the islandA
+			if(board->vBridges[bridge.islandA.y][bridge.islandA.x]) {
+				board->vBridges[bridge.islandA.y][bridge.islandA.x] = false;
 				return true;
 			}
 		}
-		else if(bridge.islandA.y==bridge.islandB.y){ //Vertical bridge 
-			if(board->vBridges[bridge.islandA.y][bridge.islandA.x]) {
-				board->vBridges[bridge.islandA.y][bridge.islandA.x] = false;
+		else if(bridge.islandA.y==bridge.islandB.y){ //Horizontal bridge 
+			if(board->hBridges[bridge.islandA.y][bridge.islandA.x]) {
+				board->hBridges[bridge.islandA.y][bridge.islandA.x] = false; //bridge coordinates equals to the islandA
 				return true;
 			}
 	}
