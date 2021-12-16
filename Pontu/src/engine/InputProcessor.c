@@ -38,7 +38,7 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
 		if (SDL_PointInRect(&mousePoint, boardRect))
 		{
-			if (coordValide(inputProcessor->selectedCase))
+			if (coordValid(inputProcessor->selectedCase))
 			{
 				Coord newCoord = screenCoordToGameCoord(&mousePoint, boardRect);
 				if (coordEqual(inputProcessor->selectedCase, newCoord)) {

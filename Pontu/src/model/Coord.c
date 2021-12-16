@@ -5,9 +5,10 @@ Coord newCoord(const int x, const int y) {
 	return c;
 }
 
-bool coordValide(const Coord coord)
+bool coordValid(const Coord coord)
 {
-	return coord.x >= 0 && coord.y >= 0;
+	return coord.x >= 0 && coord.y >= 0 
+		&& coord.x < 9 && coord.y < 9;
 }
 
 bool coordEqual(const Coord a, const Coord b)
