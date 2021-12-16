@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 			case InputType_ClickGame:
 				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
 				fflush(stderr);
-				if (cliqueOnBoard(inputElement.data.coord, &game)) {
+				if (clickOnBoard(inputElement.data.coord, &game)) {
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 				break;

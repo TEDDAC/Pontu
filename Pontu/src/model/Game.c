@@ -139,7 +139,7 @@ bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const
 }
 
 
-bool cliqueOnBoard(const Coord coord, Game* game) {
+bool clickOnBoard(const Coord coord, Game* game) {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
 	switch(game->phase)

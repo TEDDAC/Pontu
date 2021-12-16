@@ -84,8 +84,24 @@ bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nb
  */
 bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
+
+/**
+ * \brief test if a piece is isolated
+ * 
+ * \param [in] piece The piece which is checked 
+ * \param [in] board The board were the piece is
+ * \return true if no bridge go from piece's island to another island, false otherwise
+ */
 bool isPieceIsolated(const Piece* piece, const Board* board);
 
+/**
+ * \brief test if all pieces from a player are stucked 
+ * 
+ * \param idJ Player id
+ * \param arrPieces All pieces from board
+ * \param nbPieces Number of pieces
+ * \return true if all player's pieces are stucked, false otherwise
+ */
 bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const size_t nbPieces);
 
 /**
@@ -105,11 +121,25 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  */
 Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island);
 
-//NEED A COMMENTARY
+
+/**
+ * \brief  Handle global game action move
+ * 
+ * \param start Board coord were the move started
+ * \param end Board coord were the move ended
+ * \param game Game's state
+ * \return true if an action was realised, false otherwise
+ */
 bool moveOnBoard(const Coord start, const Coord end, Game* game);
 
-
-bool cliqueOnBoard(const Coord coord, Game* game);
+/**
+ * \brief Handle global game action click
+ * 
+ * \param [in] coord Board coord were the click is
+ * \param [in, out] game Game's state
+ * \return true if an action was realised, false otherwise
+ */
+bool clickOnBoard(const Coord coord, Game* game);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
