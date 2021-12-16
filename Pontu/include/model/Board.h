@@ -29,6 +29,12 @@ typedef struct {
 	const size_t nbPieces; ///< Logical size of arrPieces
 } Board;
 
+/**
+ * \brief Create a new board 
+ * 
+ * \param nbPlayers The number of players
+ * \return A new board for nbPlayers
+ */
 Board newBoard(const size_t nbPlayers);
 
 #endif // BOARD_H
