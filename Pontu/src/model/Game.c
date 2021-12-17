@@ -11,6 +11,11 @@ Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 		.board = newBoard(nbPlayers)
 	};
 	
+	if (nbPlayers == 2) {
+		g.currentPlayerID = 0;
+		g.phase = MOVE_PIECE;
+	}
+
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
 	SDL_Color colors[4] = {

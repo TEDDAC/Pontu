@@ -23,6 +23,15 @@ typedef struct
 } Island;
 
 /**
+ * \brief Create a new island
+ * 
+ * \param [in] x X coordinate of the island
+ * \param [in] y Y coordinate of the island
+ * \return The newly created Island
+*/
+Island newIsland(const int x, const int y);
+
+/**
  * \brief Check if two islands are equal
  * 
  * \param a An island
