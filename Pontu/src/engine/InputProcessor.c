@@ -26,7 +26,9 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
 		if (SDL_PointInRect(&mousePoint, boardRect))
 		{
-			inputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
+			if (!coordValid(inputProcessor->selectedCase)) {
+				inputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
+			}
 		}
 		else
 		{
@@ -40,14 +42,16 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 		{
 			if (coordValid(inputProcessor->selectedCase))
 			{
-				Coord newCoord = screenCoordToGameCoord(&mousePoint, boardRect);
-				if (coordEqual(inputProcessor->selectedCase, newCoord)) {
-					return createInputElementClickBoard(newCoord);
+				Coord newCoords = screenCoordToGameCoord(&mousePoint, boardRect);
+				if (coordEqual(inputProcessor->selectedCase, newCoords)) {
+					inputProcessor->selectedCase = newCoords;
+					return createInputElementClickBoard(newCoords);
 				}
 				else {
-					return createInputElementMoveBoard(inputProcessor->selectedCase, newCoord);
+					const Coord oldCoord = inputProcessor->selectedCase;
+					inputProcessor->selectedCase = newCoord(-1,-1);
+					return createInputElementMoveBoard(oldCoord, newCoords);
 				}
-				inputProcessor->selectedCase = newCoord;
 			}
 		}
 		else
