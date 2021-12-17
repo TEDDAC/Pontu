@@ -11,6 +11,11 @@ Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 		.board = newBoard(nbPlayers)
 	};
 	
+	if (nbPlayers == 2) {
+		g.currentPlayerID = 0;
+		g.phase = MOVE_PIECE;
+	}
+
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
 	SDL_Color colors[4] = {
@@ -138,6 +143,20 @@ bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const
 	return true;
 }
 
+/*
+	I think we shouldn't put this in the header (not intended to be used by exterior)
+
+	It's used when a bridge is removed
+*/
+void updatePieceIsolated(Game* game, const Island* island) {
+	Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, *island);
+	if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board)) { //Check is a piece is isolated and then if the player is eliminated
+		piecePotentialyIsolated->stuck=true;
+		if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
+			game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds;//TODO : See what we put in rank
+		}
+	}
+}
 
 bool clickOnBoard(const Coord coord, Game* game) {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
@@ -153,22 +172,9 @@ bool clickOnBoard(const Coord coord, Game* game) {
 		if (islandOrBridge.type == BRIDGE) {
 			Bridge bridge = islandOrBridge.data.bridge;
 			rmBridge(bridge,&game->board);
-			Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, bridge.islandA);
-			if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board)) { //Check is a piece is isolated and then if the player is eliminated
-				piecePotentialyIsolated->stuck=true;
-				if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
-					game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds;//TODO : See what we put in rank
-				}
-			}
-			
-			// To factorise
-			piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, bridge.islandB);
-			if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board)) { //Check is a piece is isolated and then if the player is eliminated
-				piecePotentialyIsolated->stuck=true;
-				if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
-					game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds;//See what we put in rank
-				}
-			}
+
+			updatePieceIsolated(game, &bridge.islandA);
+			updatePieceIsolated(game, &bridge.islandB);
 
 			return true;
 		}

@@ -1,6 +1,14 @@
 #include "model/Island.h"
 
 
+Island newIsland(const int x, const int y) {
+	Island i = {
+		.x = x,
+		.y = y
+	};
+	return i;
+}
+
 bool islandEqual(const Island a, const Island b) {
 	return a.x == b.x && a.y == b.y;
 }
