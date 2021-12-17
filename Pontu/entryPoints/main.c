@@ -5,11 +5,12 @@
 #include "engine/InputElement.h"
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
-#include "view/BoardDrawer.h"
+#include "view/GameDrawer.h"
 
 int main(int argc, char* argv[])
 {
 	SDL_Window* window = NULL;
+	SDL_Rect windowSize = {10, 10, 600, 600};
 	SDL_Renderer* renderer = NULL;
 
 	int statut = EXIT_FAILURE;
@@ -19,7 +20,7 @@ int main(int argc, char* argv[])
 		goto Quit;
 	}
 
-	window = SDL_CreateWindow("Pontu",10,10,600,600,SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
@@ -34,7 +35,8 @@ int main(int argc, char* argv[])
 	}
 
 	InputProcessor inputProcessor = {.selectedCase = {.x=-1, .y=-1}};
-	SDL_Rect boardRect = {.x=20, .y=20, .w=99*3, .h=99*3};
+	int wBoardRect=99*3, hBoardRect=99*3;
+	SDL_Rect boardRect = {.x=windowSize.w/2 - wBoardRect/2, .y=windowSize.h/2 - hBoardRect/2, .w=wBoardRect, .h=99*3};
 	const char* pseudos[] = {"Azerty","Bépo"};
 	Game game = newGame(2, pseudos);
 	TextureHandler textureHandler = newTextureHandler(renderer);
@@ -82,7 +84,7 @@ int main(int argc, char* argv[])
 
 
 		// Drawing
-		drawBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island],  textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
+		drawGame(renderer, &windowSize, &boardRect, &game, &textureHandler);
 
 		SDL_RenderPresent(renderer);
 
