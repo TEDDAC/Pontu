@@ -7,12 +7,19 @@ struct params {
 
 int fadeOut(void* args) {
 	struct params* argsCast = (struct params*)args;
+	Mix_Music* newMusic = Mix_LoadMUS(argsCast->path);
 	if (argsCast->music != NULL) {
-		Mix_FadeOutMusic(1000);
-		Mix_FreeMusic(argsCast->music);
+		if(Mix_FadeOutMusic(500) == 0) {
+			while (Mix_PlayingMusic()) {
+				;
+			}
+		}
 	}
-	argsCast->music = Mix_LoadMUS(argsCast->path);
-	return Mix_PlayMusic(argsCast->music,-1);
+	if (newMusic != NULL) {
+		argsCast->music = newMusic;
+		return Mix_PlayMusic(argsCast->music,-1);
+	}
+	else return -2;
 }		
 
 void switchMusic(Mix_Music* music, char path[]) {
@@ -20,7 +27,7 @@ void switchMusic(Mix_Music* music, char path[]) {
 		.music = music,
 		.path = path
 	};
-SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", (void*)&args);
+	SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", (void*)&args);
 
 
 	SDL_DetachThread(thread); // Won't wait until thread is done to continue
