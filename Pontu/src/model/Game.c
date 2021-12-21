@@ -2,6 +2,36 @@
 #include "model/IslandOrBridge.h"
 #include <assert.h>
 
+// Not defined in header to not pollute inferface
+void applySpecificRulesFor2PlayersGame(Game* g) {
+	g->currentPlayerID = 0;
+	g->phase = MOVE_PIECE;
+
+	size_t iJ1 = 0;
+	size_t iJ2 = 0;
+
+	const Island startPosJ1[] = {
+		newIsland(1,0),
+		newIsland(2,1),
+		newIsland(3,0)
+	};
+
+	const Island startPosJ2[] = {
+		newIsland(1,4),
+		newIsland(2,3),
+		newIsland(3,4)
+	};
+
+	for (size_t i = 0; i < g->board.nbPieces; ++i) {
+		if (g->board.arrPieces[i].idJ==0) {
+			g->board.arrPieces[i].island = startPosJ1[iJ1++]; // Post increment return the value "before" incrementing
+		}
+		else {
+			g->board.arrPieces[i].island = startPosJ2[iJ2++];
+		}
+	}
+}
+
 Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 	Game g = {
 		// In Placement phase, the last player initialized is the 1st to play
@@ -10,11 +40,6 @@ Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 		.phase = PLACEMENT,
 		.board = newBoard(nbPlayers)
 	};
-	
-	if (nbPlayers == 2) {
-		g.currentPlayerID = 0;
-		g.phase = MOVE_PIECE;
-	}
 
 	// red, green, blue, yellow
 	// TODO meilleures couleurs (?)
@@ -29,8 +54,13 @@ Game newGame(const size_t nbPlayers, const char* pseudos[]) {
 		g.arrPlayers[player_i] = newPlayer(pseudos[player_i] ,colors[player_i]);
 	}
 	
+	if (nbPlayers == 2) {
+		applySpecificRulesFor2PlayersGame(&g);
+	}
+
 	return g;
 }
+
 
 bool placePiece(Piece* p, const Island island, const Board* b) {
 	if (isIslandEmpty(island, b->arrPieces, b->nbPieces)) {
@@ -43,13 +73,13 @@ bool placePiece(Piece* p, const Island island, const Board* b) {
 
 bool movePiece(Piece* p, const Island i, const Board* b)
 {
-	if (isIslandEmpty(i, b->arrPieces, b->nbPieces) 
-			&& isPieceAdjacentToIsland(*p, i) 
-			&& checkBridge(p->island, i, b)) {
+	if (isIslandEmpty(i, b->arrPieces, b->nbPieces) && isPieceAdjacentToIsland(*p, i) && checkBridge(p->island, i, b)) {
 		p->island = i;
-		
 		return true;
-	} else return false;
+	} 
+	else {
+		return false;
+	}
 }
 
 bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces) {
@@ -178,7 +208,6 @@ bool clickOnBoard(const Coord coord, Game* game) {
 
 			return true;
 		}
-			
 		break;
 	default:
 		break;
@@ -207,17 +236,19 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game) {
 		case MOVE_PIECE:
 			if(islandOrBridgeStart.type==ISLAND && islandOrBridgeEnd.type==ISLAND)
 			{
-				Piece *piece;
-				size_t idCurrentPlayer = game->currentPlayerID;
-				Island islandStart = islandOrBridgeStart.data.island;
-				Island islandEnd = islandOrBridgeEnd.data.island;
-				piece=getPieceFromIsland(game->board.arrPieces, game->board.nbPieces,islandStart);
-				if(idCurrentPlayer==piece->idJ) //Check if the current player id is the same than the piece selected by the player
+				const size_t idCurrentPlayer = game->currentPlayerID;
+				const Island islandStart = islandOrBridgeStart.data.island;
+				const Island islandEnd = islandOrBridgeEnd.data.island;
+				Piece* piece = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, islandStart);
+				if(piece != NULL && idCurrentPlayer==piece->idJ) { //Check if the current player id is the same than the piece selected by the player
 					return movePiece(piece, islandEnd, &game->board);
-				return false;
+				}
 			}
+			break;
+		default:
+			break;
 	}
-
+	
 	return false;
 }
 

@@ -1,6 +1,8 @@
 #include "view/GameDrawer.h"
+#include "view/BoardDrawer.h"
+#include "view/PiecesDrawer.h"
 
-bool drawGame(SDL_Renderer* renderer, SDL_Rect* windowSize, SDL_Rect* boardRect, Game* game, TextureHandler* textureHandler)
+bool drawGame(SDL_Renderer* renderer, const SDL_Rect* windowSize, const SDL_Rect* boardRect, const Game* game,TextureHandler* textureHandler)
 {
 	SDL_Texture* menuTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 50, 70);
 	
@@ -15,4 +17,7 @@ bool drawGame(SDL_Renderer* renderer, SDL_Rect* windowSize, SDL_Rect* boardRect,
 
 
 	drawBoard(renderer, boardRect, &(game->board), textureHandler->textures[TEXTURE_Island],  textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
+	drawPieces(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, textureHandler->textures[TEXTURE_Piece]);
+
+	return true;
 }

@@ -5,10 +5,9 @@
 
 #include "model/Game.h"
 #include "engine/TextureHandler.h"
-#include "view/BoardDrawer.h"
 #include "engine/Button.h"
 
 
-bool drawGame(SDL_Renderer* renderer, SDL_Rect* windowSize, SDL_Rect* boardRect, Game* game,TextureHandler* textureHandler);
+bool drawGame(SDL_Renderer* renderer, const SDL_Rect* windowSize, const SDL_Rect* boardRect, const Game* game,TextureHandler* textureHandler);
 
 #endif

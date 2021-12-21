@@ -1,5 +1,5 @@
 #include "view/BoardDrawer.h"
-#include "model/Game.h"
+
 
 bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water)
 {
@@ -8,7 +8,7 @@ bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* b
 
 	SDL_RenderCopy(renderer, water, NULL, boardRect);
 
-//Islands
+	//Islands
 	for (int y=0; y<9; y+=2) {
 		for (int x=0; x<9; x+=2) {
 			const SDL_Rect destRect = {
@@ -36,7 +36,7 @@ bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* b
 		}
 	}
 
-	//HBridge
+	//VBridge
 	for (int y=0; y<4; ++y) {
 		for (int x=0; x<5; ++x) {
 			if (board->vBridges[y][x]) {
