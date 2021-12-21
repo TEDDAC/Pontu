@@ -23,7 +23,8 @@
 typedef enum {
 	PLACEMENT,
 	MOVE_PIECE,
-	RM_BRIDGE
+	RM_BRIDGE,
+	GAME_ENDED
 } Phase;
 
 /**
@@ -36,6 +37,7 @@ typedef struct {
 	//TODO duree
 	Phase phase; ///< The current state of the game
 	Player arrPlayers[4]; ///< The array of all the players in this game
+	size_t nbPlayers;
 	Board board; ///< The board for this game
 } Game;
 
@@ -46,6 +48,13 @@ typedef struct {
  */
 Game newGame(const size_t nbPlayers, const char* pseudos[]);
 
+
+/**
+ * \brief (Should not be called outside Game.c) Used to change phase or player (or both) after an action
+ * 
+ * \param [in, out] game The game to mutate
+ */
+void changePhaseOrPlayerTurn(Game* game);
 
 /**
  * \brief Place a piece into the board
@@ -65,6 +74,16 @@ bool placePiece(Piece* p, const Island island, const Board* b);
  * \return True if the piece can be move otherwise false
  */
 bool movePiece(Piece* p, const Island i, const Board* b);
+
+/**
+ * \brief Test if a movement is possible for a piece to a destination island
+ * 
+ * \param p The piece to test
+ * \param i The destination island 
+ * \param b The board
+ * \return true if the piece p can move to the island i 
+ */
+bool pieceCanMoveTo(const Piece* p, const Island i, const Board* b);
 
 /**
  * \brief Check if an island is empty 
@@ -103,6 +122,15 @@ bool isPieceIsolated(const Piece* piece, const Board* board);
  * \return true if all player's pieces are stucked, false otherwise
  */
 bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const size_t nbPieces);
+
+/**
+ * \brief Test if one piece of a player can move
+ * 
+ * \param playerID The player to check
+ * \param board The board
+ * \return true if at least one of player's piece can move 
+ */
+bool anyOfPlayersPiecesCanMove(const size_t playerID, const Board* board);
 
 /**
  * \brief Check if there is a bridge between two Island.

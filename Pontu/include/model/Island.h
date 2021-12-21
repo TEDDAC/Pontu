@@ -9,6 +9,7 @@
 #define ISLAND_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 /**
  *\struct  Island
@@ -47,5 +48,14 @@ bool islandEqual(const Island a, const Island b);
  * \return true is the island is in board bounds
  */
 bool islandValid(const Island island);
+
+/**
+ * \brief Return valid island around the one given
+ * 
+ * \param [in] island The island for which neighbors are searched
+ * \param [out] nbIlsandsFound The number of island in the returned array
+ * \return neighbors Array of neighbors islands (take care to free)
+ */
+Island* islandsAround(const Island island, size_t* nbIslandsFound);
 
 #endif 
