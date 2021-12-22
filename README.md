@@ -37,7 +37,7 @@ cd .. #Se mettre dans le dossier Pontu
 ./bin/Pontu
 ```
 
-### On Windows:
+### Sur Windows:
 
 ```BASH
 git clone [urlToThisRepo]
