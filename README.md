@@ -20,9 +20,9 @@ Nous développerons successivement les versions suivantes :
 * Jouer contre des IAs (eventuellement mixées avec des joueurs)
 * Jouer en réseau sur un seveur de mise en relation (attendre qu'un adversaire se connecte)
 
-## How to get, build and run
+## Comment télécharger, compiler et executer Pontu
 
-### On Linux:
+### Sur Linux:
 
 ```BASH
 git clone [urlToThisRepo]
@@ -33,7 +33,8 @@ mkdir bin
 cd bin
 cmake ..
 make
-./Pontu
+cd .. #Se mettre dans le dossier Pontu
+./bin/Pontu
 ```
 
 ### On Windows:
@@ -47,6 +48,7 @@ mkdir bin
 cd bin
 cmake ..
 mingw32-make
-./Pontu
+cd .. #Se mettre dans le dossier Pontu
+./bin/Pontu.exe
 ```
 
