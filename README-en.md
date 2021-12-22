@@ -39,7 +39,8 @@ mkdir bin
 cd bin
 cmake ..
 make
-./Pontu
+cd .. # to get to the directory Pontu
+./bin/Pontu
 ```
 
 ### On Windows:
@@ -53,7 +54,8 @@ mkdir bin
 cd bin
 cmake ..
 mingw32-make
-./Pontu
+cd .. # to get to the directory Pontu
+./bin/Pontu.exe
 ```
 
 
