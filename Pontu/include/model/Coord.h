@@ -9,6 +9,8 @@
 #define COORD_INCLUDED
 
 #include <stdbool.h>
+#include "model/Island.h"
+#include "engine/ArrayUtils.h"
 
 /**
  * \struct Coord
@@ -45,5 +47,13 @@ bool coordValid(const Coord coord);
  * \return true if (a.x==b.x and a.y==b.y), false otherwise
  */
 bool coordEqual(const Coord a, const Coord b);
+
+/**
+ * \brief Convert an island to a coord
+ * 
+ * \param[in] island The island to convert
+ * \return Coord from the island
+ */
+Coord islandToCoord(const Island* island);
 
 #endif //COORD_INCLUDED

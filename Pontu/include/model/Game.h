@@ -13,6 +13,7 @@
 #include "model/Bridge.h"
 #include "model/Island.h"
 #include "model/Coord.h"
+#include "model/arrayCoord.h"
 #include <SDL2/SDL_pixels.h>
 #include <stdbool.h> 
 
@@ -176,6 +177,15 @@ bool clickOnBoard(const Coord coord, Game* game);
  * \return True on success. Else return false.
  */
 bool rmBridge(Bridge bridge, Board* board);
+
+/**
+ * \brief List cases that can be interacted with for movement
+ * 
+ * \param[in] game The game
+ * \param[in] selectedCase The selected case
+ * \return struct array_Coord An array of coord /!\ Care to free this array with array_Coord_Free
+ */
+struct array_Coord getInteractiveCases(const Game* const game, const Coord selectedCase);
 
 #endif //GAME_H
 
