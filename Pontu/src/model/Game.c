@@ -189,13 +189,13 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 	// Vertical bridge
 	if (xdiff == 0 && abs(ydiff) == 1)
 	{
-		const int coordY = start.y - (ydiff==-1);
+		const int coordY = start.y - (ydiff==-1?1:0);
 		return board->vBridges[coordY][start.x];
 	}
 	// Horizontal bridge
 	else if (abs(xdiff) == 1 && ydiff == 0)
 	{
-		const int coordX = start.x - (xdiff==-1);
+		const int coordX = start.x - (xdiff==-1?1:0);
 		return board->hBridges[start.y][coordX];
 	}
 	// Not a bridge
