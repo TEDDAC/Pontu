@@ -56,7 +56,7 @@ int testGenerateurTexture(){
 
     // load font.ttf at size 16 into font
     TTF_Font *retroFont;
-    int size = 100;
+    int size = 100*100/88;
     char* string = "Pontu";
     retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", size);
     if(!retroFont) {
@@ -83,7 +83,7 @@ int testGenerateurTexture(){
     SDL_Rect Message_rect; //create a rect
     Message_rect.x = 0;  //controls the rect's x coordinate
     Message_rect.y = 0; // controls the rect's y coordinte
-    Message_rect.w = strlen(string)*advance*3/2; // controls the width of the rect
+    Message_rect.w = strlen(string)*size*2/3; // controls the width of the rect
     Message_rect.h = size; // controls the height of the rect
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 
