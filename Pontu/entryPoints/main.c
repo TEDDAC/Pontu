@@ -5,9 +5,9 @@
 #include "engine/InputElement.h"
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
-#include "model/arrayCoord.h"
 #include "view/GameDrawer.h"
 #include "engine/ArrayUtils.h"
+#include "model/arrayCoord.h"
 #include "debug/printer.h"
 
 int main(int argc, char* argv[])
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	int wBoardRect=99*3, hBoardRect=99*3;
 	SDL_Rect boardRect = {.x=windowSize.w/2 - wBoardRect/2, .y=windowSize.h/2 - hBoardRect/2, .w=wBoardRect, .h=99*3};
 	const char* pseudos[] = {"Azerty","Bépo"};
-	Game game = newGame(2, pseudos);
+	Game game = newGame(3, pseudos);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
 

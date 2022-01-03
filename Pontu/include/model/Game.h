@@ -1,7 +1,7 @@
 /**
  * \file Game.h
  * \brief Management of a Game
- * \author Théotime Maillarbaux, Jacques Thomas
+ * \author Théotime Maillarbaux, Jacques Thomas, Martin Rouault
  * \date 29/11/2021
  */
 
