@@ -12,18 +12,23 @@
 #include <stdio.h>
 #include "engine/TextureLoader.h"
 
-// List here the different texture to handle 
-// In the enum
-//		Island become TEXTURE_Island
-// In file
-//		Island become Island.png
+/** List here the different texture to handle 
+ * In the enum
+ *		Island become TEXTURE_Island
+ * In file
+ *		Island become Island.png
+ * \sa MACRO_TEXTURE_ENUM_GEN(E)
+ */
 #define MACRO_FOR_ALL_TEXTURES(M) 	\
 	M(Island)                     	\
 	M(Bridge)                     	\
 	M(Piece)						\
 	M(Water)
 
-// Allow the generation of enum
+/**
+ *  \brief Allow the generation of enum
+ * 	\sa MACRO_FOR_ALL_TEXTURES(M)
+ */
 #define MACRO_TEXTURE_ENUM_GEN(E) TEXTURE_##E,
 
 /**
@@ -50,7 +55,7 @@ typedef struct
 /**
  * \brief Create a TextureHandler and load each texture defined in MACRO_FOR_ALL_TEXTURES in it
  * \param renderer The renderer which is passed to texture when they are created
- * \return ** TextureHandler filled with textures
+ * \return TextureHandler filled with textures
  */
 TextureHandler newTextureHandler(SDL_Renderer* renderer);
 

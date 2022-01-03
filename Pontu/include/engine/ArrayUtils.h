@@ -1,3 +1,10 @@
+/**
+ * \file ArrayUtils.h
+ * \brief This file define a macro used to generate dynamic array structs and associated functions
+ * \author Martin Rouault
+ * \date 3/01/2022
+ */
+
 #ifndef ARRAY_UTILS_INCLUDED
 #define ARRAY_UTILS_INCLUDED
 
@@ -5,19 +12,21 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-/*
-This file define a macro used to generate array structs and associated functions
+/**
+ * \brief Generate a dynamic array for type T
+ * If you want an int array use
+ *	GENERATE_DYNAMIC_ARRAY(int)
 
-If you want an int array use
-	GENERATE_DYNAMIC_ARRAY(int)
-
-If you miss a function, write it with a type as int first then rewrite it in the macro
-	You will need to follow function naming convetions to avoid multiple functions with the same name
-	Functions in header must be marked as inline
-	Don't forget antislashes
-*/
-
+ * If you miss a function, write it with a type as int first then rewrite it in the macro
+ *	You will need to follow function naming convetions to avoid multiple functions with the same name
+ *	Functions in header must be marked as inline
+ *	Don't forget antislashes
+ */
 #define GENERATE_DYNAMIC_ARRAY(T) \
+/** \
+ * \struct array_##T \
+ *  \
+ * */\
 struct array_##T { \
 	T* elems; \
 	size_t arraySize; \
