@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 		goto Quit;   
 	}
 
-	renderer = SDL_CreateRenderer(window,-1,0);
+	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
 	if(!renderer)
 	{
 		fprintf(stderr, "Erreur : %s", SDL_GetError());
@@ -103,10 +103,9 @@ int main(int argc, char* argv[])
 			fprintf(stderr, "Interactive cases : {");
 			array_Coord_Foreach(&interactiveCases, *printCoord);
 			fprintf(stderr, "}\n");
-			fflush(stderr);
 		}
-		
-
+			
+		fflush(stderr);
 
 		// Drawing
 		drawGame(renderer, &windowSize, &boardRect, &game, &textureHandler);
