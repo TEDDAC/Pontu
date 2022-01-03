@@ -1,26 +1,15 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
 #include "engine/TextureLoader.h"
 
-//gcc test.c -I ../include $(sdl2-config --cflags --libs)
-
-int testTextureLoader(void) {
+int testGenerateurTexture(){
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-    SDL_Texture* picture;
     int statut = EXIT_FAILURE;
-    char* path = "../rsrc/img/Lenna.png";
 
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr, "Erreur SDL_INIT: %s\n", SDL_GetError());
         goto Quit;
     }
-
-	if(TTF_Init()==-1) {
-	    printf("TTF_Init: %s\n", TTF_GetError());
-	    exit(2);
-	}
 
     //fenetre
     window = SDL_CreateWindow("Fenêtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640,480, SDL_WINDOW_SHOWN);
@@ -57,11 +46,47 @@ int testTextureLoader(void) {
     }
     SDL_RenderPresent(renderer);
 
+
+
+    if(TTF_Init()==-1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
+
+    // load font.ttf at size 16 into font
+    TTF_Font *retroFont;
+    retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", 72);
+    if(!retroFont) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+    // handle error
+    }
+    SDL_Color White = {255, 255, 255};
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(retroFont, "put your text here", White);
+
+    // now you can convert it into a texture
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+    SDL_Rect Message_rect; //create a rect
+    Message_rect.x = 0;  //controls the rect's x coordinate
+    Message_rect.y = 0; // controls the rect's y coordinte
+    Message_rect.w = 500; // controls the width of the rect
+    Message_rect.h = 100; // controls the height of the rect
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+
+    SDL_RenderPresent(renderer);
+
+    int minx,maxx,maxy,advance;
+    if(TTF_GlyphMetrics(retroFont,'put your text here',&minx,&maxx,NULL,NULL,&advance)==-1)
+        printf("%s\n",TTF_GetError());
+    else {
+        printf("minx    : %d\n",minx);
+        printf("maxx    : %d\n",maxx);
+        printf("advance : %d\n",advance);
+        printf("Largeur : %d\n",maxx-minx);
+    }
+
     SDL_bool quit = SDL_FALSE;
     SDL_Event event;
-
-
-	picture = createTextureFromPath(renderer, path);
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -71,14 +96,8 @@ int testTextureLoader(void) {
             case SDL_QUIT:
                 quit = SDL_TRUE;
                 break;
-            case SDL_MOUSEBUTTONUP:
-                break;
             }
         }
-	SDL_RenderCopy(renderer, picture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-
-        SDL_Delay(20);
     }
 
 Quit:

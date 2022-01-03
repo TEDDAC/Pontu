@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 /*
  * \brief Create a texture with an image
@@ -8,3 +9,5 @@
  * \return Return texture created on success. Else return NULL and print the error on STDERR.
 */
 SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path);
+
+SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int* sizex, int* sizey, SDL_bool forHover);

@@ -81,7 +81,6 @@ int main(int argc, char const *argv[]) {
 
     SDL_SetRenderTarget(renderer, NULL);
     arg.texture = violetTexture;
-    button.hoverTexture = blueTexture;
     while(!quit)
     {
         while(SDL_PollEvent(&event))
