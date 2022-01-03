@@ -1,7 +1,7 @@
 /**
  * \file Game.h
  * \brief Management of a Game
- * \author Théotime Maillarbaux, Jacques Thomas
+ * \author Théotime Maillarbaux, Jacques Thomas, Martin Rouault
  * \date 29/11/2021
  */
 
@@ -13,6 +13,7 @@
 #include "model/Bridge.h"
 #include "model/Island.h"
 #include "model/Coord.h"
+#include "model/arrayCoord.h"
 #include <SDL2/SDL_pixels.h>
 #include <stdbool.h> 
 
@@ -37,7 +38,7 @@ typedef struct {
 	//TODO duree
 	Phase phase; ///< The current state of the game
 	Player arrPlayers[4]; ///< The array of all the players in this game
-	size_t nbPlayers;
+	size_t nbPlayers; 
 	Board board; ///< The board for this game
 } Game;
 
@@ -146,6 +147,7 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  * \param[in] arrPieces Array of all pieces
  * \param[in] logicalSize The logical size of arrPieces
  * \param[in] island The island on the one we want to check the piece
+ * \return the piece address if there is one the island otherwise return NULL
  */
 Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island);
 
@@ -176,6 +178,15 @@ bool clickOnBoard(const Coord coord, Game* game);
  * \return True on success. Else return false.
  */
 bool rmBridge(Bridge bridge, Board* board);
+
+/**
+ * \brief List cases that can be interacted with for movement
+ * 
+ * \param[in] game The game
+ * \param[in] selectedCase The selected case
+ * \return struct array_Coord An array of coord /!\ Care to free this array with array_Coord_Free
+ */
+struct array_Coord getInteractiveCases(const Game* const game, const Coord selectedCase);
 
 #endif //GAME_H
 

@@ -1,5 +1,6 @@
 #include "model/Game.h"
 #include "model/IslandOrBridge.h"
+#include "engine/ArrayUtils.h"
 #include <assert.h>
 
 // Not defined in header to not pollute inferface
@@ -93,7 +94,7 @@ void changePhaseOrPlayerTurn(Game* game)
 											   game->board.nbPieces));
 
 			
-			fprintf(stderr, "Player n°%lld turn\n", game->currentPlayerID);
+			fprintf(stderr, "Player n°%ld turn\n", game->currentPlayerID);
 			fflush(stderr);
 
 			if (anyOfPlayersPiecesCanMove(game->currentPlayerID, &game->board))
@@ -189,12 +190,14 @@ bool checkBridge(const Island start, const Island target, const Board* board)
 	// Vertical bridge
 	if (xdiff == 0 && abs(ydiff) == 1)
 	{
-		return board->vBridges[start.y + ydiff][start.x];
+		const int coordY = start.y - (ydiff==-1?1:0);
+		return board->vBridges[coordY][start.x];
 	}
 	// Horizontal bridge
 	else if (abs(xdiff) == 1 && ydiff == 0)
 	{
-		return board->hBridges[start.y][start.x + xdiff];
+		const int coordX = start.x - (xdiff==-1?1:0);
+		return board->hBridges[start.y][coordX];
 	}
 	// Not a bridge
 	else
@@ -373,4 +376,93 @@ bool rmBridge(Bridge bridge, Board* board)
 	}
 
 	return false;
+}
+
+
+struct array_Coord getInteractiveCases(const Game* const game, const Coord selectedCase) {
+	switch (game->phase)
+	{
+	case PLACEMENT: {
+		struct array_Coord retVal = array_Coord_Create();
+		array_Coord_Reserve(&retVal, 25);
+	
+		for (int y = 0; y<5; y+=2) {
+			for (int x = 0; x<5; x+=2) {
+				array_Coord_AddElement(&retVal, newCoord(x,y));
+			}
+		}
+
+		for (size_t i = 0; i < game->board.nbPieces; i++)
+		{
+			if (islandValid(game->board.arrPieces[i].island)) {
+				array_Coord_RemoveElement(&retVal, islandToCoord(&game->board.arrPieces[i].island), &coordEqual);
+			}
+		}
+		
+		array_Coord_FitToSize(&retVal);
+
+		return retVal;
+	}
+	case MOVE_PIECE: {
+		struct array_Coord retVal = array_Coord_Create();
+		array_Coord_Reserve(&retVal, 4);
+
+		for (size_t i = 0; i < game->board.nbPieces; ++i)
+		{
+			if (game->board.arrPieces[i].idJ == game->currentPlayerID && !game->board.arrPieces[i].stuck) {
+				size_t nbIsland;
+				Island* islands = islandsAround(game->board.arrPieces[i].island, &nbIsland);
+				
+				if (nbIsland != 0) {
+					Coord pieceCoord = islandToCoord(&game->board.arrPieces[i].island);
+					if (!coordValid(selectedCase)) {
+						array_Coord_AddElement(&retVal, pieceCoord);
+					}
+					else {
+						if (coordEqual(pieceCoord, selectedCase)) {
+							for (size_t iIsle = 0; iIsle < nbIsland; ++iIsle)
+							{
+								if (pieceCanMoveTo(&game->board.arrPieces[i], islands[iIsle], &game->board)) {
+									Coord coordIsland = islandToCoord(&islands[iIsle]);
+									array_Coord_AddElement(&retVal, coordIsland);
+								}
+							}
+							free(islands);
+							return retVal;
+						}
+					}
+				}
+				free(islands);
+			}
+		}
+
+		array_Coord_FitToSize(&retVal);
+		return retVal;
+	}
+	case RM_BRIDGE: {
+		struct array_Coord retVal = array_Coord_Create();
+		array_Coord_Reserve(&retVal, 40);
+		
+		for (size_t y = 0; y<5; ++y) {
+			for (size_t x = 0; x<4; ++x) {
+				if (game->board.hBridges[y][x]) {
+					Coord coord = {.x=x*2+1, .y=y*2};
+					array_Coord_AddElement(&retVal, coord);
+				}
+			}
+		}
+		for (size_t y = 0; y<4; ++y) {
+			for (size_t x = 0; x<5; ++x) {
+				if (game->board.vBridges[y][x]) {
+					Coord coord = {.x=x*2, .y=y*2+1};
+					array_Coord_AddElement(&retVal, coord);
+				}
+			}
+		}
+		
+		return retVal;
+	}
+	default:
+		return array_Coord_Create();
+	}
 }

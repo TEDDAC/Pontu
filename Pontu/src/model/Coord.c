@@ -15,3 +15,8 @@ bool coordEqual(const Coord a, const Coord b)
 {
 	return a.x == b.x && a.y == b.y;
 }
+
+Coord islandToCoord(const Island* island) {
+	Coord coord = {.x = island->x*2, .y = island->y*2};
+	return coord;
+}
