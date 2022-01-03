@@ -1,4 +1,5 @@
 #include "engine/TextureLoader.h"
+#include <string.h>
 
 int testGenerateurTexture(){
     SDL_Window *window = NULL;
@@ -55,35 +56,38 @@ int testGenerateurTexture(){
 
     // load font.ttf at size 16 into font
     TTF_Font *retroFont;
-    retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", 72);
+    int size = 100;
+    char* string = "Pontu";
+    retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", size);
     if(!retroFont) {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     // handle error
     }
     SDL_Color White = {255, 255, 255};
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(retroFont, "put your text here", White);
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(retroFont, string, White);
 
     // now you can convert it into a texture
     SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
-    SDL_Rect Message_rect; //create a rect
-    Message_rect.x = 0;  //controls the rect's x coordinate
-    Message_rect.y = 0; // controls the rect's y coordinte
-    Message_rect.w = 500; // controls the width of the rect
-    Message_rect.h = 100; // controls the height of the rect
-    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-
-    SDL_RenderPresent(renderer);
-
-    int minx,maxx,maxy,advance;
-    if(TTF_GlyphMetrics(retroFont,'put your text here',&minx,&maxx,NULL,NULL,&advance)==-1)
+    int minx,maxx,miny,maxy,advance;
+    if(TTF_GlyphMetrics(retroFont,string,&minx,&maxx,&miny,&maxy,&advance)==-1)
         printf("%s\n",TTF_GetError());
     else {
         printf("minx    : %d\n",minx);
         printf("maxx    : %d\n",maxx);
-        printf("advance : %d\n",advance);
-        printf("Largeur : %d\n",maxx-minx);
+        printf("miny    : %d\n",miny);
+        printf("maxy    : %d\n",maxy);
+        printf("advance    : %d\n",advance);
     }
+
+    SDL_Rect Message_rect; //create a rect
+    Message_rect.x = 0;  //controls the rect's x coordinate
+    Message_rect.y = 0; // controls the rect's y coordinte
+    Message_rect.w = strlen(string)*advance*3/2; // controls the width of the rect
+    Message_rect.h = size; // controls the height of the rect
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+
+    SDL_RenderPresent(renderer);
 
     SDL_bool quit = SDL_FALSE;
     SDL_Event event;
