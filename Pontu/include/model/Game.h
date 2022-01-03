@@ -38,7 +38,7 @@ typedef struct {
 	//TODO duree
 	Phase phase; ///< The current state of the game
 	Player arrPlayers[4]; ///< The array of all the players in this game
-	size_t nbPlayers;
+	size_t nbPlayers; 
 	Board board; ///< The board for this game
 } Game;
 
@@ -147,6 +147,7 @@ bool checkBridge(const Island start, const Island target, const Board* b);
  * \param[in] arrPieces Array of all pieces
  * \param[in] logicalSize The logical size of arrPieces
  * \param[in] island The island on the one we want to check the piece
+ * \return the piece address if there is one the island otherwise return NULL
  */
 Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island);
 
