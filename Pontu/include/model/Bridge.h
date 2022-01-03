@@ -1,7 +1,7 @@
 /**
  * \file Bridge.h
  * \brief Bridge
- * \autor Martin Rouault, Jacques Thomas
+ * \author Martin Rouault, Jacques Thomas
  * \date 13/12/2021
  */
 
