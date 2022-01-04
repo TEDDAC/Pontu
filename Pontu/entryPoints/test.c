@@ -1,6 +1,6 @@
 //#include "../test/testTextureLoader.c"
-#include "../test/testFontLoader.c"
-// #include "../test/testAudio.c"
+//#include "../test/testFontLoader.c"
+#include "../test/testAudioHandler.c"
 // #include "../test/testGenerateurTexture.c"
 
 /*
@@ -9,8 +9,8 @@
 
 int main(/*int argc, char *argv[]*/) {
 	//testTextureLoader();
-	//testAudio();
-	testFontLoader();
+	testAudioHandler();
+	//testFontLoader();
 	//testGenerateurTexture();
 
 	return 0;

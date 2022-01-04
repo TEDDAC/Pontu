@@ -105,7 +105,7 @@ void changeSFXVol(int volSFX);
  * \brief Frees the music and SFX, and un-initializes the audio.
  * \param[in,out]	audioHandler	A pointer to the AudioHandler to be freed.
  */
-void freeAudioHandler(AudioHandler audioHandler);
+void freeAudioHandler(AudioHandler* audioHandler);
 
 /**
  * \brief Plays a music. If another music is currently playing, the previous one will fade out.
@@ -117,10 +117,9 @@ void playMusic(EnumAudios music, AudioHandler audioHandler);
 /**
  * \brief Plays a sound effect.
  * \param[in]	sfx		The SFX to be played. Should be a value of #EnumAudios starting with SFX_.
- * \param[in]	channel		The channel the SFX should be played on.
  * \param[in]	audioHandler	The AudioHandler used to store the SFX.
  */
-void playSFX(EnumAudios sfx, int channel, AudioHandler audioHandler);
+void playSFX(EnumAudios sfx, AudioHandler audioHandler);
 
 
 #endif // AUDIO_H
