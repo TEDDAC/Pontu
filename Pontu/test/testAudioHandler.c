@@ -29,11 +29,51 @@ void testAudioHandler(void) {
 
 	SDL_Delay(5000);
 
-	printf("Playing SFX");
+	printf("Playing SFX\n");
 
 	playSFX(SFX_testClick, ah);
 
-	SDL_Delay(1000);
+	SDL_Delay(2000);
+
+	printf("Trying to play a music as SFX (playSFX(MUSIC_base_tardi))\n");
+
+	playSFX(MUSIC_base_tardi, ah);
+
+	printf("Trying to play -1 as SFX\n");
+
+	playSFX(-1, ah);
+
+	printf("Trying to play 9999 as SFX\n");
+
+	playSFX(9999, ah);
+
+	printf("Trying to play a SFX as music (playMusic(SFX_testClick))\n");
+
+	playMusic(SFX_testClick, ah);
+
+	printf("Trying to play -1 as music\n");
+
+	playMusic(-1, ah);
+
+	printf("Trying to play 9999 as music\n");
+
+	playMusic(9999, ah);
+
+	printf("Playing louder (vol = 128) the SFX, testing with SFX_testClick\n");
+
+	changeSFXVol(128);
+	playSFX(SFX_testClick, ah);
+	SDL_Delay(2000);
+
+	printf("Playing quieter (vol = 10) the SFX, testing with SFX_testClick\n");
+
+	changeSFXVol(10);
+	playSFX(SFX_testClick, ah);
+	SDL_Delay(2000);
+
+	printf("Waiting another 30 seconds to test loop...\n");
+
+	SDL_Delay(30000);
 
 	printf("Freeing AudioHandler\n");
 	freeAudioHandler(&ah);

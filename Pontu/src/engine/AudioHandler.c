@@ -20,7 +20,7 @@ int fadeOut(void* args) {
 	Mix_Music* music = (Mix_Music*)args;
 	int ret;
 	
-	if(Mix_FadeOutMusic(500) == 0) { // Starting the fadeout
+	if(Mix_FadeOutMusic(500) == 1) { // Starting the fadeout
 		while (Mix_PlayingMusic()) {
 			; // Waiting until it's done
 		}
@@ -138,7 +138,7 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 	// If another music is playing, fading the previous one out
 	if (Mix_PlayingMusic()) {
 		// Creating the thread, passing the music as parameter
-		SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", (void*)audioHandler.musics[music]);
+		SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", audioHandler.musics[music]);
 		if (thread == NULL) {
 			fprintf(stderr,"WARNING: couldn't create thread to fade out music\n");
 		}
