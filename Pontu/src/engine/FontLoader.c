@@ -32,6 +32,7 @@ FontHandler loadFonts(void)
 		}
 		free(fontPathFile);
 	}
+	return fontHandler;
 }
 
 bool freeFonts(FontHandler fontHandler)
