@@ -6,15 +6,16 @@ bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charT
 	{
 		return false;
 	}
-	if(textInput->cursorPosition >= strlen(textInput->value))
+	if(textInput->cursorPosition > strlen(textInput->value))
 	{
 		return false;
 	}
 	char newValue[strlen(textInput->value)+1];
 
-	strncpy(newValue, textInput->value, textInput->cursorPosition);
+	strcpy(newValue, "");
+	strncat(newValue, textInput->value, textInput->cursorPosition);
 	strcat(newValue, &charToAdd);
-	strcat(newValue, textInput->value+textInput->cursorPosition+1);
+	strcat(newValue, textInput->value+textInput->cursorPosition);
 
 	free(textInput->value);
 	textInput->value = (char*) malloc(strlen(newValue));
@@ -24,7 +25,7 @@ bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charT
 		return false;
 	}
 	strcpy(textInput->value, newValue);
-	textInput->cursorPosition -= 1;
+	textInput->cursorPosition += 1;
 
 	return true;
 }
@@ -48,7 +49,7 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 	textLen = strlen(textInput->value);
 	char tmp[textLen];
 	
-	if(textInput->cursorPosition > textLen)
+	if(textInput->cursorPosition-1 > textLen)
 	{
 		return false;
 	}
@@ -58,7 +59,8 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 	}
 	
 	strcpy(tmp, textInput->value);
-	strncpy(textInput->value, tmp, textInput->cursorPosition-1);
+	strcpy(textInput->value, "");
+	strncat(textInput->value, tmp, textInput->cursorPosition-2);
 	strcat(textInput->value, tmp+textInput->cursorPosition);
 	textInput->cursorPosition -= 1;
 	return true;
@@ -66,22 +68,34 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 
 bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 {
+	if(textInput == NULL)
+	{
+		fprintf(stderr, "WARNING: TextInput mustn't be NULL\n");
+		return false;
+	}
 	SDL_Surface* textRendered = NULL;
+	SDL_Texture* textTexture = NULL;
+	SDL_Color black = {0, 0, 0, 255};
+	SDL_Color white = {200, 200, 200, 255};
+
 	SDL_Texture* inputTexture = SDL_CreateTexture(renderer,
 		      	SDL_PIXELFORMAT_RGBA8888,
 		       	SDL_TEXTUREACCESS_TARGET,
 		       	(textInput->size).w,
 		       	(textInput->size).h);
-	SDL_Color black = {0, 0, 0, 255};
-	SDL_Color white = {200, 200, 200, 255};
-	char textValue[strlen(textInput->value)+1];
-	SDL_Rect size = {.x=0, .y=0, .w=textInput->size.w, .h=textInput->size.h};
-
 	if(inputTexture == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't create TextInput texture: %s\n", SDL_GetError());
 		return false;
 	}
+	char textValue[strlen(textInput->value)+1];
+	SDL_Rect size = {.x=0, .y=0, .w=textInput->size.w, .h=textInput->size.h};
+	if(textInput->textFont == NULL)
+	{
+		fprintf(stderr, "WARNING: Can't use a null font\n");
+		return false;
+	}
+	SDL_Rect textZone = {.x=textInput->size.x, .y=textInput->size.y, .h=TTF_FontHeight(textInput->textFont)};
 	if(SDL_SetRenderTarget(renderer, inputTexture) < 0)
 	{
 		fprintf(stderr, "WARNING: Can't set TextInput's texture as target: %s\n", SDL_GetError());
@@ -92,7 +106,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		fprintf(stderr, "WARNING: Can't change color: %s\n", SDL_GetError());
 		return false;
 	}
-	if(SDL_RenderFillRect(renderer, &(textInput->size)) < 0)
+	if(SDL_RenderFillRect(renderer, &size) < 0)
 	{
 		fprintf(stderr, "WARNING: Can't fill TextInput: %s\n", SDL_GetError());
 		return false;
@@ -109,17 +123,24 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 	}
 	if(textInput->isActive)
 	{
-		strncpy(textValue, textInput->value, textInput->cursorPosition);
+		strcpy(textValue, "");
+		strncat(textValue, textInput->value, textInput->cursorPosition);
 		strcat(textValue, "|");
-		strcat(textValue, textInput->value+textInput->cursorPosition+1);
+		strcat(textValue, textInput->value+textInput->cursorPosition);
 	}else
 	{
-		strcpy(textValue, textInput->value);
+		strcpy(textValue, strcmp(textInput->value, "") != 0 ? textInput->value : " ");
 	}
-	textRendered = TTF_RenderUTF8_Solid(textInput->textFont, textValue, textInput->textColor);
+	textRendered = TTF_RenderText_Solid(textInput->textFont, textValue, textInput->textColor);
 	if(textRendered == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't write on TextInput\n");
+		return false;
+	}
+	textTexture = SDL_CreateTextureFromSurface(renderer, textRendered);
+	if(textTexture == NULL)
+	{
+		fprintf(stderr, "WARNING: Can't create texture from surface: %s\n", SDL_GetError());
 		return false;
 	}
 	if(SDL_SetRenderTarget(renderer, NULL) < 0)
@@ -127,7 +148,18 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		fprintf(stderr, "WARNING: Can't unset TextInput's texture as target: %s\n", SDL_GetError());
 		return false;
 	}
-	return SDL_RenderCopy(renderer, inputTexture, NULL, &textInput->size) == 0;
+	if(SDL_RenderCopy(renderer, inputTexture, NULL, &textInput->size) != 0)
+	{
+		fprintf(stderr, "WARNING: Can't copy the inputTexure on renderer");
+		return false;
+	}
+	textZone.w = calculateStringPixelLenght(textInput->textFont, textValue);
+	if(SDL_RenderCopy(renderer, textTexture, NULL, &textZone) != 0)
+	{
+		fprintf(stderr, "WARNING: Can't copy the text on renderer");
+		return false;
+	}
+	return true;
 }
 
 bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, const TTF_Font* font)
@@ -138,13 +170,13 @@ bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* 
 		return false;
 	}
 
-	textInput->value = (char*) malloc(strlen("TEST"));
+	textInput->value = (char*) malloc(strlen(""));
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
 		return false;
 	}
-	strcpy(textInput->value, "TEST");
+	strcpy(textInput->value, "");
 	textInput->cursorPosition = 0;
 	if(size == NULL)
 	{

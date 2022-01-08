@@ -6,6 +6,26 @@
 
 //gcc test.c -I ../include $(sdl2-config --cflags --libs)
 
+char writeErina(int i)
+{
+	switch(i)
+	{
+		case 0:
+			return 'E';
+		case 1:
+			return 'r';
+		case 2:
+			return 'i';
+		case 3:
+			return 'n';
+		case 4:
+			return 'a';
+		default:
+			return 0;
+	}
+	return 0;
+}
+
 int testTextInput(void) {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
@@ -13,6 +33,7 @@ int testTextInput(void) {
     TextInput textInput;
     int statut = EXIT_FAILURE;
     char* path = "rsrc/img/Lenna.png";
+    int i=0;
 
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
@@ -80,8 +101,7 @@ int testTextInput(void) {
     
 			    
     SDL_RenderPresent(renderer);
-
-
+    textInput.isActive = true;
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -99,9 +119,25 @@ int testTextInput(void) {
 
 	if(!drawTextInputOnRenderer(renderer, &textInput))
 	{
-		fprintf(stderr, "Can't draw TextInput\n");
+		fprintf(stderr, "WARNING: Can't draw TextInput\n");
 	}
-        SDL_RenderPresent(renderer);
+	if(i > 9)
+	{
+		if(!removeCharacterToInputTextValueAtCursor(&textInput))
+		{
+			fprintf(stderr, "WARINING: can't rm character in TextInput\n");
+		}
+	}
+	else
+	{
+		if(!addCharacterToInputTextValueAtCursor(&textInput, writeErina(i)))
+		{
+			fprintf(stderr, "WARINING: can't add character in TextInput\n");
+		};
+	}
+	SDL_RenderPresent(renderer);
+        SDL_Delay(500);
+	++i;
 
         SDL_Delay(20);
     }

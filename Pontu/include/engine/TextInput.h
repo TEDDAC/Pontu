@@ -1,4 +1,3 @@
-#ifndef TEXT_INPUT_INCLUDED
 /**
  * \file TextInput.h
  * \brief Basic TextInput
@@ -6,12 +5,15 @@
  * \date 05/01/2022
  */
 
+#ifndef TEXT_INPUT_INCLUDED
 #define TEXT_INPUT_INCLUDED
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
 #include <string.h>
 #include <stdbool.h>
+#include "engine/FontUtils.h"
 
 
 /**
@@ -41,7 +43,7 @@ typedef struct
  * \date 05/01/2022
  * \copyright CECILL
  */
-bool addCharcterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd);
+bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd);
 
 /**
  * \brief Remove a character from the TextInput
@@ -51,7 +53,7 @@ bool addCharcterToInputTextValueAtCursor(TextInput* textInput, const char charTo
  * \date 05/01/2022
  * \copyright CECILL
  */
-bool removeCharcterToInputTextValueAtCursor(TextInput* textInput);
+bool removeCharacterToInputTextValueAtCursor(TextInput* textInput);
 
 /**
  * \brief Draw a text input on a renderer
