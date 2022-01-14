@@ -22,7 +22,10 @@
 #define MACRO_FOR_ALL_TEXTURES(M) 	\
 	M(Island)                     	\
 	M(Bridge)                     	\
-	M(Piece)						\
+	M(PieceRed)						\
+	M(PieceViolet)						\
+	M(PieceBlue)						\
+	M(PieceYellow)						\
 	M(Water)
 
 /**
