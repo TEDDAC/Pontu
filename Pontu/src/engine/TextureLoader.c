@@ -23,12 +23,9 @@ SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path)
 	return texture;
 }
 
-SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int fontSize, SDL_Color border_color, SDL_Color background_color,int* sizex, int* sizey, SDL_Renderer renderer)
+SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SDL_Color border_color, SDL_Color background_color, int thickness, int padding,int* sizex, int* sizey, SDL_Renderer* renderer)
 {
 	// https://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf.html#SEC38
-	int thickness = 1; //thickness of the outline;
-    int statut = EXIT_FAILURE;7
-	int padding = 1;
 
     if(renderer == NULL)
     {
@@ -42,22 +39,18 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int fontSize
         return NULL;
     }
 
-	// load font.ttf at size 16 into font
-    TTF_Font *retroFont;
-    int size = fontSize*100/88;
-    retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", size);
-    if(!retroFont) {
-        printf("TTF_OpenFont: %s\n", TTF_GetError());
-    // handle error
-    }
-    SDL_Color White = {255, 255, 255};
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(retroFont, text, border_color);
+	if(font == NULL){
+		fprintf(stderr, "Erreur: la police d'écriture ne peut pas être null à la création d'une texture.\n");
+		return NULL;
+	}
+
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text, border_color);
 
     // now you can convert it into a texture
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
     int minx,maxx,miny,maxy,advance;
-    if(TTF_GlyphMetrics(retroFont,string,&minx,&maxx,&miny,&maxy,&advance)==-1){
+    if(TTF_GlyphMetrics(font,text,&minx,&maxx,&miny,&maxy,&advance)==-1){
 	        printf("%s\n",TTF_GetError());
 	}
     /*else {
@@ -69,32 +62,34 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int fontSize
     }*/
 
     SDL_Rect Message_rect; //create a rect
-    Message_rect.x = padding+thickness;  //controls the rect's x coordinate
+    Message_rect.x = padding+thickness+minx;  //controls the rect's x coordinate
     Message_rect.y = padding+thickness; // controls the rect's y coordinte
-    Message_rect.w = strlen(string)*size*2/3; // controls the width of the rect
+    Message_rect.w = strlen(text)*size*2/3; // controls the width of the rect
     Message_rect.h = size; // controls the height of the rect
 
 	//pour les contour d'abord
 	SDL_Rect button_rect;
 	button_rect.x = 0;
 	button_rect.y = 0;
-	button_rect.w = Message_rect.w+2*(padding+thickness);
+	button_rect.w = Message_rect.w+2*(padding+thickness)+minx;
 	button_rect.h = Message_rect.h+2*(padding+thickness);
+	SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,button_rect.w,button_rect.h);
 	SDL_SetRenderDrawColor(renderer, border_color.r,border_color.g,border_color.b,0);
-	SDL_RenderFillRect(renderer, button_rect);
+    SDL_SetRenderTarget(renderer, texture);
+	SDL_RenderFillRect(renderer, &button_rect);
 
 	*sizex = button_rect.w;
 	*sizey = button_rect.h;
 
 	//pour le background
-	SDL_Rect button_rect;
-	button_rect.x = 0;
-	button_rect.y = 0;
-	button_rect.w = Message_rect.w+2*padding;
+	button_rect.x = thickness;
+	button_rect.y = thickness;
+	button_rect.w = Message_rect.w+2*padding+minx;
 	button_rect.h = Message_rect.h+2*padding;
 	SDL_SetRenderDrawColor(renderer, background_color.r,background_color.g,background_color.b,0);
-	SDL_RenderFillRect(renderer, button_rect);
+	SDL_RenderFillRect(renderer, &button_rect);
 
-    SDL_RenderCopy(renderer, texture, NULL, &Message_rect);
+	SDL_SetRenderDrawColor(renderer, border_color.r,border_color.g,border_color.b,0);
+    SDL_RenderCopy(renderer, message, NULL, &Message_rect);
 	return texture;
 }

@@ -8,7 +8,6 @@ void testButtonTextureLoader() {
     SDL_Renderer *renderer = NULL;
     int statut = EXIT_FAILURE;
 
-
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr, "Erreur SDL_INIT: %s\n", SDL_GetError());
@@ -38,12 +37,6 @@ void testButtonTextureLoader() {
     }
 
     if(0 != SDL_RenderClear(renderer))  //efface le rendu en le repeignant avec la couleur choisi
-    {
-        fprintf(stderr, "Erreur SDL_SetRenderDrawColor: %s\n", SDL_GetError());
-        goto Quit;
-    }
-
-    if(0 != SDL_SetRenderDrawColor(renderer, 255,255,255,255))  //choisi la couleur avec laquelle travailler
     {
         fprintf(stderr, "Erreur SDL_SetRenderDrawColor: %s\n", SDL_GetError());
         goto Quit;

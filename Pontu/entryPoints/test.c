@@ -2,6 +2,7 @@
 // #include "../test/testFontLoader.c"
 // #include "../test/testAudioHandler.c"
 // #include "../test/testGenerateurTexture.c"
+#include "../test/testButton.c"
 #include "../test/testTextInput.c"
 /*
     This file is meant to be modified (used only to called other tests functions)
@@ -12,7 +13,7 @@ int main(/*int argc, char *argv[]*/) {
 	//testAudioHandler();
 	//testFontLoader();
 	//testGenerateurTexture();
-	testTextInput();
-
+	//testTextInput();
+	testButtonTextureLoader();
 	return 0;
 }

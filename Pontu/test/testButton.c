@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include "engine/Button.h"
+#include "engine/TextureLoader.h"
 
 //gcc test.c -I ../include $(sdl2-config --cflags --libs)
 
@@ -9,11 +11,10 @@ void action(P_ButtonArg* arg){
     changeButtonTexture(arg->buttonCaller,arg->texture);
 }
 
-int main(int argc, char const *argv[]) {
+int testButtonTextureLoader() {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     int statut = EXIT_FAILURE;
-
 
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
@@ -48,12 +49,6 @@ int main(int argc, char const *argv[]) {
         fprintf(stderr, "Erreur SDL_SetRenderDrawColor: %s\n", SDL_GetError());
         goto Quit;
     }
-
-    if(0 != SDL_SetRenderDrawColor(renderer, 255,255,255,255))  //choisi la couleur avec laquelle travailler
-    {
-        fprintf(stderr, "Erreur SDL_SetRenderDrawColor: %s\n", SDL_GetError());
-        goto Quit;
-    }
     SDL_RenderPresent(renderer);
 
     SDL_bool quit = SDL_FALSE;
@@ -71,22 +66,40 @@ int main(int argc, char const *argv[]) {
     SDL_SetRenderTarget(renderer, blueTexture);
     SDL_RenderFillRect(renderer, &buttonRect);*/
 
+    if(TTF_Init()==-1) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        exit(2);
+    }
+
+	// load font.ttf at size 16 into font
+    TTF_Font *retroFont;
+    int fontSize = 100;
+    int size = fontSize*100/88;
+    retroFont=TTF_OpenFont("rsrc/font/retro/retro.TTF", size);
+    if(!retroFont) {
+        printf("TTF_OpenFont: %s\n", TTF_GetError());
+    // handle error
+    }
+
     int sizex,sizey;
 
-    SDL_Color background = { 85, 39, 163, 255};
-    SDL_Color outline = { 134, 64, 255, 255};
-    SDL_Texture* buttonTexture = createGenericButtonTexture("Bouton",NULL,100,outline,background,&sizex,&sizey,renderer);
-    SDL_Texture* blueTexture = createGenericButtonTexture("Bouton",NULL,100,background, outline,&sizex,&sizey,renderer);
-    P_Button button = createButton(buttonTexture,blueTexture ,5, 5, sizex, sizey, &action);
+    SDL_Color outline = { 85, 39, 163, 255};
+    SDL_Color background = { 134, 64, 255, 255};
+    SDL_Texture* buttonTexture = createGenericButtonTexture("Test",retroFont,fontSize,outline,background,3, 3,&sizex,&sizey,renderer);
+    SDL_Texture* blueTexture = createGenericButtonTexture("Test",retroFont,fontSize,background,outline,3, 3,&sizex,&sizey,renderer);
+    P_Button button = createButton(buttonTexture,blueTexture ,20, 20, sizex, sizey, &action);
     P_ButtonArg arg;
     arg.buttonCaller = &button;
 
     SDL_Texture* violetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
     SDL_SetRenderDrawColor(renderer, 150,75,200,255);
     SDL_SetRenderTarget(renderer, violetTexture);
-    SDL_RenderFillRect(renderer, &buttonRect);
+    //SDL_RenderFillRect(renderer, &buttonRect);
 
+    SDL_SetRenderDrawColor(renderer,0,0,0,0);
     SDL_SetRenderTarget(renderer, NULL);
+
+    SDL_RenderClear(renderer);
     arg.texture = violetTexture;
     while(!quit)
     {

@@ -16,4 +16,4 @@
 */
 SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path);
 
-SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int fontSize, SDL_Color border_color, SDL_Color background_color,int* sizex, int* sizey, SDL_Renderer renderer);
+SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int fontSize, SDL_Color border_color, SDL_Color background_color,int thickness, int padding, int* sizex, int* sizey, SDL_Renderer* renderer);
