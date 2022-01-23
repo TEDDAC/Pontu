@@ -17,10 +17,10 @@ int fadeOut(void* args) {
 	// Since args is a pointer to void
 	// (the way C handles undefined types),
 	// casting args to a pointer to Mix_Music
-	Mix_Music* = (Mix_Music*)args;
+	Mix_Music* music = (Mix_Music*)args;
 	int ret;
 	
-	if(Mix_FadeOutMusic(500) == 0) { // Starting the fadeout
+	if(Mix_FadeOutMusic(500) == 1) { // Starting the fadeout
 		while (Mix_PlayingMusic()) {
 			; // Waiting until it's done
 		}
@@ -29,7 +29,7 @@ int fadeOut(void* args) {
 		Mix_HaltMusic();
 	}
 
-	ret = Mix_PlayMusic(argsCast->music,-1);
+	ret = Mix_PlayMusic(music,-1);
 	if (ret != 0) {
 		fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 	}
@@ -43,7 +43,7 @@ int fadeOut(void* args) {
 
 AudioHandler newAudioHandler(int volMusic, int volSFX) {
 	AudioHandler audioHandler;
-	int nb_SFX = NB_AUDIO_DEFINED - NB_MUSC_DEFINED - 1;
+	int nb_SFX = NB_AUDIO_DEFINED - NB_MUSIC_DEFINED - 1;
 
 	// Generating paths to musics and SFX files using macros
 	char* musicsPaths[] = {MACRO_FOR_ALL_MUSICS(MACRO_TO_MUSIC_PATH)};
@@ -62,10 +62,11 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 	
 	// Loading musics
 	for (size_t i = 0; i < NB_MUSIC_DEFINED; i++) {
-		if ((audioHandler.musics[i] = LoadMUS(musicPaths[i]) == NULL)) {
+		audioHandler.musics[i] = Mix_LoadMUS(musicsPaths[i]);
+		if (audioHandler.musics[i] == NULL) {
 			fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 		} else {
-			fprintf(stderr,"Loaded %s\n",musicPaths[i]);
+			fprintf(stderr,"Loaded %s\n",musicsPaths[i]);
 		}
 	}
 
@@ -75,8 +76,9 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 	Mix_AllocateChannels(NBCHANNELS);
 
 	// Loading SFX
-	for (size_t i = 0; i < nb_SFX; i++) {
-		if ((audioHandler.sfx[i] = Mix_LoadWAV(sfxPaths[i])) == NULL) {
+	for (int i = 0; i < nb_SFX; i++) {
+		audioHandler.sfx[i] = Mix_LoadWAV(sfxPaths[i]);
+		if (audioHandler.sfx[i] == NULL) {
 			fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 		} else {
 			fprintf(stderr,"Loaded %s\n",sfxPaths[i]);
@@ -88,7 +90,7 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 }
 
 void changeSFXVol(int volSFX) {
-	for (size_t i = 0; i < NBCHANNELS; i++) {
+	for (int i = 0; i < NBCHANNELS; i++) {
 		Mix_Volume(i, volSFX);
 	}
 }
@@ -136,7 +138,7 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 	// If another music is playing, fading the previous one out
 	if (Mix_PlayingMusic()) {
 		// Creating the thread, passing the music as parameter
-		SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", (void*)audioHandler.musics[music]);
+		SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", audioHandler.musics[music]);
 		if (thread == NULL) {
 			fprintf(stderr,"WARNING: couldn't create thread to fade out music\n");
 		}
@@ -145,13 +147,12 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 	// No other music is playing: starting a music normally.
 	} else {
 		if (Mix_PlayMusic(audioHandler.musics[music],-1) != 0) {
-			fprintf("WARNING: %s\n",Mix_GetError());
+			fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 		}
 	}
 }
 
 void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
-	int nb_SFX = NB_AUDIO_DEFINED - NB_MUSIC_DEFINED - 1;
 	int channel;
 	Mix_Chunk* chunkSFX;
 

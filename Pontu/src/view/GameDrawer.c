@@ -17,7 +17,10 @@ bool drawGame(SDL_Renderer* renderer, const SDL_Rect* windowSize, const SDL_Rect
 
 
 	drawBoard(renderer, boardRect, &(game->board), textureHandler->textures[TEXTURE_Island],  textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
-	drawPieces(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, textureHandler->textures[TEXTURE_Piece]);
+	
+	
+	drawPiecesPlayer(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, 0, textureHandler->textures[TEXTURE_PieceRed]);
+	drawPiecesPlayer(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, 1, textureHandler->textures[TEXTURE_PieceViolet]);
 
 	return true;
 }

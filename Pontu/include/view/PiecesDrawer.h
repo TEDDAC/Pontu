@@ -5,6 +5,6 @@
 #include <stdbool.h>
 #include "model/Piece.h"
 
-void drawPieces(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Piece arrPieces[], const size_t nbPieces, SDL_Texture* piece);
+void drawPiecesPlayer(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Piece arrPieces[], const size_t nbPieces, const size_t numPlayer, SDL_Texture* piece);
 
 #endif //PIECES_DRAWER_INCLUDED
