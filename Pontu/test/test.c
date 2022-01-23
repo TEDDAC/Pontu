@@ -1,6 +1,7 @@
 #include "model/Game.h"
 #include "model/IslandOrBridge.h"
 #include <assert.h>
+#include "testButtonTextureLoader.c"
 
 void testIsIslandEmpty() {
 	Piece arrPieces[4] = {
@@ -9,9 +10,9 @@ void testIsIslandEmpty() {
 		newPiece(1),
 		newPiece(1),
 	};
-	
+
 	Island i = {.x = 2, .y = 4};
-	
+
 	assert(isIslandEmpty(i, arrPieces, 4));
 
 	arrPieces[1].island = i;
@@ -69,7 +70,7 @@ void testCoordToEntity() {
 			Island i = {.x = iX/2, .y= iY/2};
 			assert(coordToEntity(c).type==ISLAND);
 			assert(islandEqual(i, coordToEntity(c).data.island));
-		}	
+		}
 	}
 
 	for (int wX = 1; wX < 9; wX+=2)
@@ -78,7 +79,7 @@ void testCoordToEntity() {
 		{
 			Coord c = {.x = wX, .y = wY};
 			assert(coordToEntity(c).type==WATER);
-		}	
+		}
 	}
 
 	for (int bX = 0; bX < 9; bX+=2)
@@ -103,13 +104,11 @@ void testCoordToEntity() {
 
 
 int callAll() {
-	testIsIslandEmpty();
+	/*testIsIslandEmpty();
 	testIsPieceAdjacentToIsland();
 	testPlacePiece();
 	testCheckBridge();
-	testCoordToEntity();
-
+	testCoordToEntity();*/
+	testButtonTextureLoader();
 	return 0;
 }
-
-

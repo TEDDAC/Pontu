@@ -1,15 +1,9 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include "engine/Button.h"
-
-//gcc test.c -I ../include $(sdl2-config --cflags --libs)
-
 void action(P_ButtonArg* arg){
     printf("Clické\n");
     changeButtonTexture(arg->buttonCaller,arg->texture);
 }
 
-int main(int argc, char const *argv[]) {
+void testButtonTextureLoader() {
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     int statut = EXIT_FAILURE;
