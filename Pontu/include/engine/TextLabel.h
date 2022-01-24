@@ -13,9 +13,9 @@ typedef struct
 	SDL_Texture* texture;
 }TextLabel;
 
-TextLabel createTextLabel(const char text[], const SDL_Rect* rect, const SDL_Color* color);
+TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer);
 void freeTextLabel(TextLabel* label);
 
-void drawTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* fontHandler);
+void drawTextLabel(SDL_Renderer* renderer, TextLabel* label);
 
 #endif //TEXT_LABEL_INCLUDED
