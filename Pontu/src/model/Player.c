@@ -5,6 +5,7 @@ Player newPlayer(const char pseudo[PSEUDO_LENMAX], const SDL_Color color) {
 	strcpy(player.pseudo, pseudo);
 	player.color = color;
 	player.rank = 0;
+	player.eliminationTurn = 0;
 
 	return player;
 }
