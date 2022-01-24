@@ -84,8 +84,8 @@ typedef struct {
 	bool canPlayAudio; ///< true if audio could be initialized, else false. It shouldn't be changed manually.
 	Mix_Music* musics[NB_MUSIC_DEFINED]; ///< Paths to the musics
 	Mix_Chunk* sfx[NB_AUDIO_DEFINED - NB_MUSIC_DEFINED - 1]; ///< Paths to the SFX
-	int musicVol; ///< The current volume of the music
-	int sfxVol; ///< The current volume of the SFX
+	int volMusic; ///< The current volume of the music
+	int volSFX; ///< The current volume of the SFX
 	int masterVol;
 } AudioHandler;
 
@@ -96,7 +96,7 @@ typedef struct {
  * \return A new AudioHandler.
  * \warning The program won't know if opening the audio device and the files failed.
  */
-AudioHandler newAudioHandler(int volMusic, int volSFX);
+AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX);
 
 /**
  * \brief Changes volume for the SFX.
