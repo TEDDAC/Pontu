@@ -138,6 +138,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		return false;
 	}
 	textTexture = SDL_CreateTextureFromSurface(renderer, textRendered);
+	SDL_FreeSurface(textRendered);
 	if(textTexture == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't create texture from surface: %s\n", SDL_GetError());
@@ -159,10 +160,11 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		fprintf(stderr, "WARNING: Can't copy the text on renderer");
 		return false;
 	}
+	SDL_DestroyTexture(textTexture);
 	return true;
 }
 
-bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, const TTF_Font* font)
+bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* font)
 {
 	if(textInput == NULL)
 	{
