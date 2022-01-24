@@ -26,7 +26,7 @@ Nous développerons successivement les versions suivantes :
 
 ```BASH
 git clone [urlToThisRepo]
-cd [thisRepo]
+cd [thisRepo]/Pontu
 git submodule init
 git submodule update
 mkdir bin
@@ -41,7 +41,7 @@ cd .. #Se mettre dans le dossier Pontu
 
 ```BASH
 git clone [urlToThisRepo]
-cd [thisRepo]
+cd [thisRepo]/Pontu
 git submodule init
 git submodule update
 mkdir bin

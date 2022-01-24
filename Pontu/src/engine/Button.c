@@ -8,8 +8,6 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 	// Declarations
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .drawn = false};
 
-	assert(texture != NULL && "ERROR: Button created without texture");
-
 	b.texture = texture;
 	b.hoverTexture = hoverTexture;
 	return b;
