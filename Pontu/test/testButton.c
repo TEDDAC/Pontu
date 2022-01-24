@@ -6,9 +6,9 @@
 
 //gcc test.c -I ../include $(sdl2-config --cflags --libs)
 
-void action(P_ButtonArg* arg){
+void action(P_Button* buttonCaller){
     printf("Clické\n");
-    changeButtonTexture(arg->buttonCaller,arg->texture);
+    //changeButtonTexture(arg->buttonCaller,arg->texture);
 }
 
 int testButtonTextureLoader() {
@@ -88,8 +88,6 @@ int testButtonTextureLoader() {
     SDL_Texture* buttonTexture = createGenericButtonTexture("Test",retroFont,fontSize,outline,background,3, 3,&sizex,&sizey,renderer);
     SDL_Texture* blueTexture = createGenericButtonTexture("Test",retroFont,fontSize,background,outline,3, 3,&sizex,&sizey,renderer);
     P_Button button = createButton(buttonTexture,blueTexture ,20, 20, sizex, sizey, &action);
-    P_ButtonArg arg;
-    arg.buttonCaller = &button;
 
     SDL_Texture* violetTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,20,20);
     SDL_SetRenderDrawColor(renderer, 150,75,200,255);
@@ -100,7 +98,6 @@ int testButtonTextureLoader() {
     SDL_SetRenderTarget(renderer, NULL);
 
     SDL_RenderClear(renderer);
-    arg.texture = violetTexture;
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -112,7 +109,7 @@ int testButtonTextureLoader() {
                 break;
             case SDL_MOUSEBUTTONUP:
                 if(isHover(&button,event.button.x,event.button.y))
-                button.onClick(&arg);
+                button.onClick(&button);
                 break;
             case SDL_MOUSEMOTION:
                 //on vérifie à chaque tour ou est la souris, drawButtonOnRenderer choisit la bonne texture à afficher
