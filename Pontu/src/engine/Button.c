@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller, void* arg))
+P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller))
 {
 	// Declarations
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .drawn = false};

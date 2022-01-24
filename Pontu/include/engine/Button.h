@@ -22,9 +22,10 @@ typedef struct
 	SDL_Texture* texture;  ///> background sprite or texture
 	SDL_Texture* hoverTexture; ///> texture to draw when the button is hovered
 	SDL_Rect rect;		   ///> defines coordinates and size for hitbox and display
-	void (*onClick)(P_Button* buttonCaller, void* arg); ///> action done on click
+	void (*onClick)(P_Button* buttonCaller); ///> action done on click
 	bool drawn;	///> is the button drawn
 	bool hover;	///> is the button hovered
+	void* arg;
 } P_Button;
 
 /**
@@ -39,7 +40,7 @@ typedef struct
  * \pre At least text or texture must be defined, or an error will be printed in STDERR.
  * \return a button created with the specs passed as params, or NULL if there was an error.
  */
-P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_ButtonArg* arg));
+P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller));
 
 /**
  * \brief draw a button on a renderer with his texture according if it hover or not
