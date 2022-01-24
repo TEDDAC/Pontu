@@ -84,7 +84,7 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
 	//pour le background
 	button_rect.x = thickness;
 	button_rect.y = thickness;
-	button_rect.w = Message_rect.w+2*padding;
+	button_rect.w = Message_rect.w+2*padding+minx;
 	button_rect.h = Message_rect.h+2*padding;
 	SDL_SetRenderDrawColor(renderer, background_color.r,background_color.g,background_color.b,0);
 	SDL_RenderFillRect(renderer, &button_rect);
