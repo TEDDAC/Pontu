@@ -68,13 +68,13 @@ void testTextLabel() {
     FontHandler fontHandler = loadFonts();
 
     // TextLabel
-    SDL_Rect size = {.x=10, .y=10, .w=90, .h=20};
+    SDL_Point pos = {.x=10, .y=10};
 
     SDL_Color color = {
         0,0,0,0
     };
     
-    TextLabel textLabel = createTextLabel("Salut", &size, &color);
+    TextLabel textLabel = createTextLabel("Salut", &pos, &color, fontHandler.fonts[FONT_retro], renderer);
     
     
 			    
@@ -96,7 +96,7 @@ void testTextLabel() {
 
 	    //SDL_RenderCopy(renderer, picture, NULL, NULL);
 
-        drawTextLabel(renderer, &textLabel, fontHandler.fonts[FONT_retro]);
+        drawTextLabel(renderer, &textLabel);
 
         SDL_RenderPresent(renderer);
             SDL_Delay(500);

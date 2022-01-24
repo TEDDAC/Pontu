@@ -1,16 +1,65 @@
 #include "engine/TextLabel.h"
+#include "engine/FontUtils.h"
+#include "engine/TextureLoader.h"
 
 
-
-TextLabel createTextLabel(const char text[], const SDL_Rect* rect, const SDL_Color* color) {
+TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer, const POSITIONX_TYPE posXType, const POSITIONY_TYPE posYType) {
     TextLabel label = {
-        .textZone = *rect,
         .color = *color,
         .texture = NULL
     };
 
     label.text = (char*) malloc(sizeof(char)*strlen(text));
     strcpy(label.text, text);
+
+    {
+        SDL_Surface* surface = TTF_RenderText_Solid(font, label.text, label.color);
+
+        if(surface == NULL)
+        {
+            fprintf(stderr, "WARNING: Can't write on TextLabel\n");
+        }
+        label.texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if(label.texture == NULL)
+        {
+            fprintf(stderr, "WARNING: Can't create texture from surface: %s\n", SDL_GetError());
+        }
+
+        SDL_FreeSurface(surface);
+    }
+
+    label.textZone.w = calculateStringPixelLenght(font, label.text);
+    label.textZone.h = TTF_FontHeight(font);
+
+    switch (posXType)
+    {
+    case POSX_LEFT:
+        label.textZone.x = pos->x;    
+        break;
+    case POSX_CENTER:
+        label.textZone.x = pos->x-label.textZone.w/2;
+        break;
+    case POSX_RIGHT:
+        label.textZone.x = pos->x-label.textZone.w;
+        break;
+    default:
+        break;
+    }
+
+    switch (posYType)
+    {
+    case POSY_TOP:
+        label.textZone.y = pos->y;    
+        break;
+    case POSY_CENTER:
+        label.textZone.y = pos->y-label.textZone.h/2;
+        break;
+    case POSY_BOTTOM:
+        label.textZone.y = pos->y-label.textZone.h;
+        break;
+    default:
+        break;
+    }
 
     return label;
 }
@@ -24,25 +73,7 @@ void freeTextLabel(TextLabel* label) {
     }
 }
 
-void drawTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* font) {
-    if (label->texture == NULL) {
-        SDL_Surface* surface = TTF_RenderText_Solid(font, label->text, label->color);
-
-        if(surface == NULL)
-        {
-            fprintf(stderr, "WARNING: Can't write on TextLabel\n");
-            return;
-        }
-        label->texture = SDL_CreateTextureFromSurface(renderer, surface);
-        if(label->texture == NULL)
-        {
-            fprintf(stderr, "WARNING: Can't create texture from surface: %s\n", SDL_GetError());
-            return;
-        }
-
-        SDL_FreeSurface(surface);
-    }
-    
+void drawTextLabel(SDL_Renderer* renderer, TextLabel* label) {
     SDL_RenderCopy(renderer, label->texture, NULL, &label->textZone);
 }
 
