@@ -22,29 +22,19 @@ typedef struct
 	SDL_Texture* texture;  ///> background sprite or texture
 	SDL_Texture* hoverTexture; ///> texture to draw when the button is hovered
 	SDL_Rect rect;		   ///> defines coordinates and size for hitbox and display
-	void (*onClick)(struct P_buttonArg* arg); ///> action done on click
+	void (*onClick)(P_Button* buttonCaller, void* arg); ///> action done on click
 	bool drawn;	///> is the button drawn
 	bool hover;	///> is the button hovered
 } P_Button;
 
 /**
- * \struct P_Button
- * \brief Structure of arguments to pass to onClick function
- */
-typedef struct P_buttonArg
-{
-	P_Button* buttonCaller;	///> button who call the one click
-	SDL_Texture* texture;	///> texture to putt on the button if we want to change his default texture;
-} P_ButtonArg;
-
-/**
  * \brief Creates a brand new button with specs
- * \param[in]   texture texture for the button (NOT NULL)
+ * \param[in]   texture texture for the button
  * \param[in]   hoverTexture texture for the button when it's hover (can be NULL)
- * \param[in]   coordx  placement in width
- * \param[in]   coordy  placement in height
- * \param[in]   sizex   button's width
- * \param[in]   sizey   button's height
+ * \param[in]   coordx  placement in width (NOT NULL)
+ * \param[in]   coordy  placement in height (NOT NULL)
+ * \param[in]   sizex   button's width (NOT NULL)
+ * \param[in]   sizey   button's height (NOT NULL)
  * \param[in]   onClick action to do when the button is clicked
  * \pre At least text or texture must be defined, or an error will be printed in STDERR.
  * \return a button created with the specs passed as params, or NULL if there was an error.
