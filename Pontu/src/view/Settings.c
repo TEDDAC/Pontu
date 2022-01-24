@@ -75,6 +75,10 @@ bool settingsView(const SDL_Renderer* renderer, AudioHandler* ah) {
 	SDL_Rect masterVol = {150,50,450,100};
 	SDL_Rect musicVol = {150,150,450,200};
 	SDl_Rect sfxVol = {150,250,450,300};
+	SDL_Point titlePoint = {150,50};
+	SDL_Point masterVolPoint = {150,100};
+	SDL_Point musicVolPoint = {150,200};
+	SDL_Point sfxVolPoint = {150,300};
 	int font_size = 50;
 	int size = font_size*100/88;
 	TTF_Font* font = TTF_OpenFont("../../rsrc/font/retro/retro.TTF", size);
@@ -104,10 +108,10 @@ bool settingsView(const SDL_Renderer* renderer, AudioHandler* ah) {
 	SDL_RenderFillRect(renderer,&musicVol);
 	SDL_RenderFillRect(renderer,&sfxVol);
 	
-	*labels[0] = createTextLabel("Volume",title,black);
-	*labels[1] = createTextLabel("Principal",masterVol,black);
-	*labels[2] = createTextLabel("Musique",musicVol,black);
-	*labels[3] = createTextLabel("Effets spéciaux",sfxVol,black);
+	*labels[0] = createTextLabel("Volume",titlePoint,black,font,renderer,POSX_CENTER,POSY_CENTER);
+	*labels[1] = createTextLabel("Principal",masterVolPoint,black,font,renderer,POSX_CENTER,POSY_CENTER);
+	*labels[2] = createTextLabel("Musique",musicVolPoint,black,font,renderer,POSX_CENTER,POSY_CENTER);
+	*labels[3] = createTextLabel("Effets spéciaux",sfxVolPoint,black,fonot,renderer,POSX_CENTER,POSY_CENTER);
 	for (int i = 0; i < 3; i++) {
 		drawTextLabel(renderer,labels[i],font);
 	}
