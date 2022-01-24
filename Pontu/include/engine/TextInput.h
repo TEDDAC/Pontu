@@ -3,6 +3,7 @@
  * \brief Basic TextInput
  * \author Allan Point
  * \date 05/01/2022
+ * \copyright CECILL
  */
 
 #ifndef TEXT_INPUT_INCLUDED
@@ -21,7 +22,6 @@
  * \typedef
  * \brief A text-inputable zone representation
  * \author Allan Point
- * \copyright CECILL
  * \date 05/01/2022
  */
 typedef struct
@@ -41,7 +41,6 @@ typedef struct
  * \return True if all goes right. Else false.
  * \author Allan Point
  * \date 05/01/2022
- * \copyright CECILL
  */
 bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd);
 
@@ -51,7 +50,6 @@ bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charT
  * \return True if all goes right. Esle false.
  * \author Allan Point
  * \date 05/01/2022
- * \copyright CECILL
  */
 bool removeCharacterToInputTextValueAtCursor(TextInput* textInput);
 
@@ -62,7 +60,6 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput);
  * \return True on success. Esle false;
  * \author Allan POINT
  * \date 05/01/2022
- * \copyright CECILL
  */
 bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput);
 
@@ -81,9 +78,8 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
  * \return True on succsess. Esle false.
  * \author Allan POINT
  * \date 05/01/2022
- * \copyright CECILL
  */
-bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, const TTF_Font* textFont);
+bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* textFont);
 
 /*
  * \brief Free what is needed to be free and clear all data in the TextInput
