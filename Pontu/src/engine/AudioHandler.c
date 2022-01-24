@@ -41,7 +41,7 @@ int fadeOut(void* args) {
 
 // Global functions
 
-AudioHandler newAudioHandler(int volMusic, int volSFX) {
+AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	AudioHandler audioHandler;
 	int nb_SFX = NB_AUDIO_DEFINED - NB_MUSIC_DEFINED - 1;
 
@@ -57,6 +57,7 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 	}
 
 	audioHandler.canPlayAudio = true;
+	audioHandler.masterVol = masterVol;
 
 	fprintf(stderr,"Musics: %d\nSFX: %d\n",NB_MUSIC_DEFINED,nb_SFX);
 	
@@ -70,7 +71,7 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 		}
 	}
 
-	Mix_VolumeMusic(volMusic);
+	changeMusicVol(&audioHandler, volMusic);
 
 	// Initializing SFX
 	Mix_AllocateChannels(NBCHANNELS);
@@ -85,14 +86,25 @@ AudioHandler newAudioHandler(int volMusic, int volSFX) {
 		}
 	}
 
-	changeSFXVol(volSFX);
+	changeSFXVol(&audioHandler, volSFX);
+	changeMasterVol(&audioHandler, masterVol);
 	return audioHandler;
 }
 
-void changeSFXVol(int volSFX) {
-	for (int i = 0; i < NBCHANNELS; i++) {
-		Mix_Volume(i, volSFX);
-	}
+void changeMusicVol(AudioHandler* ah, int volMusic) {
+	ah->volMusic = volMusic;
+	Mix_VolumeMusic(ah->volMusic * ah->masterVol * 0.1);
+}
+
+void changeSFXVol(AudioHandler* ah, int volSFX) {
+	ah->volSFX = volSFX;
+	Mix_Volume(-1, ah->volSFX * ah->masterVol * 0.1);
+}
+
+void changeMasterVol(AudioHandler* ah, int masterVol) {
+	ah->masterVol = masterVol;
+	Mix_VolumeMusic(ah->volMusic * ah->masterVol * 0.1);
+	Mix_Volume(-1, ah->volSFX * ah->masterVol * 0.1);
 }
 
 void freeAudioHandler(AudioHandler* audioHandler) {
