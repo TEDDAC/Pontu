@@ -25,8 +25,8 @@ SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path);
  * \param[in]	background_color  The color of the background
  * \param[in]	thickness The thickness of the texture
  * \param[in]	padding   The padding around the text in the button
- * \param[in]	sizex The width of the texture. You have to apply to the width of the button
- * \param[in]	sizey The height of the texture. You have to apply to the height of the button
+ * \param[out]	sizex The width of the texture. You have to apply it to the width of the button
+ * \param[out]	sizey The height of the texture. You have to apply it to the height of the button
  * \param[in]	renderer	The renderer you want the texture to be associated
  * \return Return texture created on success. Else return NULL and print the error on STDERR.
 */

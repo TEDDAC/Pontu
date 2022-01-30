@@ -7,7 +7,8 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 {
 	// Declarations
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .drawn = false};
-
+	if(onClick == NULL)
+		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton.\n");
 	b.texture = texture;
 	b.hoverTexture = hoverTexture;
 	return b;
@@ -15,6 +16,7 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 
 bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button)
 {
+	SDL_SetRenderTarget(renderer, NULL);
 	if(SDL_RenderCopy(renderer,button->hover && button->hoverTexture != NULL ? button->hoverTexture : button->texture,NULL,&(button->rect)))
 	{
 		fprintf(stderr,"Warning: %s\n",SDL_GetError());

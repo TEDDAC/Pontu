@@ -50,7 +50,7 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
     SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
     int minx,maxx,miny,maxy,advance;
-    if(TTF_GlyphMetrics(font,text,&minx,&maxx,&miny,&maxy,&advance)==-1){
+    if(TTF_GlyphMetrics(font,'a',&minx,&maxx,&miny,&maxy,&advance)==-1){
 	        printf("%s\n",TTF_GetError());
 	}
     /*else {
@@ -64,7 +64,7 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
     SDL_Rect Message_rect; //create a rect
     Message_rect.x = padding+thickness+minx;  //controls the rect's x coordinate
     Message_rect.y = padding+thickness; // controls the rect's y coordinte
-    Message_rect.w = strlen(text)*size*2/3; // controls the width of the rect
+    Message_rect.w = (int)(strlen(text)*size*2/3); // controls the width of the rect
     Message_rect.h = size; // controls the height of the rect
 
 	//pour les contour d'abord
@@ -74,12 +74,14 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
 	button_rect.w = Message_rect.w+2*(padding+thickness)+minx;
 	button_rect.h = Message_rect.h+2*(padding+thickness);
 	SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,button_rect.w,button_rect.h);
-	SDL_SetRenderDrawColor(renderer, border_color.r,border_color.g,border_color.b,0);
     SDL_SetRenderTarget(renderer, texture);
+	SDL_SetRenderDrawColor(renderer, border_color.r,border_color.g,border_color.b,0);
 	SDL_RenderFillRect(renderer, &button_rect);
 
-	*sizex = button_rect.w;
-	*sizey = button_rect.h;
+	if(sizex != NULL)
+		*sizex = button_rect.w;
+	if(sizey != NULL)
+		*sizey = button_rect.h;
 
 	//pour le background
 	button_rect.x = thickness;
@@ -91,5 +93,7 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
 
 	SDL_SetRenderDrawColor(renderer, border_color.r,border_color.g,border_color.b,0);
     SDL_RenderCopy(renderer, message, NULL, &Message_rect);
+
+    SDL_SetRenderTarget(renderer, NULL);
 	return texture;
 }
