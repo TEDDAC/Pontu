@@ -56,7 +56,7 @@ int testDrawMainMenu(){
     SDL_RenderClear(renderer);
     bool quit = false;
     SDL_Event event;
-
+    buttons[2].arg = &quit;
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -68,20 +68,28 @@ int testDrawMainMenu(){
                 break;
             case SDL_MOUSEBUTTONUP:
                 if(isHover(buttons,event.button.x,event.button.y))
-                printf("Clicked\n");
+                    printf("Nouvelle partie\n");
+                if(isHover(&(buttons[2]),event.motion.x,event.motion.y)){
+                    buttons[2].onClick(&(buttons[2]));
+                }
                 break;
             case SDL_MOUSEMOTION:
-                for(int i=0;i<nb;i++){
-                    isHover(&(buttons[i]),event.motion.x,event.motion.y);
-                }
+                isHover(&(buttons[0]),event.motion.x,event.motion.y);
+                isHover(&(buttons[1]),event.motion.x,event.motion.y);
+                isHover(&(buttons[2]),event.motion.x,event.motion.y);
                 break;
             default:
                 break;
             }
         }
-        for(int i=0;i<nb;i++){
+
+        /*for(int i=0;i<nb;i++){
             drawButtonOnRenderer(renderer,&(buttons[i]));
-        }
+            printf("%d\n",i);
+        }*/
+        drawButtonOnRenderer(renderer,&(buttons[0]));
+        drawButtonOnRenderer(renderer,&(buttons[1]));
+        drawButtonOnRenderer(renderer,&(buttons[2]));
         SDL_RenderPresent(renderer);
 
         SDL_Delay(20);

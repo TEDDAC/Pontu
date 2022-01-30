@@ -11,6 +11,7 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton.\n");
 	b.texture = texture;
 	b.hoverTexture = hoverTexture;
+	b.arg = NULL;
 	return b;
 }
 
