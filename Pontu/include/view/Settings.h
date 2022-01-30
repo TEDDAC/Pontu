@@ -17,6 +17,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "engine/TextLabel.h"
 
+
 /**
  * \brief Generates a settings view
  * \param[in] renderer The used SDL_Renderer
