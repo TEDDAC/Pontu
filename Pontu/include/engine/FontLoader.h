@@ -4,7 +4,8 @@
 #define FONT_PATH rsrc/font/
 
 #define MACRO_FOR_ALL_FONTS(M)       \
-        M(retro)
+        M(retro)\
+        M(Curvilingus)
 #define MACRO_FONT_ENUM_GEN(E) FONT_##E,
 
 #include <SDL2/SDL_ttf.h>
