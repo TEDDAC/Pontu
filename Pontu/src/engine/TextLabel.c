@@ -9,7 +9,12 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Col
         .texture = NULL
     };
 
+
     label.text = (char*) malloc(sizeof(char)*strlen(text));
+	if (label.text == NULL) {
+		fprintf(stderr, "ERROR: allocation error (createTextLabel)\n");
+		fflush(stderr);
+	}
     strcpy(label.text, text);
 
     {
@@ -18,11 +23,13 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Col
         if(surface == NULL)
         {
             fprintf(stderr, "WARNING: Can't write on TextLabel\n");
+			fflush(stderr);
         }
         label.texture = SDL_CreateTextureFromSurface(renderer, surface);
         if(label.texture == NULL)
         {
             fprintf(stderr, "WARNING: Can't create texture from surface: %s\n", SDL_GetError());
+			fflush(stderr);
         }
 
         SDL_FreeSurface(surface);
@@ -65,12 +72,26 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Col
 }
 
 void freeTextLabel(TextLabel* label) {
-    free(label->text);
-    label->text = NULL;
+	if (label == NULL) return;
+	
+	fprintf(stderr, "freeTextLabel begin\n");
+	fflush(stderr);
+	if (label->text != NULL){
+		free(label->text);
+		label->text = NULL;
+	}
+    
+	fprintf(stderr, "textFreed\n");
+	fflush(stderr);
 
     if (label->texture != NULL) {
         SDL_DestroyTexture(label->texture);
+		label->texture = NULL;
+		fprintf(stderr, "textureFreed\n");
+		fflush(stderr);
     }
+	fprintf(stderr, "freeTextLabel end\n");
+	fflush(stderr);
 }
 
 void drawTextLabel(SDL_Renderer* renderer, TextLabel* label) {
