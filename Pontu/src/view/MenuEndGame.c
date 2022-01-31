@@ -1,16 +1,26 @@
 #include "view/MenuEndGame.h"
 #include <SDL2/SDL_ttf.h>
 #include "engine/TextLabel.h"
+#include <errno.h>
+#include "engine/Colors.h"
+#include "engine/InputProcessor.h"
 
+
+void nullFunc(P_Button* caller) {
+
+}
 
 P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect) {
-    const SDL_Color black = {0,0,0,0};
-    const SDL_Color white = {255,255,255,255};
 	int sizeX;
 	int sizeY;
-	SDL_Texture* texture = createGenericButtonTexture("Retour menu", font, 14, black, white, 1, 4, &sizeX, &sizeY, renderer);
+	
+	SDL_Texture* texture = createGenericButtonTexture("Retour menu", font, 50, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 1, 4, &sizeX, &sizeY, renderer);
 
-	return createButton(texture, texture, rect->x, rect->y, sizeX, sizeY, NULL);
+	if (texture == NULL) {
+		perror(SDL_GetError());
+		exit(errno);
+	}
+	return createButton(texture, NULL, rect->x, rect->y, sizeX, sizeY, nullFunc);
 }
 
 void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, FontHandler* fontHandler) {
@@ -91,3 +101,61 @@ void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_
     drawPlayersScores(renderer, players, nbPlayers, rect, fontHandler);
 }
 
+void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, const Player players[], const size_t nbPlayers) {
+	InputProcessor inputProcessor = createInputProcessor();
+
+	 //récupère le numéro de l'écran
+    SDL_DisplayMode current;
+    const int i = SDL_GetWindowDisplayIndex(window);
+    SDL_GetCurrentDisplayMode(i, &current); //retourne current, structure avec vrai valeurs de taille de fenêtre
+
+	SDL_Rect rectMenuEndGme = {.x=current.w/20, .y=0, .w=current.w*4/5, .h=current.h};
+	
+
+	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme));
+	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
+
+	SDL_Color color = {0,0,0,0};
+	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGme, &fontHandler);
+
+	while(!quit)
+	{
+		{
+			InputElement inputElement;
+			while (InputType_None != (inputElement = proccessInput(&inputProcessor)).type) {
+
+				switch (inputElement.type)
+				{
+				case InputType_ActivateUI:
+					switch (inputElement.data.uiAction)
+					{
+					case UIAction_Quit:
+						quit = true;
+						break;
+					case UIAction_Validate:
+						break;
+					case UIAction_Cancel:
+						break;
+					default:
+						break;
+					}
+					break;
+				case InputType_MoveGame:
+					
+					break;
+				case InputType_ClickGame:
+					
+					break;
+				case InputType_None:
+				default:
+					break;
+				}
+			}
+		}
+
+		drawButtonOnRenderer(renderer, buttonMenuEndGame);
+
+		SDL_RenderPresent(renderer);
+		SDL_Delay(50);
+	}
+}
