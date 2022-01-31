@@ -6,7 +6,6 @@
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
 #include "view/GameDrawer.h"
-#include "engine/ArrayUtils.h"
 #include "model/arrayCoord.h"
 #include "debug/printer.h"
 
@@ -37,7 +36,7 @@ int main(int argc, char* argv[])
 		goto Quit;
 	}
 
-	InputProcessor inputProcessor = {.selectedCase = {.x=-1, .y=-1}};
+	InputProcessor inputProcessor = createInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
 
 	int wBoardRect=99*3, hBoardRect=99*3;

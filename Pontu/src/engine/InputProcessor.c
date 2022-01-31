@@ -1,15 +1,13 @@
 #include "engine/InputProcessor.h"
 
-Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect){
-	Coord coord = {
-		coord.x = (point->x-boardRect->x)*9/boardRect->w,
-		coord.y = (point->y-boardRect->y)*9/boardRect->h
+InputProcessor createInputProcessor() {
+	InputProcessor inputProcessor = {
+		.tabButton = array_P_Button_Create()
 	};
-	return coord;
+	return inputProcessor;
 }
 
-
-InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* boardRect)
+InputElement proccessInput(InputProcessor *inputProcessor)
 {
 	SDL_Event event;
 	if (!SDL_PollEvent(&event))
@@ -19,51 +17,27 @@ InputElement proccessInput(InputProcessor *inputProcessor, const SDL_Rect* board
 
 	switch (event.type)
 	{
-	case SDL_QUIT:
-		return createInputElementUIQuit();
-	case SDL_MOUSEBUTTONDOWN:
-	{
-		const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
-		if (SDL_PointInRect(&mousePoint, boardRect))
+		case SDL_QUIT:
+			return createInputElementUIQuit();
+		case SDL_MOUSEBUTTONUP:
 		{
-			if (!coordValid(inputProcessor->selectedCase)) {
-				inputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
-			}
-		}
-		else
-		{
-		}
-		break;
-	}
-	case SDL_MOUSEBUTTONUP:
-	{
-		const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
-		if (SDL_PointInRect(&mousePoint, boardRect))
-		{
-			if (coordValid(inputProcessor->selectedCase))
-			{
-				Coord newCoords = screenCoordToGameCoord(&mousePoint, boardRect);
-				if (coordEqual(inputProcessor->selectedCase, newCoords)) {
-					inputProcessor->selectedCase = newCoords;
-					return createInputElementClickBoard(newCoords);
-				}
-				else {
-					const Coord oldCoord = inputProcessor->selectedCase;
-					inputProcessor->selectedCase = newCoord(-1,-1);
-					return createInputElementMoveBoard(oldCoord, newCoords);
+			const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
+			
+			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
+				P_Button* b = &inputProcessor->tabButton.elems[i];
+				if (SDL_PointInRect(&mousePoint, &b->rect)) {
+					b->onClick(b);
 				}
 			}
-		}
-		else
-		{
-			/*for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
-				if (SDL_PointInRect(&mousePoint, &inputProcessor->tabButton.buttons[i].rect)) {
-					// ...
-				}
-			}*/
 			return createInputElementNone();
 		}
-		break;
+		case SDL_MOUSEMOTION:
+		{
+			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
+				P_Button* b = &inputProcessor->tabButton.elems[i];
+				isHover(b, event.motion.x, event.motion.y);
+			}
+			break;
 		}
 	}
 

@@ -7,6 +7,7 @@
 
 #include "engine/Button.h"
 #include "engine/TextureLoader.h"
+#include "engine/GeneralState.h"
 
 P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect);
 
