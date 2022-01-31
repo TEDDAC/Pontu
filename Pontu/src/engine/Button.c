@@ -55,3 +55,8 @@ bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
 	button->hoverTexture = texture;
 	return true;
 }
+
+void freeButton(P_Button * button){
+	SDL_DestroyTexture(button->texture);
+	SDL_DestroyTexture(button->textureHover);
+}
