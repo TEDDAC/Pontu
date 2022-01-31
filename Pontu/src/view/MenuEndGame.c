@@ -6,21 +6,31 @@
 #include "engine/InputProcessor.h"
 
 
-void nullFunc(P_Button* caller) {
-
+void setStateToMainMenu(P_Button* caller) {
+	*((GeneralState*)caller->arg) = GS_MainMenu;
 }
 
-P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect) {
+P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect, GeneralState* state) {
 	int sizeX;
 	int sizeY;
 	
 	SDL_Texture* texture = createGenericButtonTexture("Retour menu", font, 50, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 1, 4, &sizeX, &sizeY, renderer);
-
 	if (texture == NULL) {
 		perror(SDL_GetError());
 		exit(errno);
 	}
-	return createButton(texture, NULL, rect->x, rect->y, sizeX, sizeY, nullFunc);
+	SDL_Texture* textureHover = createGenericButtonTexture("Retour menu", font, 50, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND_HOVER, 4, 4, &sizeX, &sizeY, renderer);
+	if (textureHover == NULL) {
+		perror(SDL_GetError());
+		exit(errno);
+	}
+	
+
+	P_Button buttonMenuEndGame = createButton(texture, textureHover, rect->x, rect->y, sizeX, sizeY, &setStateToMainMenu);
+	buttonMenuEndGame.arg = state;
+	buttonMenuEndGame.rect.y = rect->h*8/10;
+	buttonMenuEndGame.rect.x = rect->x + rect->w/2-buttonMenuEndGame.rect.w/2;
+	return buttonMenuEndGame;
 }
 
 void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, FontHandler* fontHandler) {
@@ -117,10 +127,8 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	};
 	
 
-	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &rectMenuEndGame));
+	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &rectMenuEndGame, generalState));
 	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
-	buttonMenuEndGame->rect.y = rectMenuEndGame.h*8/10;
-	buttonMenuEndGame->rect.x = rectMenuEndGame.x + rectMenuEndGame.w/2-buttonMenuEndGame->rect.w/2;
 
 	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
 	

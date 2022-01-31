@@ -8,7 +8,7 @@
 
 void testMenuEndGame() {
 	SDL_Window *window = NULL;
-	SDL_Rect windowSize = {10, 10, 600, 600};
+	SDL_Rect windowSize = {10, 10, 1100, 600};
 	SDL_Renderer *renderer = NULL;
 
 	if(0 != SDL_Init(SDL_INIT_VIDEO))

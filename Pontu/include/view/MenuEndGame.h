@@ -9,7 +9,7 @@
 #include "engine/TextureLoader.h"
 #include "engine/GeneralState.h"
 
-P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect);
+P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect, GeneralState* state);
 
 void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, FontHandler* fontHandler);
 
