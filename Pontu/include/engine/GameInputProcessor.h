@@ -32,6 +32,13 @@ typedef struct
 GameInputProcessor createGameInputProcessor();
 
 /**
+ * @brief Free a game input processor
+ * 
+ * @param gameInputProcessor the game input processor to free (do not use after freeing)
+ */
+void freeGameInputProcessor(GameInputProcessor* gameInputProcessor);
+
+/**
  * \brief Convert a screen coord into a model Coord
  * 
  * \param [in] point Screen coordinates

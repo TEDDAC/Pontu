@@ -7,6 +7,10 @@ InputProcessor createInputProcessor() {
 	return inputProcessor;
 }
 
+void freeInputProcessor(InputProcessor* inputProcessor) {
+	array_P_Button_Free(&inputProcessor->tabButton);
+}
+
 InputElement proccessInput(InputProcessor *inputProcessor)
 {
 	SDL_Event event;

@@ -16,6 +16,10 @@ GameInputProcessor createGameInputProcessor() {
 	return gameInputProcessor;
 }
 
+void freeGameInputProcessor(GameInputProcessor* gameInputProcessor) {
+	array_P_Button_Free(&gameInputProcessor->tabButton);
+}
+
 InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL_Rect* boardRect)
 {
 	SDL_Event event;

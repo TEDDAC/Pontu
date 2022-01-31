@@ -30,6 +30,14 @@ typedef struct
 InputProcessor createInputProcessor();
 
 /**
+ * @brief Free a game input processor
+ * 
+ * @param inputProcessor the game input processor to free (do not use after freeing)
+ */
+void freeInputProcessor(InputProcessor* inputProcessor);
+
+
+/**
  * \brief Poll and convert SDL_Events into specific event for Pontu
  * 
  * \param [in, out] inputProcessor The input processor which keeps a state of input in between calls

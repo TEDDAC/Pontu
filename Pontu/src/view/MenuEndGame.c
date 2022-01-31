@@ -164,4 +164,6 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 		SDL_RenderPresent(renderer);
 		SDL_Delay(50);
 	}
+
+	freeInputProcessor(&inputProcessor);
 }
