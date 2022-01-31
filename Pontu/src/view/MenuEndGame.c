@@ -52,8 +52,6 @@ void drawEliminationTurn(SDL_Renderer* renderer, const SDL_Rect* rect, const int
 		.y = height
 	};
 
-	fprintf(stderr,"drawEliminationTurn 1 \n");
-	fflush(stderr);
 
 	char *const text = (char*) malloc(sizeof(char*) * 10);
 	if (text == NULL) {
@@ -61,27 +59,15 @@ void drawEliminationTurn(SDL_Renderer* renderer, const SDL_Rect* rect, const int
 		fflush(stderr);
 		return;
 	}
-	fprintf(stderr,"drawEliminationTurn 2 \n");
-	fflush(stderr);
-
 	sprintf(text, "Tour: %d", eliminationTurn);
-
-	fprintf(stderr,"drawEliminationTurn 3 \n");
-	fflush(stderr);
 
 	TextLabel label = createTextLabel(text, &posTourElimination, color, font, renderer, POSX_RIGHT, POSY_TOP);
 	
-	fprintf(stderr,"drawEliminationTurn 4 \n");
-	fflush(stderr);
 	free(text);
 	drawTextLabel(renderer, &label);
 	
-	fprintf(stderr,"drawEliminationTurn 5 \n");
-	fflush(stderr);
 	freeTextLabel(&label);
 	
-	fprintf(stderr,"drawEliminationTurn 6 \n");
-	fflush(stderr);
 }
 
 void drawPlayersScores(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, FontHandler* fontHandler) {
@@ -89,15 +75,9 @@ void drawPlayersScores(SDL_Renderer* renderer, const Player players[], const siz
 	for (size_t i=0; i<nbPlayers; ++i) {
 		const int height = rect->y+(players[i].rank+1)*rect->h/10+rect->y+rect->h/100;
 
-		fprintf(stderr,"%lld\tBefore pseudo and rank\n", i);
-		fflush(stderr);
 		drawPseudoAndRank(renderer, rect, height, fontHandler->fonts[FONT_retro], &black,  i, players[i].pseudo);
 		
-		fprintf(stderr,"Between Before pseudo and rank and elimination turn\n");
-		fflush(stderr);
 		drawEliminationTurn(renderer, rect, height, fontHandler->fonts[FONT_retro], &black, players[i].eliminationTurn);
-		fprintf(stderr,"after elimination turn\n");
-		fflush(stderr);
 	}
 }
 

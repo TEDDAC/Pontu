@@ -96,8 +96,6 @@ void testMenuEndGame() {
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(50);
-		fprintf(stderr, "Boucle\n");
-		fflush(stderr);
 	}
 
 Quit:
