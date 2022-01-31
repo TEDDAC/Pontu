@@ -1,0 +1,11 @@
+#ifndef COLORS_H_INCLUDED
+#define COLORS_H_INCLUDED
+
+#include <SDL2/SDL_Pixel.h>
+
+const SDL_Color COLOR_GENERIC_BUTTON_BACKGROUND = {225, 225, 225, 255};
+const SDL_Color COLOR_GENERIC_BUTTON_BORDER = {10, 10, 10, 255};
+
+
+#endif
+

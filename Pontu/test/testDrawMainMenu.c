@@ -9,6 +9,7 @@ int testDrawMainMenu(){
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     int statut = EXIT_FAILURE;
+    char* path = "../rsrc/img/Lenna.png";
 
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
@@ -43,17 +44,20 @@ int testDrawMainMenu(){
     unsigned int nb = 0;
     FontHandler fontHandler = loadFonts();
 
-    int window_w, window_h;
-    SDL_GetWindowSize(window,&window_w,&window_h);
+    //récupère le numéro de l'écran
+    SDL_DisplayMode current;
+    int i = SDL_GetWindowDisplayIndex(window);
+    SDL_GetCurrentDisplayMode(i, &current); //retourne current, structure avec vrai valeurs de taille de fenêtre
 
-    SDL_Rect rect = {.x = 0, .y = 0, .w = window_w, .h = window_h};
+    SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+    SDL_RenderClear(renderer);
+    
+    SDL_Rect rect = {.x = 0, .y = 0, .w = current.w, .h = current.h};
     if(!(buttons = drawMainMenu(renderer,fontHandler,&nb,&rect))){
         fprintf(stderr, "Le menu principale ne s'est pas déssiné correctement\n");
         return statut;
     }
 
-    SDL_SetRenderDrawColor(renderer, 0,0,0,0);
-    SDL_RenderClear(renderer);
     bool quit = false;
     SDL_Event event;
     buttons[2].arg = &quit;
@@ -82,11 +86,6 @@ int testDrawMainMenu(){
                 break;
             }
         }
-
-        /*for(int i=0;i<nb;i++){
-            drawButtonOnRenderer(renderer,&(buttons[i]));
-            printf("%d\n",i);
-        }*/
         drawButtonOnRenderer(renderer,&(buttons[0]));
         drawButtonOnRenderer(renderer,&(buttons[1]));
         drawButtonOnRenderer(renderer,&(buttons[2]));
