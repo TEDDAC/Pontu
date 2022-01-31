@@ -18,7 +18,7 @@ bool settingsView(SDL_Renderer* renderer, AudioHandler* ah) {
 
     SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
     SDL_RenderFillRect(renderer,&title_area);
-    tmp_textLabel = createTextLabel("Paramètres", &((SDL_Point) {150,50}), &black,
+    tmp_textLabel = createTextLabel("Paramètres", &((SDL_Point) {150,50}), 1, &black,
                                     FONT_Curvilingus, renderer, POSX_CENTER, POSY_CENTER);
 
 

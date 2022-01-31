@@ -64,7 +64,7 @@ void testMenuEndGame() {
 	SDL_RenderPresent(renderer);
 
 	SDL_Rect rectMenuEndGme = {.x=20, .y=0, .w=300, .h=480};
-	//P_Button buttonMenuEndGame = createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme);
+	P_Button buttonMenuEndGame = createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme);
 
 	while(!quit)
 	{
@@ -92,7 +92,7 @@ void testMenuEndGame() {
 		players[0].rank = 1;
 		players[1].rank = 2;
 		drawEndGameMenu(renderer, players, 2, &rectMenuEndGme, &fontHandler);
-		//drawButtonOnRenderer(renderer, &buttonMenuEndGame);
+		drawButtonOnRenderer(renderer, &buttonMenuEndGame);
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(50);
@@ -100,7 +100,7 @@ void testMenuEndGame() {
 
 Quit:
 	freeFonts(fontHandler);
-	//SDL_DestroyTexture(buttonMenuEndGame.texture);
+	SDL_DestroyTexture(buttonMenuEndGame.texture);
 	if(renderer != NULL)
 		SDL_DestroyRenderer(renderer);
 	if(window != NULL)

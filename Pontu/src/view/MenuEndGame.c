@@ -17,7 +17,7 @@ void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, FontHandler* fontHa
 	SDL_Point pos = {rect->x+rect->w/2, rect->y+rect->h/100};
 	SDL_Color color = {0,0,0,0};
 
-	TextLabel titre = createTextLabel("Scores", &pos, &color, fontHandler->fonts[FONT_retro], renderer, POSX_CENTER, POSY_TOP);
+	TextLabel titre = createTextLabel("Scores", &pos, 2, &color, fontHandler->fonts[FONT_retro], renderer, POSX_CENTER, POSY_TOP);
 
 	drawTextLabel(renderer, &titre);
 
@@ -38,7 +38,7 @@ void drawPseudoAndRank(SDL_Renderer* renderer, const SDL_Rect* rect, const int h
 	}
 	sprintf(text, "%lld. %s", rank, pseudo);
 
-	TextLabel joueur = createTextLabel(text, &posRangPseudo, color, font, renderer, POSX_LEFT, POSY_TOP);
+	TextLabel joueur = createTextLabel(text, &posRangPseudo, 1, color, font, renderer, POSX_LEFT, POSY_TOP);
 	free(text);
 
 	drawTextLabel(renderer, &joueur);
@@ -61,7 +61,7 @@ void drawEliminationTurn(SDL_Renderer* renderer, const SDL_Rect* rect, const int
 	}
 	sprintf(text, "Tour: %d", eliminationTurn);
 
-	TextLabel label = createTextLabel(text, &posTourElimination, color, font, renderer, POSX_RIGHT, POSY_TOP);
+	TextLabel label = createTextLabel(text, &posTourElimination, 1, color, font, renderer, POSX_RIGHT, POSY_TOP);
 	
 	free(text);
 	drawTextLabel(renderer, &label);
