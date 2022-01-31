@@ -44,17 +44,17 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 
 	SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
 	SDL_RenderFillRect(renderer,&title_area);
-	arr_textLabel[0] = createTextLabel("Parametres", &title_point, &black,
-                                           fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[0] = createTextLabel("Parametres", &title_point, 2.0, &black,
+                                           fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[0]);
 
-	arr_textures[0] = createGenericButtonTexture("-",fh->fonts[FONT_Curvilingus],16,black,blue, 0, 5, &wMinus, &hMinus, renderer);
-	arr_textures[1] = createGenericButtonTexture("+",fh->fonts[FONT_Curvilingus],16,black,blue, 0, 5, &wPlus, &hPlus, renderer);
+	arr_textures[0] = createGenericButtonTexture("-",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wMinus, &hMinus, renderer);
+	arr_textures[1] = createGenericButtonTexture("+",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wPlus, &hPlus, renderer);
 	
 	/* Master volume */
 	// Title
-	arr_textLabel[1] = createTextLabel("Volume principal", &masterVolTitle_point, &black,
-                                           fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[1] = createTextLabel("Volume principal", &masterVolTitle_point, 1.25, &black,
+                                           fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer,&arr_textLabel[1]);
 
 	// - button
@@ -62,18 +62,18 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// + button
-	tmp_button = createButton(arr_textures[1], NULL, 280, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wPlus, hPlus, onClick);
+	tmp_button = createButton(arr_textures[1], NULL, 270, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wPlus, hPlus, onClick);
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// Current value
 	sprintf(tmp_str, "%d", ah->masterVol);
-	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), &black, fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[2]);
 
 	/* Music volume */
 	// Title
-	arr_textLabel[3] = createTextLabel("Volume musique", &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h+20}), &black,
-					   fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[3] = createTextLabel("Volume musique", &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h+20}), 1.5, &black,
+					   fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[3]);
 
 	// - button
@@ -81,18 +81,18 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// + button
-	tmp_button = createButton(arr_textures[1], NULL, 280, arr_textLabel[3].textZone.y+arr_textLabel[3].textZone.h+20, wPlus, hPlus, onClick);
+	tmp_button = createButton(arr_textures[1], NULL, 270, arr_textLabel[3].textZone.y+arr_textLabel[3].textZone.h+20, wPlus, hPlus, onClick);
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// Current value
 	sprintf(tmp_str, "%d", ah->volMusic);
-	arr_textLabel[4] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), &black, fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[4] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[4]);
 
 	/* SFX Volume */
 	// Title
-	arr_textLabel[5] = createTextLabel("Volume sons", &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h + 20}), &black,
-					   fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[5] = createTextLabel("Volume sons", &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h + 20}), 1.5, &black,
+					   fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[5]);
 
 	// - button
@@ -100,12 +100,12 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// + button
-	tmp_button = createButton(arr_textures[1], NULL, 280, arr_textLabel[5].textZone.y+arr_textLabel[5].textZone.h+20, wPlus, hPlus, onClick);
+	tmp_button = createButton(arr_textures[1], NULL, 270, arr_textLabel[5].textZone.y+arr_textLabel[5].textZone.h+20, wPlus, hPlus, onClick);
 	drawButtonOnRenderer(renderer, &tmp_button);
 
 	// Current value
 	sprintf(tmp_str, "%d", ah->volSFX);
-	arr_textLabel[6] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), &black, fh->fonts[FONT_Curvilingus], renderer, POSX_CENTER, POSY_CENTER);
+	arr_textLabel[6] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[6]);
 
 
