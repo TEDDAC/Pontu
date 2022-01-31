@@ -20,7 +20,7 @@ bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button)
 	SDL_SetRenderTarget(renderer, NULL);
 	if(SDL_RenderCopy(renderer,button->hover && button->hoverTexture != NULL ? button->hoverTexture : button->texture,NULL,&(button->rect)))
 	{
-		fprintf(stderr,"Warning: %s\n",SDL_GetError());
+		fprintf(stderr,"SDLWarning: %s\n",SDL_GetError());
 		return false;
 	}
 	button->drawn = true;
@@ -54,4 +54,9 @@ bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
 	}
 	button->hoverTexture = texture;
 	return true;
+}
+
+void freeButton(P_Button * button){
+	SDL_DestroyTexture(button->texture);
+	SDL_DestroyTexture(button->hoverTexture);
 }

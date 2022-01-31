@@ -3,7 +3,7 @@
 #include "engine/TextureLoader.h"
 #include <errno.h>
 
-TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer, const POSITIONX_TYPE posXType, const POSITIONY_TYPE posYType) {
+TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float factorSize, const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer, const POSITIONX_TYPE posXType, const POSITIONY_TYPE posYType) {
     TextLabel label = {
         .color = *color,
         .texture = NULL
@@ -37,8 +37,8 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const SDL_Col
         }
     }
 
-    label.textZone.w = calculateStringPixelLenght(font, label.text);
-    label.textZone.h = TTF_FontHeight(font);
+    label.textZone.w = calculateStringPixelLenght(font, label.text)*factorSize;
+    label.textZone.h = TTF_FontHeight(font)*factorSize;
 
     switch (posXType)
     {
