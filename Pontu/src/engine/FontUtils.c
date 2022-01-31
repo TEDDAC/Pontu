@@ -1,4 +1,5 @@
 #include "engine/FontUtils.h"
+#include <string.h>
 
 int calculateStringPixelLenght(TTF_Font* font, char* str)
 {

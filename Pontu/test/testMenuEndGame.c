@@ -3,12 +3,13 @@
 #include "view/MenuEndGame.h"
 #include "engine/FontLoader.h"
 #include "model/Player.h"
+#include "engine/InputProcessor.h"
+#include "engine/InputElement.h"
 
 void testMenuEndGame() {
 	SDL_Window *window = NULL;
+	SDL_Rect windowSize = {10, 10, 1100, 600};
 	SDL_Renderer *renderer = NULL;
-	SDL_Texture* picture;
-	int statut = EXIT_FAILURE;
 
 	if(0 != SDL_Init(SDL_INIT_VIDEO))
 	{
@@ -17,7 +18,7 @@ void testMenuEndGame() {
 	}
 
 	//fenetre
-	window = SDL_CreateWindow("Fenêtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640,480, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Fenêtre", windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
 	if(window == NULL)
 	{
 		fprintf(stderr, "Erreur SDL_CreateWindow: %s\n", SDL_GetError());
@@ -57,50 +58,23 @@ void testMenuEndGame() {
 		goto Quit;
 	}
 
-	bool quit = false;
 
 	FontHandler fontHandler = loadFonts();
 				
 	SDL_RenderPresent(renderer);
+	GeneralState generalState = GS_EndOfGameMenu;
 
-	SDL_Rect rectMenuEndGme = {.x=20, .y=0, .w=300, .h=480};
-	P_Button buttonMenuEndGame = createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme);
+	SDL_Color color = {0,0,0,0};
+	Player players[2] = {newPlayer("Bépo", color), newPlayer("Azerty", color)};
+	players[0].eliminationTurn = 10;
+	players[1].eliminationTurn = 10;
+	players[0].rank = 1;
+	players[1].rank = 2;
 
-	while(!quit)
-	{
-		
-		{
-			SDL_Event event;
-			while(SDL_PollEvent(&event))
-			{
-				switch(event.type)
-				{
-				case SDL_QUIT:
-					fprintf(stderr, "Quit\n");
-					quit = true;
-					break;
-				}
-			}
-		}
-		SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-		SDL_RenderClear(renderer);
-
-		SDL_Color color = {0,0,0,0};
-		Player players[] = {newPlayer("Bépo", color), newPlayer("Azerty", color)};
-		players[0].eliminationTurn = 10;
-		players[1].eliminationTurn = 10;
-		players[0].rank = 1;
-		players[1].rank = 2;
-		drawEndGameMenu(renderer, players, 2, &rectMenuEndGme, &fontHandler);
-		drawButtonOnRenderer(renderer, &buttonMenuEndGame);
-
-		SDL_RenderPresent(renderer);
-		SDL_Delay(50);
-	}
+	endGameMenu(&generalState, window, renderer, &fontHandler, players, 2);
 
 Quit:
 	freeFonts(fontHandler);
-	SDL_DestroyTexture(buttonMenuEndGame.texture);
 	if(renderer != NULL)
 		SDL_DestroyRenderer(renderer);
 	if(window != NULL)

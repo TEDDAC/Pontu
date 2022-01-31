@@ -9,8 +9,8 @@
 #define INPUT_PROCESSOR_INCLUDED
 
 #include "engine/Button.h"
+#include "engine/arrayButton.h"
 #include "engine/InputElement.h"
-#include "model/Coord.h"
 
 /**
  * \struct InputProcessor
@@ -18,26 +18,31 @@
  */
 typedef struct
 {
-	//ArrayButton tabButton;
-	Coord selectedCase; ///< A case in Board (used to handle move actions) , (-1;-1) si inexistant
+	struct array_P_Button tabButton;
 } InputProcessor;
 
+
 /**
- * \brief Convert a screen coord into a model Coord
- * 
- * \param [in] point Screen coordinates
- * \param [in] boardRect The game's board's rect
- * \return Game coordinate from point
+ * \brief Create a new input processor
+ *
+ * \return A new input processor
  */
-Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect);
+InputProcessor createInputProcessor();
+
+/**
+ * @brief Free a game input processor
+ * 
+ * @param inputProcessor the game input processor to free (do not use after freeing)
+ */
+void freeInputProcessor(InputProcessor* inputProcessor);
+
 
 /**
  * \brief Poll and convert SDL_Events into specific event for Pontu
  * 
  * \param [in, out] inputProcessor The input processor which keeps a state of input in between calls
- * \param [in] boardRect The game's board's rect
  * \return InputElement : an event for Pontu
  */
-InputElement proccessInput(InputProcessor* inputProcessor, const SDL_Rect* boardRect);
+InputElement proccessInput(InputProcessor* inputProcessor);
 
 #endif // INPUT_PROCESSOR_INCLUDED

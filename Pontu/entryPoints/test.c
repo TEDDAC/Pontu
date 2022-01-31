@@ -5,11 +5,11 @@
 /*#include "../test/testButton.c"
 #include "../test/testTextInput.c"
 #include "../test/testConnectionMenu.c"*/
-/*#include "../test/testMenuEndGame.c"
+#include "../test/testMenuEndGame.c"
 /*#include "../test/testGameInterface.c"
 #include "../test/testConnectionMenu.c"*/
 //#include "../test/testDrawMainMenu.c
-#include "../test/testSettingsView.c"
+//#include "../test/testSettingsView.c"
 /*
     This file is meant to be modified (used only to called other tests functions)
 */
@@ -22,11 +22,11 @@ int main(int argc, char *argv[]) {
 	//testTextInput();
 	//testButtonTextureLoader();
 	//testConnectionMenu();
-	//testMenuEndGame();
+	testMenuEndGame();
 	//testGameInterface();
 	//testConnectionMenu();
 	//testDrawMainMenu();
-    testSettingsView();
+    //testSettingsView();
 
 	return 0;
 }

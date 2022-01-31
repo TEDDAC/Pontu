@@ -9,6 +9,7 @@ void testSettingsView(void) {
 	SDL_Renderer* renderer = NULL;
 	SDL_Texture* background = NULL;
 	AudioHandler ah;
+	FontHandler fh;
 
 	if (0 != SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr,"Error when initializing SDL: %s\n",SDL_GetError());
@@ -26,11 +27,13 @@ void testSettingsView(void) {
 	}
 
 	ah = newAudioHandler(10,100,100);
+	fh = loadFonts();
 
 	SDL_SetRenderDrawColor(renderer,255,140,0,255);
+	printf("%s\n",SDL_GetError());
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
-	settingsView(renderer,&ah);
+	settingsView(window, &ah,&fh);
 
 
 	SDL_Delay(5000);

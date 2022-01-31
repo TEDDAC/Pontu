@@ -16,7 +16,7 @@
 #include "engine/TextureLoader.h"
 #include <SDL2/SDL_ttf.h>
 #include "engine/TextLabel.h"
-
+#include "engine/FontLoader.h"
 
 /**
  * \brief Generates a settings view
@@ -24,7 +24,7 @@
  * \param[in] ah The AudioHandler in use
  * \return true if the view could be generated, else false
  */
-bool settingsView(SDL_Renderer* renderer, AudioHandler* ah);
+bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh);
 
 
 #endif // SETTINGS_H
