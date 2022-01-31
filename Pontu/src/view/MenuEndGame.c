@@ -27,7 +27,7 @@ void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, FontHandler* fontHa
 	SDL_Point pos = {rect->x+rect->w/2, rect->y+rect->h/100};
 	SDL_Color color = {0,0,0,0};
 
-	TextLabel titre = createTextLabel("Scores", &pos, 2, &color, fontHandler->fonts[FONT_retro], renderer, POSX_CENTER, POSY_TOP);
+	TextLabel titre = createTextLabel("Scores", &pos, 4, &color, fontHandler->fonts[FONT_retro], renderer, POSX_CENTER, POSY_TOP);
 
 	drawTextLabel(renderer, &titre);
 
@@ -101,24 +101,30 @@ void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_
     drawPlayersScores(renderer, players, nbPlayers, rect, fontHandler);
 }
 
-void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, const Player players[], const size_t nbPlayers) {
+void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
 	InputProcessor inputProcessor = createInputProcessor();
 
-	 //récupère le numéro de l'écran
-    SDL_DisplayMode current;
-    const int i = SDL_GetWindowDisplayIndex(window);
-    SDL_GetCurrentDisplayMode(i, &current); //retourne current, structure avec vrai valeurs de taille de fenêtre
+	int windowW;
+	int windowH;
 
-	SDL_Rect rectMenuEndGme = {.x=current.w/20, .y=0, .w=current.w*4/5, .h=current.h};
+	SDL_GetWindowSize(window, &windowW, &windowH);
+
+	SDL_Rect rectMenuEndGame = {
+		.x=windowW/10, 
+		.y=0, 
+		.w=windowW*80/100, 
+		.h=windowH
+	};
 	
 
-	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme));
+	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &rectMenuEndGame));
 	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
+	buttonMenuEndGame->rect.y = rectMenuEndGame.h*8/10;
+	buttonMenuEndGame->rect.x = rectMenuEndGame.x + rectMenuEndGame.w/2-buttonMenuEndGame->rect.w/2;
 
-	SDL_Color color = {0,0,0,0};
-	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGme, &fontHandler);
-
-	while(!quit)
+	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
+	
+	while(*generalState == GS_EndOfGameMenu)
 	{
 		{
 			InputElement inputElement;
@@ -130,7 +136,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					switch (inputElement.data.uiAction)
 					{
 					case UIAction_Quit:
-						quit = true;
+						*generalState = GS_MainMenu;
 						break;
 					case UIAction_Validate:
 						break;

@@ -10,8 +10,6 @@ void testMenuEndGame() {
 	SDL_Window *window = NULL;
 	SDL_Rect windowSize = {10, 10, 600, 600};
 	SDL_Renderer *renderer = NULL;
-	SDL_Texture* picture;
-	int statut = EXIT_FAILURE;
 
 	if(0 != SDL_Init(SDL_INIT_VIDEO))
 	{
@@ -60,69 +58,20 @@ void testMenuEndGame() {
 		goto Quit;
 	}
 
-	bool quit = false;
 
 	FontHandler fontHandler = loadFonts();
 				
 	SDL_RenderPresent(renderer);
-
-
-	InputProcessor inputProcessor = createInputProcessor();
-
-	SDL_Rect rectMenuEndGme = {.x=20, .y=0, .w=300, .h=480};
-	
-
-	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler.fonts[FONT_retro], &rectMenuEndGme));
-	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
+	GeneralState generalState = GS_EndOfGameMenu;
 
 	SDL_Color color = {0,0,0,0};
-	Player players[] = {newPlayer("Bépo", color), newPlayer("Azerty", color)};
+	Player players[2] = {newPlayer("Bépo", color), newPlayer("Azerty", color)};
 	players[0].eliminationTurn = 10;
 	players[1].eliminationTurn = 10;
 	players[0].rank = 1;
 	players[1].rank = 2;
-	drawEndGameMenu(renderer, players, 2, &rectMenuEndGme, &fontHandler);
 
-	while(!quit)
-	{
-		{
-			InputElement inputElement;
-			while (InputType_None != (inputElement = proccessInput(&inputProcessor)).type) {
-
-				switch (inputElement.type)
-				{
-				case InputType_ActivateUI:
-					switch (inputElement.data.uiAction)
-					{
-					case UIAction_Quit:
-						quit = true;
-						break;
-					case UIAction_Validate:
-						break;
-					case UIAction_Cancel:
-						break;
-					default:
-						break;
-					}
-					break;
-				case InputType_MoveGame:
-					
-					break;
-				case InputType_ClickGame:
-					
-					break;
-				case InputType_None:
-				default:
-					break;
-				}
-			}
-		}
-
-		drawButtonOnRenderer(renderer, buttonMenuEndGame);
-
-		SDL_RenderPresent(renderer);
-		SDL_Delay(50);
-	}
+	endGameMenu(&generalState, window, renderer, &fontHandler, players, 2);
 
 Quit:
 	freeFonts(fontHandler);
