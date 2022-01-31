@@ -1,7 +1,14 @@
 #include "view/MainMenu.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <stdio.h>
+#include "engine/Button.h"
+#include "engine/FontLoader.h"
+#include "view/MainMenu.h"
+#include "engine/GeneralState.h"
 
 void quit(struct P_button* buttonCaller){
-    *((bool*)(buttonCaller->arg)) = true;
+    *((GeneralState*)(buttonCaller->arg)) = GS_Quit;
 }
 
 P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, unsigned int* nb, const SDL_Rect* windowSize)
@@ -54,4 +61,60 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
     SDL_RenderCopy(renderer, picture, NULL, NULL);
     SDL_RenderPresent(renderer);
 	return buttons;
+}
+
+int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler){
+    int statut = EXIT_FAILURE;
+    char* path = "../rsrc/img/Lenna.png";
+    //Initialisation
+
+    P_Button* buttons = NULL;
+    unsigned int nb = 0;
+
+    SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+    SDL_RenderClear(renderer);
+
+    SDL_Rect rect = {.x = 0, .y = 0, .w = 0, .h = 0};
+    SDL_GetWindowSize(window,&(rect.w),&(rect.h));
+    if(!(buttons = drawMainMenu(renderer,fontHandler,&nb,&rect))){
+        fprintf(stderr, "Le menu principale ne s'est pas déssiné correctement\n");
+        return statut;
+    }
+    SDL_Event event;
+    buttons[2].arg = generalState;
+    while(*generalState != GS_Quit)
+    {
+        while(SDL_PollEvent(&event))
+        {
+            switch(event.type)
+            {
+            case SDL_QUIT:
+                *generalState = GS_Quit;
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if(isHover(buttons,event.button.x,event.button.y))
+                    printf("Nouvelle partie\n");
+                if(isHover(&(buttons[2]),event.motion.x,event.motion.y)){
+                    buttons[2].onClick(&(buttons[2]));
+                    break;
+                }
+                break;
+            case SDL_MOUSEMOTION:
+                isHover(&(buttons[0]),event.motion.x,event.motion.y);
+                isHover(&(buttons[1]),event.motion.x,event.motion.y);
+                isHover(&(buttons[2]),event.motion.x,event.motion.y);
+                break;
+            default:
+                break;
+            }
+        }
+        drawButtonOnRenderer(renderer,&(buttons[0]));
+        drawButtonOnRenderer(renderer,&(buttons[1]));
+        drawButtonOnRenderer(renderer,&(buttons[2]));
+        SDL_RenderPresent(renderer);
+
+        SDL_Delay(20);
+    }
+
+    return 0;
 }
