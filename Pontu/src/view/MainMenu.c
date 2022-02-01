@@ -7,7 +7,7 @@
 #include "view/MainMenu.h"
 #include "engine/GeneralState.h"
 
-void quit(struct P_button* buttonCaller){
+void quit(P_Button* buttonCaller) {
     *((GeneralState*)(buttonCaller->arg)) = GS_Quit;
 }
 
