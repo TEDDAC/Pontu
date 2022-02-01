@@ -19,9 +19,9 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	SDL_Color white = {255,255,255,255};
 	SDL_Color blue = {52,158,235,255};
 	SDL_Color black = {0,0,0,255};
-	int hMinus, wMinus, hPlus, wPlus;
+	int hMinus, wMinus, hPlus, wPlus, wBack, hBack;
 	TextLabel* arr_textLabel = (TextLabel*)malloc(7*sizeof(TextLabel));
-	SDL_Texture** arr_textures = (SDL_Texture**)malloc(2*sizeof(SDL_Texture*));
+	SDL_Texture** arr_textures = (SDL_Texture**)malloc(3*sizeof(SDL_Texture*));
 	P_Button tmp_button;
 	char tmp_str[3];
 
@@ -50,6 +50,7 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 
 	arr_textures[0] = createGenericButtonTexture("-",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wMinus, &hMinus, renderer);
 	arr_textures[1] = createGenericButtonTexture("+",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wPlus, &hPlus, renderer);
+	arr_textures[2] = createGenericButtonTexture("Retour", fh->fonts[FONT_retro],32,black,blue,0,20,&wBack,&hBack,renderer);
 	
 	/* Master volume */
 	// Title
@@ -108,6 +109,9 @@ bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	arr_textLabel[6] = createTextLabel(tmp_str, &((SDL_Point) {150, tmp_button.rect.y+tmp_button.rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 	drawTextLabel(renderer, &arr_textLabel[6]);
 
+	/* Return button */
+	tmp_button = createButton(arr_textures[2], NULL, 150 - wBack/2, tmp_button.rect.y+tmp_button.rect.h + 100, wBack, hBack, onClick);
+	drawButtonOnRenderer(renderer, &tmp_button);
 
 	SDL_RenderPresent(renderer);
 
