@@ -10,5 +10,8 @@ void drawPiecesPlayer(SDL_Renderer* renderer, const SDL_Rect* boardRect, const P
 
 void drawMovePiece(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Coord* startMove, const Coord* endMove, SDL_Texture* pieceTexture, SDL_Texture* islandTexture);
 
+
+void drawPlacePiece(SDL_Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* pieceTexture, const Coord* coordPlace);
+
 #endif //PIECES_DRAWER_INCLUDED
 

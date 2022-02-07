@@ -268,7 +268,7 @@ void updatePieceIsolated(Game* game, const Island* island)
 	}
 }
 
-bool clickOnBoard(const Coord coord, Game* game)
+GameAction clickOnBoard(const Coord coord, Game* game)
 {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
@@ -281,7 +281,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 				if (piece != NULL) {
 					if (placePiece(piece, islandOrBridge.data.island, &game->board)) {
 						changePhaseOrPlayerTurn(game);
-						return true;
+						return GameAction_PlacePiece;
 					}
 				}
 			}
@@ -296,7 +296,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 
 					changePhaseOrPlayerTurn(game);
 
-					return true;
+					return GameAction_RemoveBridge;
 				}
 			}
 			break;
@@ -304,7 +304,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 			break;
 	}
 
-	return false;
+	return GameAction_None;
 }
 
 Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island)
@@ -319,7 +319,7 @@ Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Is
 	return NULL;
 }
 
-bool moveOnBoard(const Coord start, const Coord end, Game* game)
+GameAction moveOnBoard(const Coord start, const Coord end, Game* game)
 {
 	const IslandOrBridge islandOrBridgeStart = coordToEntity(start);
 	const IslandOrBridge islandOrBridgeEnd	 = coordToEntity(end);
@@ -340,7 +340,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game)
 					{
 						changePhaseOrPlayerTurn(game);
 					}
-					return pieceMoved;
+					return pieceMoved ? GameAction_MovePiece : GameAction_None;
 				}
 			}
 			break;
@@ -348,7 +348,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game)
 			break;
 	}
 
-	return false;
+	return GameAction_None;
 }
 
 bool rmBridge(Bridge bridge, Board* board)

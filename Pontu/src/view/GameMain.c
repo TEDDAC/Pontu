@@ -65,18 +65,23 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					break;
 				}
 				break;
-			case InputType_MoveGame:
+			case InputType_MoveGame: {
 				fprintf(stderr, "Move on board\n");
 				fprintf(stderr, "From (%d; %d)\n", inputElement.data.move.start.x, inputElement.data.move.start.y);
 				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
 
-				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
-
-				drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, textureHandler.textures[TEXTURE_PieceRed], textureHandler.textures[TEXTURE_Island]);
+				const GameAction actionRealized = moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
+				switch (actionRealized)
+				{
+				case GameAction_MovePiece:
+					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, textureHandler.textures[TEXTURE_PieceRed], textureHandler.textures[TEXTURE_Island]);
+					SDL_RenderPresent(renderer);
+					break;
+				}
 			
-				SDL_RenderPresent(renderer);
 				break;
-			case InputType_ClickGame:
+			}
+			case InputType_ClickGame: {
 				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
 				fprintf(stderr, "\tSelected case : (%d; %d)\n", inputProcessor.selectedCase.x, inputProcessor.selectedCase.y);
 
@@ -85,13 +90,26 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
-				if (clickOnBoard(inputElement.data.coord, &game)) {
+				const GameAction actionRealized = clickOnBoard(inputElement.data.coord, &game);
+				switch (actionRealized)
+				{
+				case GameAction_PlacePiece:
+					drawPlacePiece(renderer, &boardRect, textureHandler.textures[TEXTURE_PieceViolet], &inputElement.data.coord);
+					SDL_RenderPresent(renderer);
+					break;
+				case GameAction_RemoveBridge:
+					drawRemoveBridge(renderer, &boardRect, textureHandler.textures[TEXTURE_Water], &inputElement.data.coord);
+					SDL_RenderPresent(renderer);
+					break;
+				}
+
+				if (actionRealized != GameAction_None) {
 					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
-
 				break;
+			}
 			case InputType_None:
 			default:
 				break;

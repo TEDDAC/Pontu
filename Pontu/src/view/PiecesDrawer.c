@@ -21,3 +21,11 @@ void drawMovePiece(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Coor
 	rDest = coordToRect(boardRect, endMove);
 	SDL_RenderCopy(renderer, pieceTexture, NULL, &rDest);	
 }
+
+
+void drawPlacePiece(SDL_Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* pieceTexture, const Coord* coordPlace) {
+	SDL_Rect rDest = coordToRect(boardRect, coordPlace);
+	SDL_RenderCopy(renderer, pieceTexture, NULL, &rDest);
+}
+
+

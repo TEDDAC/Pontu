@@ -28,6 +28,13 @@ typedef enum {
 	GAME_ENDED
 } Phase;
 
+typedef enum {
+	GameAction_None,
+	GameAction_PlacePiece,
+	GameAction_MovePiece,
+	GameAction_RemoveBridge,
+} GameAction;
+
 /**
  * \struct Game
  * \brief Represents a game
@@ -158,18 +165,18 @@ Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Is
  * \param start Board coord were the move started
  * \param end Board coord were the move ended
  * \param game Game's state
- * \return true if an action was realised, false otherwise
+ * \return The action realised, GameAction_None if no action was realized
  */
-bool moveOnBoard(const Coord start, const Coord end, Game* game);
+GameAction moveOnBoard(const Coord start, const Coord end, Game* game);
 
 /**
  * \brief Handle global game action click
  *
  * \param [in] coord Board coord were the click is
  * \param [in, out] game Game's state
- * \return true if an action was realised, false otherwise
+ * \return The action realised, GameAction_None if no action was realized
  */
-bool clickOnBoard(const Coord coord, Game* game);
+GameAction clickOnBoard(const Coord coord, Game* game);
 
 /**
  * \brief Remove bridge from board at (coord->x; coord->y)
