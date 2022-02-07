@@ -10,12 +10,12 @@
 //#include "../test/testConnectionMenu.c"
 //#include "../test/testDrawMainMenu.c"
 //#include "../test/testSettingsView.c"
-#include "../test/oldMain__ThisCanBeGameMain.c"
+//#include "../test/oldMain__ThisCanBeGameMain.c"
 /*
     This file is meant to be modified (used only to called other tests functions)
 */
 
-/*int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 	//testTextureLoader();
 	//testAudioHandler();
 	//testFontLoader();
@@ -24,12 +24,11 @@
 	//testButtonTextureLoader();
 	//testConnectionMenu();
 	//testMenuEndGame();
-	testGameInterface();
 	//testButton();
-	//testGameInterface();
+	testGameInterface();
 	//testConnectionMenu();
 	//testDrawMainMenu();
     //testSettingsView();
 
 	return 0;
-}*/
+}

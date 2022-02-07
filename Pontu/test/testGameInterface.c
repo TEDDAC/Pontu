@@ -29,7 +29,7 @@ int testGameInterface()
     }
 
      //fenetre
-    window = SDL_CreateWindow("Fenêtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800,600, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Fenêtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 900,900, SDL_WINDOW_SHOWN);
     if(window == NULL)
     {
         fprintf(stderr, "Erreur SDL_CreateWindow: %s\n", SDL_GetError());
