@@ -34,8 +34,13 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	SDL_GetWindowSize(window, &windowW, &windowH);
 	SDL_Rect boardRect = boardRectFromWindowSize(windowW, windowH);
 
-
+	//Draw 
 	drawFullBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island], textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
+	for (int iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
+		drawPiecesPlayer(renderer, &boardRect, game.board.arrPieces, game.board.nbPieces, iPlayer, textureHandler.textures[TEXTURE_PieceRed]);
+		//SDL_Renderer* renderer, const SDL_Rect* boardRect, const Piece arrPieces[], const size_t nbPieces, const size_t numPlayer,  SDL_Texture* piece
+	}
+	
 	SDL_RenderPresent(renderer);
 
 
