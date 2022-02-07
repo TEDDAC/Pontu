@@ -30,7 +30,7 @@ void applySpecificRulesFor2PlayersGame(Game* g)
 	}
 }
 
-Game newGame(const size_t nbPlayers, const char* pseudos[])
+Game newGame(const size_t nbPlayers, const Player player[])
 {
 	Game g = { // In Placement phase, the last player initialized is the 1st to play
 		.currentPlayerID = nbPlayers - 1,
@@ -40,13 +40,9 @@ Game newGame(const size_t nbPlayers, const char* pseudos[])
 		.nbPlayers = nbPlayers
 	};
 
-	// red, green, blue, yellow
-	// TODO meilleures couleurs (?)
-	SDL_Color colors[4] = { { 255, 0, 0, 255 }, { 0, 255, 0, 255 }, { 0, 0, 255, 255 }, { 255, 255, 0, 255 } };
-
 	for (size_t player_i = 0; player_i < nbPlayers; player_i++)
 	{
-		g.arrPlayers[player_i] = newPlayer(pseudos[player_i], colors[player_i]);
+		g.arrPlayers[player_i] = player[player_i];
 	}
 
 	if (nbPlayers == 2)
@@ -72,8 +68,8 @@ void changePhaseOrPlayerTurn(Game* game)
 				game->currentPlayerID--;
 			}
 			break;
-		case MOVE_PIECE: 
-			game->phase = RM_BRIDGE; 
+		case MOVE_PIECE:
+			game->phase = RM_BRIDGE;
 			break;
 		case RM_BRIDGE:
 		{
@@ -93,7 +89,7 @@ void changePhaseOrPlayerTurn(Game* game)
 			} while (areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces,
 											   game->board.nbPieces));
 
-			
+
 			fprintf(stderr, "Player n°%ld turn\n", game->currentPlayerID);
 			fflush(stderr);
 
@@ -103,7 +99,7 @@ void changePhaseOrPlayerTurn(Game* game)
 			}
 			break;
 		}
-		default: 
+		default:
 			break;
 	}
 }
@@ -243,7 +239,7 @@ bool anyOfPlayersPiecesCanMove(const size_t playerID, const Board* board) {
 		size_t nbNeighbors;
 		Island* neighbors = islandsAround(board->arrPieces[i].island, &nbNeighbors);
 		for (size_t n = 0; n < nbNeighbors; ++n)
-		{		
+		{
 			if (board->arrPieces[i].idJ == playerID && pieceCanMoveTo(&board->arrPieces[i], neighbors[n], board)) {
 				return true;
 			}
@@ -304,7 +300,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 				}
 			}
 			break;
-		default: 
+		default:
 			break;
 	}
 
@@ -348,7 +344,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game)
 				}
 			}
 			break;
-		default: 
+		default:
 			break;
 	}
 
@@ -385,7 +381,7 @@ struct array_Coord getInteractiveCases(const Game* const game, const Coord selec
 	case PLACEMENT: {
 		struct array_Coord retVal = array_Coord_Create();
 		array_Coord_Reserve(&retVal, 25);
-	
+
 		for (int y = 0; y<5; y+=2) {
 			for (int x = 0; x<5; x+=2) {
 				array_Coord_AddElement(&retVal, newCoord(x,y));
@@ -398,7 +394,7 @@ struct array_Coord getInteractiveCases(const Game* const game, const Coord selec
 				array_Coord_RemoveElement(&retVal, islandToCoord(&game->board.arrPieces[i].island), &coordEqual);
 			}
 		}
-		
+
 		array_Coord_FitToSize(&retVal);
 
 		return retVal;
@@ -412,7 +408,7 @@ struct array_Coord getInteractiveCases(const Game* const game, const Coord selec
 			if (game->board.arrPieces[i].idJ == game->currentPlayerID && !game->board.arrPieces[i].stuck) {
 				size_t nbIsland;
 				Island* islands = islandsAround(game->board.arrPieces[i].island, &nbIsland);
-				
+
 				if (nbIsland != 0) {
 					Coord pieceCoord = islandToCoord(&game->board.arrPieces[i].island);
 					if (!coordValid(selectedCase)) {
@@ -442,7 +438,7 @@ struct array_Coord getInteractiveCases(const Game* const game, const Coord selec
 	case RM_BRIDGE: {
 		struct array_Coord retVal = array_Coord_Create();
 		array_Coord_Reserve(&retVal, 40);
-		
+
 		for (size_t y = 0; y<5; ++y) {
 			for (size_t x = 0; x<4; ++x) {
 				if (game->board.hBridges[y][x]) {
@@ -459,7 +455,7 @@ struct array_Coord getInteractiveCases(const Game* const game, const Coord selec
 				}
 			}
 		}
-		
+
 		return retVal;
 	}
 	default:

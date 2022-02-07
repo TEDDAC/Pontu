@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include "engine/GeneralState.h"
 #include "view/MainMenu.h"
+#include "view/MenuEndGame.h"
+#include "view/GameCreationMenu.h"
 #include "engine/FontLoader.h"
+#include "model/Player.h"
 
 int main(int argc, char const *argv[]) {
     GeneralState generalState;
@@ -45,9 +48,28 @@ int main(int argc, char const *argv[]) {
 			case GS_MainMenu:
 				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
 				break;
-			/*case GS_EndOfGameMenu:// Coupler avec le menu de jeu
-				endGameMenu(&generalState, window, renderer, fontHandler, NULL, 0);
-				break;*/
+			case GS_GameCreationMenu:{
+				int windowW;
+				int windowH;
+
+				SDL_GetWindowSize(window, &windowW, &windowH);
+				
+				size_t nbPlayers = 0;
+				Players* players;
+				bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+				if (crashed) {
+					fprintf(stderr,"sorry");
+					exit(-1);
+				}
+
+				gameView(&generalState, window, renderer, &fontHandler, players, nbPlayers);
+
+				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
+				break;
+			}
+			case GS_Game: {
+				break;
+			}
         }
     }
 
