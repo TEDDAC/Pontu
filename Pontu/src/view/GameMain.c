@@ -10,12 +10,24 @@
 #include "view/BoardDrawer.h"
 #include "view/GameDrawer.h"
 
+#include "engine/UIElementUtils.h"
 
 
-SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
-	SDL_Rect boardRect = {.x=windowW/10.0, .y=windowH/10, .w=windowW*8.0/10.0, .h=windowH*8.0/10.0};
+PositionSpecifier boardRectPositionSpecifier() {
+	SDL_Rect b100 = {
+		.x= 50, 
+		.y= 50, 
+		.w= 80, 
+		.h= 80,
+	};
+	return newPositionSpecifier(&b100, POSX_CENTER, POSY_CENTER, ASPECT_KEEP_FIT);
+}
 
-	return boardRect;
+void redrawGameBoard(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const TextureHandler* textureHandler, const SDL_Rect* boardRect, const Board* board) {
+	drawFullBoard(renderer, boardRect, board, textureHandler->textures[TEXTURE_Island], textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
+	for (size_t iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
+		drawPiecesPlayer(renderer, boardRect, board->arrPieces, board->nbPieces, iPlayer, textureHandler, players[iPlayer].color);
+	}
 }
 
 void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers)
@@ -29,18 +41,15 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-	int windowW;
-	int windowH;
+	
+	SDL_Rect windowRect = {0,0,0,0};
+	SDL_GetWindowSize(window, &windowRect.w, &windowRect.h);
+	PositionSpecifier boardRPositionSpecifier = boardRectPositionSpecifier();
 
-	SDL_GetWindowSize(window, &windowW, &windowH);
-	SDL_Rect boardRect = boardRectFromWindowSize(windowW, windowH);
+	SDL_Rect boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
 
 	//Draw 
-	drawFullBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island], textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
-	for (int iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
-		drawPiecesPlayer(renderer, &boardRect, game.board.arrPieces, game.board.nbPieces, iPlayer, textureHandler.textures[TEXTURE_PieceRed]);
-	}
-
+	redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
 	SDL_RenderPresent(renderer);
 
 
@@ -71,7 +80,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				switch (actionRealized)
 				{
 				case GameAction_MovePiece:
-					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, textureHandler.textures[TEXTURE_PieceRed], textureHandler.textures[TEXTURE_Island]);
+					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, &textureHandler, game.arrPlayers[game.currentPlayerID].color);
 					SDL_RenderPresent(renderer);
 					if (game.phase == GAME_ENDED) {
 						*generalState = GS_EndOfGameMenu;
@@ -90,7 +99,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				switch (actionRealized)
 				{
 				case GameAction_PlacePiece:
-					drawPlacePiece(renderer, &boardRect, textureHandler.textures[TEXTURE_PieceViolet], &inputElement.data.coord);
+					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID-1>0) ? game.currentPlayerID-1 : game.nbPlayers-1].color, &inputElement.data.coord);
 					SDL_RenderPresent(renderer);
 					break;
 				case GameAction_RemoveBridge:
@@ -107,6 +116,14 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				}
 
 				break;
+			}
+			case InputType_Window_Resize: {
+				windowRect.w = inputElement.data.windowSize.w;
+				windowRect.h = inputElement.data.windowSize.h;
+				boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
+
+				redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
+				SDL_RenderPresent(renderer);
 			}
 			case InputType_None:
 			default:

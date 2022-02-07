@@ -10,8 +10,9 @@
 
 #define PSEUDO_LENMAX 50
 
-#include <SDL2/SDL_pixels.h>
+#include "model/PlayersColors.h"
 #include <string.h>
+
 
 /**
  * \struct Player
@@ -19,7 +20,7 @@
  */
 typedef struct {
 	char pseudo[PSEUDO_LENMAX]; //< The player's pseudo
-	SDL_Color color; //< The player's Piece' color
+	PlayersColors color; //< The player's Piece' color
 	int rank; //< The player's rank (0 if the player isn't out yet)
 	int eliminationTurn; //< When the player has been eliminated (0 if the player isn't out yet)
 } Player;
@@ -30,7 +31,7 @@ typedef struct {
  * \param[in]	color	The color of the new Player's Piece
  * \return A struct representing the new Player
  */
-Player newPlayer(const char pseudo[PSEUDO_LENMAX], const SDL_Color color);
+Player newPlayer(const char pseudo[PSEUDO_LENMAX], const PlayersColors color);
 
 
 #endif // JOUEUR_H

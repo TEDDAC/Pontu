@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 		goto Quit;
 	}
 
-	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
@@ -57,10 +57,10 @@ int main(int argc, char *argv[]) {
 				SDL_GetWindowSize(window, &windowW, &windowH);
 				
 				size_t nbPlayers = 2;
-				SDL_Color color = {0,0,0,0};
 				Player* players = (Player*)malloc(sizeof(Player)*2);
-				players[0] = newPlayer("Bépo", color);
-				players[1] = newPlayer("Azeryty", color);
+				players[0] = newPlayer("Bépo", PlayerViolet);
+				players[1] = newPlayer("Azeryty", PlayerYellow);
+				//players[2] = newPlayer("Adcsg", PlayerRed);
 
 				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
 

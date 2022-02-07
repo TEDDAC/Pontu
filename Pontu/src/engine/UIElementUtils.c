@@ -33,6 +33,24 @@ SDL_Rect adaptPosToRect(const PositionSpecifier *const positionSpecifier, const 
 		r.h = globalRect->h * positionSpecifier->base100.h/100.0;
 		r.w =  r.h * positionSpecifier->base100.w/positionSpecifier->base100.h;
 		break;
+	case ASPECT_KEEP_FIT: {
+		const int preferedW = globalRect->w * positionSpecifier->base100.w/100.0;
+		const int preferedH = globalRect->h * positionSpecifier->base100.h/100.0;
+		const int associatedH = preferedW * positionSpecifier->base100.h/positionSpecifier->base100.w;
+		const int associatedW = preferedH * positionSpecifier->base100.w/positionSpecifier->base100.h;
+
+		if (associatedH > preferedH) {
+			r.h = preferedH;
+			r.w = associatedW;
+		}
+		else {
+			r.w = preferedW;
+			r.h = associatedH;
+		}
+	}
+		
+		
+		break;
 	default:
 		break;
 	}
@@ -57,10 +75,10 @@ SDL_Rect adaptPosToRect(const PositionSpecifier *const positionSpecifier, const 
 	case POSY_TOP:
 		r.y = globalRect->y + globalRect->h * positionSpecifier->base100.y/100.0;
 		break;
-	case POSX_CENTER:
-		r.x = globalRect->y + globalRect->h * positionSpecifier->base100.y/100.0 - r.h/2;
+	case POSY_CENTER:
+		r.y = globalRect->y + globalRect->h * positionSpecifier->base100.y/100.0 - r.h/2;
 		break;
-	case POSX_RIGHT:
+	case POSY_BOTTOM:
 		r.y = globalRect->y + globalRect->h * positionSpecifier->base100.y/100.0 - r.h;
 		break;
 	default:

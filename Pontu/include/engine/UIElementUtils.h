@@ -18,7 +18,8 @@ typedef enum {
 typedef enum {
 	ASPECT_KEEP_W, 
 	ASPECT_KEEP_H, 
-	ASPECT_IGNORE
+	ASPECT_IGNORE,
+	ASPECT_KEEP_FIT
 } AspectRatioType;
 
 typedef struct {

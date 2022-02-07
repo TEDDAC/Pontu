@@ -43,7 +43,10 @@ Game newGame(const size_t nbPlayers, const Player player[])
 
 	for (size_t player_i = 0; player_i < nbPlayers; player_i++)
 	{
-		g.arrPlayers[player_i] = player[player_i];
+		g.arrPlayers[player_i].color = player[player_i].color;
+		g.arrPlayers[player_i].eliminationTurn = player[player_i].eliminationTurn;
+		g.arrPlayers[player_i].rank = player[player_i].rank;
+		strcpy(g.arrPlayers[player_i].pseudo, player[player_i].pseudo);
 	}
 
 	if (nbPlayers == 2)
