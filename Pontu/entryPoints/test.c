@@ -2,13 +2,13 @@
 // #include "../test/testFontLoader.c"
 // #include "../test/testAudioHandler.c"
 // #include "../test/testGenerateurTexture.c"
-/*#include "../test/testButton.c"
-#include "../test/testTextInput.c"
-#include "../test/testConnectionMenu.c"*/
-#include "../test/testMenuEndGame.c"
-/*#include "../test/testGameInterface.c"
-#include "../test/testConnectionMenu.c"*/
-//#include "../test/testDrawMainMenu.c
+//#include "../test/testButton.c"
+//#include "../test/testTextInput.c"
+//#include "../test/testConnectionMenu.c"
+//#include "../test/testMenuEndGame.c"
+#include "../test/testGameInterface.c"
+//#include "../test/testConnectionMenu.c"
+//#include "../test/testDrawMainMenu.c"
 //#include "../test/testSettingsView.c"
 #include "../test/oldMain__ThisCanBeGameMain.c"
 /*
@@ -24,6 +24,8 @@
 	//testButtonTextureLoader();
 	//testConnectionMenu();
 	//testMenuEndGame();
+	testGameInterface();
+	//testButton();
 	//testGameInterface();
 	//testConnectionMenu();
 	//testDrawMainMenu();
