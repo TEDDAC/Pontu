@@ -38,12 +38,15 @@ int main(int argc, char const *argv[]) {
     }
     FontHandler fontHandler = loadFonts();
 
-    generalState = GS_Quit;
+    generalState = GS_MainMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
-            case GS_MainMenu:
-            mainMenu(renderer,window,&generalState, fontHandler);
-            break;
+			case GS_MainMenu:
+				mainMenu(renderer,window,&generalState, fontHandler);
+				break;
+			case GS_EndOfGameMenu:// Coupler avec le menu de jeu
+				endGameMenu(&generalState, window, renderer, fontHandler, NULL, 0);
+				break;
         }
     }
 
