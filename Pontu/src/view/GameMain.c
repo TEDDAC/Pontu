@@ -7,6 +7,10 @@
 #include "model/arrayCoord.h"
 #include "debug/printer.h"
 
+#include "view/PiecesDrawer.h"
+#include "view/BoardDrawer.h"
+#include "view/GameDrawer.h"
+
 SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
 	SDL_Rect boardRect = {.x=windowW/10.0, .y=windowH/10, .w=windowW*8.0/10.0, .h=windowH*8.0/10.0};
 
@@ -21,7 +25,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	GameInputProcessor inputProcessor = createGameInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
 
-	Game game = newGame(players, nbPlayers);
+	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
 	int windowW;
@@ -29,6 +33,11 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 	SDL_GetWindowSize(window, &windowW, &windowH);
 	SDL_Rect boardRect = boardRectFromWindowSize(windowW, windowH);
+
+
+	drawFullBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island], textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
+	SDL_RenderPresent(renderer);
+
 
 	while(*generalState == GS_Game)
 	{
@@ -89,20 +98,11 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 			fprintf(stderr, "}\n");
 		}
 
-		fflush(stderr);
-
-		// Drawing
-		drawGame(renderer, &windowSize, &boardRect, &game, &textureHandler);
-
-		SDL_RenderPresent(renderer);
-
 		SDL_Delay(20);
 	}
 
-Quit:
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
 	
 	SDL_Quit();
-	return statut;
 }
