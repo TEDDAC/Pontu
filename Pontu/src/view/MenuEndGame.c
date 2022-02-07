@@ -4,6 +4,15 @@
 #include <errno.h>
 #include "engine/Colors.h"
 #include "engine/InputProcessor.h"
+#include "engine/UIElementUtils.h"
+#include "engine/arrayTextLabel.h"
+#include "engine/arrayPositionSpecifier.h"
+
+
+struct endGameMenuTextLabel {
+	struct array_TextLabel textLabels;
+	struct array_PositionSpecifier positionSpecifiers;
+};
 
 /**
  * @brief Button handle which set a generalState to GS_MainMenu
@@ -54,14 +63,10 @@ P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, cons
  * @param font Font used for title
  */
 void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, TTF_Font* font) {
-	SDL_Point pos = {rect->x+rect->w/2, rect->y+rect->h/100};
-	SDL_Color color = {0,0,0,0};
 
-	TextLabel titre = createTextLabel("Scores", &pos, 4, &color, font, renderer, POSX_CENTER, POSY_TOP);
+	/*drawTextLabel(renderer, &titre);
 
-	drawTextLabel(renderer, &titre);
-
-	freeTextLabel(&titre);
+	freeTextLabel(&titre);*/
 }
 
 /**
@@ -142,9 +147,37 @@ void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_
     drawPlayersScores(renderer, players, nbPlayers, rect, fontHandler->fonts[FONT_retro]);
 }
 
+TextLabel createTitleLabel(SDL_Renderer* renderer, TTF_Font* font) {
+	SDL_Color color = {0,0,0,0};
+
+	return createUnsizedTextLabel("Scores", &color, font, renderer);
+}
+
+PositionSpecifier getTitleRect100(SDL_Rect* labelSize) {
+	SDL_Rect base100 = {
+		.x=50,
+		.y=1,
+		.w = 30,
+		.h = 30*labelSize->h/labelSize->w
+	};
+	return newPositionSpecifier(&base100, POSX_CENTER, POSY_TOP, ASPECT_KEEP_W);
+}
+
+struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, FontHandler* fontHandler) {
+	struct endGameMenuTextLabel labels = {
+		.textLabels = array_TextLabel_Create(),
+		.positionSpecifiers = array_PositionSpecifier_Create()
+	};
+
+	// Titre
+	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_retro]));
+	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitleRect100(&array_TextLabel_Last(&labels.textLabels)->textZone));
+
+	return labels;
+}
+
 void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
 	
-
 	int windowW;
 	int windowH;
 
@@ -160,7 +193,12 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	InputProcessor inputProcessor = createInputProcessor();
 	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &rectMenuEndGame, generalState));
 	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
-
+	SDL_Rect base100 = {
+		.x = 50,
+		.y = 99,
+		.w = 30,
+		.h = 30*buttonMenuEndGame->rect.h/buttonMenuEndGame->rect.w
+	};
 	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
 	
 	while(*generalState == GS_EndOfGameMenu)
@@ -185,6 +223,19 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 						break;
 					}
 					break;
+				case InputType_Window_Resize: {
+					
+					SDL_Rect rectM = {
+						.x=inputElement.data.windowSize.w/10, 
+						.y=0, 
+						.w=inputElement.data.windowSize.w*80/100, 
+						.h=inputElement.data.windowSize.h
+					};
+					drawEndGameMenu(renderer, players, nbPlayers, &rectM, fontHandler);
+		
+					//buttonMenuEndGame->rect = adaptPosToRect(&base100, &rectM, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_W);
+					fprintf(stderr, "Resize\n"); fflush(stderr);
+				} 
 				default:
 					break;
 				}
@@ -193,6 +244,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 
 		drawButtonOnRenderer(renderer, buttonMenuEndGame);
 
+		
 		SDL_RenderPresent(renderer);
 		SDL_Delay(50);
 	}

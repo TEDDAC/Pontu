@@ -4,18 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "engine/FontLoader.h"
-
-typedef enum {
-	POSX_LEFT,
-	POSX_CENTER,
-	POSX_RIGHT
-} POSITIONX_TYPE;
-
-typedef enum {
-	POSY_TOP,
-	POSY_CENTER,
-	POSY_BOTTOM
-} POSITIONY_TYPE;
+#include "engine/UIElementUtils.h"
 
 typedef struct
 {
@@ -25,7 +14,8 @@ typedef struct
 	SDL_Texture* texture;
 }TextLabel;
 
-TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float factorSize,const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer, const POSITIONX_TYPE posXType, const POSITIONY_TYPE posYType);
+TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float factorSize,const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer, const PositionX_Type posXType, const PositionY_Type posYType);
+TextLabel createUnsizedTextLabel(const char text[], const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer);
 void freeTextLabel(TextLabel* label);
 
 void drawTextLabel(SDL_Renderer* renderer, TextLabel* label);

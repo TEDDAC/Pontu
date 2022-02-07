@@ -43,6 +43,10 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			}
 			break;
 		}
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+			return createInputElementResizeWindow(event.window.data1, event.window.data2);
+			break;
+
 	}
 
 	return createInputElementNone();

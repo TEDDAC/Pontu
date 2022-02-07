@@ -18,7 +18,7 @@ void testMenuEndGame() {
 	}
 
 	//fenetre
-	window = SDL_CreateWindow("Fenêtre", windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Fenêtre", windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN |SDL_WINDOW_RESIZABLE);
 	if(window == NULL)
 	{
 		fprintf(stderr, "Erreur SDL_CreateWindow: %s\n", SDL_GetError());
