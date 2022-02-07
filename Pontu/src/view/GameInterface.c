@@ -59,8 +59,8 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
     SDL_Color colorLabel = {0, 255, 0, 255};
 
     //Position label
-    POSITIONX_TYPE positionX = POSX_CENTER;
-    POSITIONY_TYPE positionY = POSY_CENTER;
+    PositionX_Type positionX = POSX_CENTER;
+    PositionY_Type positionY = POSY_CENTER;
 
 
 

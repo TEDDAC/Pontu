@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
 #include "engine/GeneralState.h"
 #include "view/MainMenu.h"
 #include "view/MenuEndGame.h"
@@ -8,7 +9,7 @@
 #include "engine/FontLoader.h"
 #include "model/Player.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     GeneralState generalState;
 
     SDL_Window* window = NULL;

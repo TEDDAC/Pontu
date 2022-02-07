@@ -13,4 +13,4 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
 
 int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler, AudioHandler audioHandler);
 
-#endif
+#endif //MAIN_MENU_INCLUDED
