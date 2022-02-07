@@ -177,7 +177,6 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 }
 
 void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
-	
 	int windowW;
 	int windowH;
 
@@ -213,7 +212,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					switch (inputElement.data.uiAction)
 					{
 					case UIAction_Quit:
-						*generalState = GS_MainMenu;
+						*generalState = GS_Quit;
 						break;
 					case UIAction_Validate:
 						break;

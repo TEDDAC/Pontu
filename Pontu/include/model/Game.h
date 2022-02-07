@@ -15,7 +15,7 @@
 #include "model/Coord.h"
 #include "model/arrayCoord.h"
 #include <SDL2/SDL_pixels.h>
-#include <stdbool.h> 
+#include <stdbool.h>
 
 /**
  * \enum Phase
@@ -38,7 +38,7 @@ typedef struct {
 	//TODO duree
 	Phase phase; ///< The current state of the game
 	Player arrPlayers[4]; ///< The array of all the players in this game
-	size_t nbPlayers; 
+	size_t nbPlayers;
 	Board board; ///< The board for this game
 } Game;
 
@@ -47,19 +47,19 @@ typedef struct {
  * \param[in]	nbPlayers	The number of players for this game
  * \return A struct representing the game
  */
-Game newGame(const size_t nbPlayers, const char* pseudos[]);
+Game newGame(const size_t nbPlayers, const Player player[]);
 
 
 /**
  * \brief (Should not be called outside Game.c) Used to change phase or player (or both) after an action
- * 
+ *
  * \param [in, out] game The game to mutate
  */
 void changePhaseOrPlayerTurn(Game* game);
 
 /**
  * \brief Place a piece into the board
- * 
+ *
  * \param [in, out] p The piece to place
  * \param [in] island The island where the piece is placed
  * \param [in] b The board in which the piece is placed
@@ -78,20 +78,20 @@ bool movePiece(Piece* p, const Island i, const Board* b);
 
 /**
  * \brief Test if a movement is possible for a piece to a destination island
- * 
+ *
  * \param p The piece to test
- * \param i The destination island 
+ * \param i The destination island
  * \param b The board
- * \return true if the piece p can move to the island i 
+ * \return true if the piece p can move to the island i
  */
 bool pieceCanMoveTo(const Piece* p, const Island i, const Board* b);
 
 /**
- * \brief Check if an island is empty 
- * 
+ * \brief Check if an island is empty
+ *
  * \param [in] island The island to check
  * \param [in] arrPieces the array of piece from the board
- * \param [in] nbPieces number of pieces 
+ * \param [in] nbPieces number of pieces
  * \return true if none of the pieces is on th island, false otherwise
  */
 bool isIslandEmpty(const Island island, const Piece arrPieces[], const size_t nbPieces);
@@ -107,16 +107,16 @@ bool isPieceAdjacentToIsland(const Piece p, const Island i);
 
 /**
  * \brief test if a piece is isolated
- * 
- * \param [in] piece The piece which is checked 
+ *
+ * \param [in] piece The piece which is checked
  * \param [in] board The board were the piece is
  * \return true if no bridge go from piece's island to another island, false otherwise
  */
 bool isPieceIsolated(const Piece* piece, const Board* board);
 
 /**
- * \brief test if all pieces from a player are stucked 
- * 
+ * \brief test if all pieces from a player are stucked
+ *
  * \param idJ Player id
  * \param arrPieces All pieces from board
  * \param nbPieces Number of pieces
@@ -126,10 +126,10 @@ bool areAllPlayerPiecesStucked(const size_t idJ,  const Piece arrPieces[], const
 
 /**
  * \brief Test if one piece of a player can move
- * 
+ *
  * \param playerID The player to check
  * \param board The board
- * \return true if at least one of player's piece can move 
+ * \return true if at least one of player's piece can move
  */
 bool anyOfPlayersPiecesCanMove(const size_t playerID, const Board* board);
 
@@ -154,7 +154,7 @@ Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Is
 
 /**
  * \brief  Handle global game action move
- * 
+ *
  * \param start Board coord were the move started
  * \param end Board coord were the move ended
  * \param game Game's state
@@ -164,7 +164,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game);
 
 /**
  * \brief Handle global game action click
- * 
+ *
  * \param [in] coord Board coord were the click is
  * \param [in, out] game Game's state
  * \return true if an action was realised, false otherwise
@@ -181,7 +181,7 @@ bool rmBridge(Bridge bridge, Board* board);
 
 /**
  * \brief List cases that can be interacted with for movement
- * 
+ *
  * \param[in] game The game
  * \param[in] selectedCase The selected case
  * \return struct array_Coord An array of coord /!\ Care to free this array with array_Coord_Free
@@ -189,4 +189,3 @@ bool rmBridge(Bridge bridge, Board* board);
 struct array_Coord getInteractiveCases(const Game* const game, const Coord selectedCase);
 
 #endif //GAME_H
-

@@ -2,7 +2,7 @@
 
 // A channel represents the number of SFX we can play at the same time.
 // We normally should use only 1 channel, and we add one for safety.
-#define NBCHANNELS 2
+#define NBCHANNELS 10
 
 // Local functions
 
@@ -19,7 +19,7 @@ int fadeOut(void* args) {
 	// casting args to a pointer to Mix_Music
 	Mix_Music* music = (Mix_Music*)args;
 	int ret;
-	
+
 	if(Mix_FadeOutMusic(500) == 1) { // Starting the fadeout
 		while (Mix_PlayingMusic()) {
 			; // Waiting until it's done
@@ -60,7 +60,7 @@ AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	audioHandler.masterVol = masterVol;
 
 	fprintf(stderr,"Musics: %d\nSFX: %d\n",NB_MUSIC_DEFINED,nb_SFX);
-	
+
 	// Loading musics
 	for (size_t i = 0; i < NB_MUSIC_DEFINED; i++) {
 		audioHandler.musics[i] = Mix_LoadMUS(musicsPaths[i]);
@@ -140,13 +140,13 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 		fprintf(stderr,"WARNING: tried to play an arbitrary value as a music\n");
 		return;
 	}
-	
+
 	// Checking if audio has been opened.
 	if (!(audioHandler.canPlayAudio)) {
 		fprintf(stderr,"WARNING: tried to play a music with an unusable AudioHandler\n");
 		return;
 	}
-	
+
 	// If another music is playing, fading the previous one out
 	if (Mix_PlayingMusic()) {
 		// Creating the thread, passing the music as parameter
@@ -180,7 +180,7 @@ void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
 		fprintf(stderr,"WARNING: tried to play an SFX with an unusable AudioHandler\n");
 		return;
 	}
-	
+
 	// Getting actual chunk
 	chunkSFX = audioHandler.sfx[sfx - NB_MUSIC_DEFINED - 1];
 	// Getting first available channel
@@ -196,4 +196,3 @@ void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
 		return;
 	}
 }
-
