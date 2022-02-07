@@ -2,6 +2,7 @@
 #include "engine/TextureLoader.h"
 #include <SDL2/SDL_ttf.h>
 #include <engine/FontLoader.h>
+#include <engine/TextLabel.h>
 
 //void action boutton
 
@@ -50,12 +51,18 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
     SDL_Color menuBorderColor= {0,0,255,255};
     SDL_Color menuBackgroundColor = {0,255,0,255};
 
+    //Postion text label
+    //SDL_Point pos 
+
 
     //SDL_Texture *buttonTexture = createGenericButtonTexture("Menu", NULL, 125, menuBorderColor,menuBackgroundColor,24,5,&sizex,&sizey,renderer);
     SDL_Texture *menuButtonTexture = createGenericButtonTexture("Menu", fontHandler.fonts[FONT_retro], 125, menuBorderColor,menuBorderColor,24,5,&sizex,&sizey,renderer);
     SDL_Texture *menuButtonHoverTexture = createGenericButtonTexture("MenuHover", fontHandler.fonts[FONT_retro], 125, menuBorderColor,menuBackgroundColor,24,5,&sizex,&sizey,renderer);
 
-    P_Button menuButton = createButton(menuButtonTexture, menuButtonHoverTexture,10,10,50,25,&action);
+    P_Button menuButton = createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action); //top left corner (rectangle)
+    P_Button settingButton = createButton(menuButtonTexture, menuButtonHoverTexture, 750,10,50,50,&action); //top right corner (square or circle)
+    P_Button soundButton = createButton(menuButtonTexture, menuButtonHoverTexture, 825,10,50,50,&action); //top right cornre (square or circle)
+    //TextLabel nbTurn = createTextLabel("Turn",)
 
 
     //bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
@@ -75,6 +82,7 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
     SDL_SetRenderTarget(renderer, NULL);
 
     SDL_RenderClear(renderer);
+    
     while(!quit)
     {
         while(SDL_PollEvent(&event))
@@ -96,11 +104,15 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
                 break;
             }
         }
+
         drawButtonOnRenderer(renderer,&menuButton);
+        drawButtonOnRenderer(renderer,&settingButton);
+        drawButtonOnRenderer(renderer,&soundButton);
         SDL_RenderPresent(renderer);
 
         SDL_Delay(20);
     }
+
 
 
 
