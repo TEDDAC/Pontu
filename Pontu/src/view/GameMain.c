@@ -5,11 +5,12 @@
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
 #include "model/arrayCoord.h"
-#include "debug/printer.h"
 
 #include "view/PiecesDrawer.h"
 #include "view/BoardDrawer.h"
 #include "view/GameDrawer.h"
+
+
 
 SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
 	SDL_Rect boardRect = {.x=windowW/10.0, .y=windowH/10, .w=windowW*8.0/10.0, .h=windowH*8.0/10.0};
@@ -66,10 +67,6 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				}
 				break;
 			case InputType_MoveGame: {
-				fprintf(stderr, "Move on board\n");
-				fprintf(stderr, "From (%d; %d)\n", inputElement.data.move.start.x, inputElement.data.move.start.y);
-				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
-
 				const GameAction actionRealized = moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 				switch (actionRealized)
 				{
@@ -82,11 +79,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				break;
 			}
 			case InputType_ClickGame: {
-				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
-				fprintf(stderr, "\tSelected case : (%d; %d)\n", inputProcessor.selectedCase.x, inputProcessor.selectedCase.y);
-
 				if(!array_Coord_Contains(&interactiveCases, inputElement.data.coord, *coordEqual)) {
-					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
@@ -104,7 +97,6 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				}
 
 				if (actionRealized != GameAction_None) {
-					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
@@ -117,12 +109,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 			array_Coord_Free(&interactiveCases);
 			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
-			fprintf(stderr, "Interactive cases : {");
-			array_Coord_Foreach(&interactiveCases, *printCoord);
-			fprintf(stderr, "}\n");
 		}
 
-		SDL_Delay(20);
+		SDL_Delay(5);
 	}
 
 	freeTextureHandler(&textureHandler);

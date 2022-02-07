@@ -90,7 +90,6 @@ void changePhaseOrPlayerTurn(Game* game)
 											   game->board.nbPieces));
 
 
-			fprintf(stderr, "Player n°%ld turn\n", game->currentPlayerID);
 			fflush(stderr);
 
 			if (anyOfPlayersPiecesCanMove(game->currentPlayerID, &game->board))

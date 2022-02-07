@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
     GeneralState generalState;
-
+	
     SDL_Window* window = NULL;
 	SDL_Rect windowSize = {10, 10, 900, 900};
 	SDL_Renderer* renderer = NULL;

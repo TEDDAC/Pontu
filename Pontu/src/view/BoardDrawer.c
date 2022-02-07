@@ -4,7 +4,6 @@
 void drawRemoveBridge(SDL_Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* water, const Coord* coordBridge) {
 	const SDL_Rect destRect = coordToRect(boardRect, coordBridge);
 	SDL_RenderCopy(renderer, water, NULL, &destRect);
-	fprintf(stderr, "RedrawWater\n"); fflush(stderr);
 }
 
 bool drawFullBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water)
