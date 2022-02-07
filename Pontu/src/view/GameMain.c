@@ -20,7 +20,7 @@ SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
 void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers)
 {
 	if (*generalState != GS_Game) {
-		return ;
+		return;
 	}
 	GameInputProcessor inputProcessor = createGameInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
@@ -38,9 +38,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	drawFullBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island], textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
 	for (int iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
 		drawPiecesPlayer(renderer, &boardRect, game.board.arrPieces, game.board.nbPieces, iPlayer, textureHandler.textures[TEXTURE_PieceRed]);
-		//SDL_Renderer* renderer, const SDL_Rect* boardRect, const Piece arrPieces[], const size_t nbPieces, const size_t numPlayer,  SDL_Texture* piece
 	}
-	
+
 	SDL_RenderPresent(renderer);
 
 
@@ -73,7 +72,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 
-				
+				drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, textureHandler.textures[TEXTURE_PieceRed], textureHandler.textures[TEXTURE_Island]);
+			
+				SDL_RenderPresent(renderer);
 				break;
 			case InputType_ClickGame:
 				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);

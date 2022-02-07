@@ -43,7 +43,7 @@ int main(int argc, char const *argv[]) {
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_MainMenu;
+    generalState = GS_GameCreationMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
 			case GS_MainMenu:
@@ -67,7 +67,7 @@ int main(int argc, char const *argv[]) {
 					fprintf(stderr,"sorry");
 					exit(-1);
 				}*/
-
+				generalState = GS_Game;
 				gameView(&generalState, window, renderer, players, nbPlayers);
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
