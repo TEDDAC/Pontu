@@ -47,6 +47,7 @@ typedef struct {
 	Player arrPlayers[4]; ///< The array of all the players in this game
 	size_t nbPlayers;
 	Board board; ///< The board for this game
+	int lastRank;
 } Game;
 
 /**

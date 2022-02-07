@@ -37,7 +37,8 @@ Game newGame(const size_t nbPlayers, const Player player[])
 		.nb_rounds = 0,
 		.phase = PLACEMENT,
 		.board = newBoard(nbPlayers),
-		.nbPlayers = nbPlayers
+		.nbPlayers = nbPlayers,
+		.lastRank = 0
 	};
 
 	for (size_t player_i = 0; player_i < nbPlayers; player_i++)
@@ -53,6 +54,16 @@ Game newGame(const size_t nbPlayers, const Player player[])
 	return g;
 }
 
+void eliminatePlayer(Game* game, const size_t playerId) {
+	game->arrPlayers[playerId].eliminationTurn = game->nb_rounds;
+	++game->lastRank;
+	game->arrPlayers[playerId].rank = game->lastRank;
+	fprintf(stderr, "Rank : %d\n", game->lastRank);
+}
+
+void endGame(Game* game) {
+	game->phase = GAME_ENDED;
+}
 
 void changePhaseOrPlayerTurn(Game* game)
 {
@@ -74,6 +85,14 @@ void changePhaseOrPlayerTurn(Game* game)
 		case RM_BRIDGE:
 		{
 			const size_t lastPlayerId = game->currentPlayerID;
+			if (areAllPlayerPiecesStucked(lastPlayerId, game->board.arrPieces, game->board.nbPieces)) {
+				eliminatePlayer(game, lastPlayerId);
+				if (game->nbPlayers-1 == game->lastRank) {
+					endGame(game);
+					return;
+				}
+			}
+
 			do
 			{
 				game->currentPlayerID++;
@@ -81,13 +100,20 @@ void changePhaseOrPlayerTurn(Game* game)
 				{
 					game->currentPlayerID = 0;
 				}
-				if (lastPlayerId == game->currentPlayerID) {
+				/*if (lastPlayerId == game->currentPlayerID) {
 					game->phase = GAME_ENDED;
 					return;
+				}*/
+
+				if (game->arrPlayers[game->currentPlayerID].rank != 0 && areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces, game->board.nbPieces)) {
+					eliminatePlayer(game, game->currentPlayerID);
+					if (game->nbPlayers-1 == game->lastRank) {
+						endGame(game);
+						return;
+					}
 				}
 
-			} while (areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces,
-											   game->board.nbPieces));
+			} while (game->arrPlayers[game->currentPlayerID].rank != 0);
 
 
 			fflush(stderr);

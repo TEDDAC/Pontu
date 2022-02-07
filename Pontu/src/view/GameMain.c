@@ -73,6 +73,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				case GameAction_MovePiece:
 					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, textureHandler.textures[TEXTURE_PieceRed], textureHandler.textures[TEXTURE_Island]);
 					SDL_RenderPresent(renderer);
+					if (game.phase == GAME_ENDED) {
+						*generalState = GS_EndOfGameMenu;
+					}
 					break;
 				}
 			
@@ -98,6 +101,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 				if (actionRealized != GameAction_None) {
 					inputProcessor.selectedCase = newCoord(-1,-1);
+					if (game.phase == GAME_ENDED) {
+						*generalState = GS_EndOfGameMenu;
+					}
 				}
 
 				break;
@@ -116,6 +122,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
+	freeGameInputProcessor(&inputProcessor);
 	
 	SDL_Quit();
 }
