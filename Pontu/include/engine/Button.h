@@ -58,7 +58,9 @@ bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
  * \param[in]   y	y of the point
  * \return SDL_TRUE if the point is on the button
  */
-bool isHover(P_Button* button, int x,int y);// dit si le bouton est survolé en donnant les coordonnées x,y
+bool isHover(P_Button* button);// dit si le bouton est survolé en donnant les coordonnées x,y
+
+bool isButtonEntry(P_Button * button,const int x,const int y);
 
 /**
  * \brief Free the texture of a button.

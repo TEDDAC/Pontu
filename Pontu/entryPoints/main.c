@@ -37,16 +37,17 @@ int main(int argc, char const *argv[]) {
         exit(2);
     }
     FontHandler fontHandler = loadFonts();
+    AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
     generalState = GS_MainMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
 			case GS_MainMenu:
-				mainMenu(renderer,window,&generalState, fontHandler);
+				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
 				break;
-			case GS_EndOfGameMenu:// Coupler avec le menu de jeu
+			/*case GS_EndOfGameMenu:// Coupler avec le menu de jeu
 				endGameMenu(&generalState, window, renderer, fontHandler, NULL, 0);
-				break;
+				break;*/
         }
     }
 

@@ -63,7 +63,7 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
 	return buttons;
 }
 
-int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler){
+int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler, AudioHandler audioHandler){
     int statut = EXIT_FAILURE;
     char* path = "../rsrc/img/Lenna.png";
     //Initialisation
@@ -92,17 +92,20 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 *generalState = GS_Quit;
                 break;
             case SDL_MOUSEBUTTONUP:
-                if(isHover(buttons,event.button.x,event.button.y))
+                if(isHover(buttons))
                     printf("Nouvelle partie\n");
-                if(isHover(&(buttons[2]),event.motion.x,event.motion.y)){
+                if(isHover(&(buttons[2]))){
                     buttons[2].onClick(&(buttons[2]));
                     break;
                 }
                 break;
             case SDL_MOUSEMOTION:
-                isHover(&(buttons[0]),event.motion.x,event.motion.y);
-                isHover(&(buttons[1]),event.motion.x,event.motion.y);
-                isHover(&(buttons[2]),event.motion.x,event.motion.y);
+                if(isButtonEntry(&(buttons[0]),event.motion.x,event.motion.y) ||
+                    isButtonEntry(&(buttons[1]),event.motion.x,event.motion.y) ||
+                    isButtonEntry(&(buttons[2]),event.motion.x,event.motion.y)){
+                    playSFX(SFX_menu_sound_effect, audioHandler);
+                    printf("True\n");
+                }
                 break;
             default:
                 break;

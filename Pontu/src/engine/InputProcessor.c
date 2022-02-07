@@ -26,7 +26,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 		case SDL_MOUSEBUTTONUP:
 		{
 			const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
-			
+
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
 				if (SDL_PointInRect(&mousePoint, &b->rect)) {
@@ -39,7 +39,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 		{
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
-				isHover(b, event.motion.x, event.motion.y);
+				isButtonEntry(b, event.motion.x, event.motion.y);
 			}
 			break;
 		}
@@ -47,4 +47,3 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 
 	return createInputElementNone();
 }
-
