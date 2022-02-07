@@ -66,6 +66,7 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
     SDL_Texture* picture = createTextureFromPath(renderer, path);
     SDL_RenderCopy(renderer, picture, NULL, NULL);
     SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(picture);
 	return buttons;
 }
 
@@ -111,7 +112,6 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                     isButtonEntry(&(buttons[1]),event.motion.x,event.motion.y) ||
                     isButtonEntry(&(buttons[2]),event.motion.x,event.motion.y)){
                     playSFX(SFX_menu_sound_effect, audioHandler);
-                    printf("True\n");
                 }
                 break;
             default:
@@ -125,6 +125,12 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
 
         SDL_Delay(20);
     }
+
+Quit:
+    for(int i=0;i<nb;i++){
+        freeButton(&(buttons[i]));
+    }
+    free(buttons);
 
     return 0;
 }
