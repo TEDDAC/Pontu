@@ -52,15 +52,21 @@ int main(int argc, char const *argv[]) {
 				int windowH;
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
+				
+				size_t nbPlayers = 0;
+				Players* players;
+				bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+				if (crashed) {
+					fprintf(stderr,"sorry");
+					exit(-1);
+				}
 
-				gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH);
+				gameView(&generalState, window, renderer, &fontHandler, players, nbPlayers);
+
+				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;
 			}
 			case GS_Game: {
-				size_t nbPlayers = 0;
-				Player* players = NULL;//...;
-
-				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;
 			}
         }

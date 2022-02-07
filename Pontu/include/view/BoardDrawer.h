@@ -11,6 +11,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include "model/Board.h"
+#include "model/Coord.h"
 
 /**
  * \brief Draw the board (water, islands and bridges)
@@ -23,7 +24,9 @@
  * \param water Texture for water
  * \return true I don't know what to return
  */
-bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water);
+bool drawFullBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water);
 
+
+void drawRemoveBridge(SDL_Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* water, const Coord* coordBridge);
 
 #endif

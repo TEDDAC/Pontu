@@ -1,12 +1,44 @@
 #include "view/BoardDrawer.h"
 
 
-bool drawBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water)
+SDL_Rect coordToRect(const SDL_Rect* boardRect, const Coord* coord) {
+	const int w = boardRect->w/9;
+	const int h = boardRect->h/9;
+	SDL_Rect r = {
+		.x = boardRect->x + w*coord->x,
+		.y = boardRect->y + h*coord->y,
+		.w = w,
+		.h = h
+	};
+
+	return r;
+}
+
+void drawRemoveBridge(SDL_Renderer* renderer, const SDL_Rect* boardRect, SDL_Texture* water, const Coord* coordBridge) {
+	const SDL_Rect destRect = coordToRect(boardRect, coordBridge);
+	SDL_RenderCopy(renderer, water, &destRect, boardRect);
+}
+
+bool drawFullBoard(SDL_Renderer* renderer, const SDL_Rect* boardRect, const Board* board, SDL_Texture* island, SDL_Texture* bridge, SDL_Texture* water)
 {
 	int h = boardRect->h / 9;
 	int w = boardRect->w / 9;
 
-	SDL_RenderCopy(renderer, water, NULL, boardRect);
+	//Water (Possible to optimize)
+	for (size_t y = 0; y < 9; ++y)
+	{
+		for (size_t x = 0; x < 9; ++x)
+		{
+			const SDL_Rect destRect = {
+				.x = boardRect->x+x*w,
+				.y = boardRect->y+y*h,
+				.w = w, 
+				.h = h,
+			}; 
+			SDL_RenderCopy(renderer, water, NULL, &destRect);
+		}
+	}
+	
 
 	//Islands
 	for (int y=0; y<9; y+=2) {

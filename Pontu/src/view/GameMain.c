@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "engine/InputProcessor.h"
+#include "engine/GameInputProcessor.h"
 #include "engine/InputElement.h"
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
@@ -9,49 +9,30 @@
 #include "model/arrayCoord.h"
 #include "debug/printer.h"
 
-int main(int argc, char* argv[])
+SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
+	SDL_Rect boardRect = {.x=windowW/10.0, .y=windowH/10, .w=windowW*8.0/10.0, .h=windowH*8.0/10.0};
+
+	return boardRect;
+}
+
+void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers)
 {
-	SDL_Window* window = NULL;
-	SDL_Rect windowSize = {10, 10, 600, 600};
-	SDL_Renderer* renderer = NULL;
-
-	int statut = EXIT_FAILURE;
-
-	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
-		fprintf(stderr, "Error : %s\n", SDL_GetError());
-		goto Quit;
+	if (*generalState != GS_Game) {
+		return ;
 	}
-
-	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
-	if (!window)
-	{
-		fprintf(stderr, "Error : %s\n", SDL_GetError());
-		goto Quit;   
-	}
-
-	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
-	if(!renderer)
-	{
-		fprintf(stderr, "Erreur : %s", SDL_GetError());
-		goto Quit;
-	}
-
-	InputProcessor inputProcessor = createInputProcessor();
+	GameInputProcessor inputProcessor = createGameInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
 
-	int wBoardRect=99*3, hBoardRect=99*3;
-	SDL_Rect boardRect = {.x=windowSize.w/2 - wBoardRect/2, .y=windowSize.h/2 - hBoardRect/2, .w=wBoardRect, .h=99*3};
-	const char* pseudos[] = {"Azerty","Bépo"};
-	Game game = newGame(2, pseudos);
+	Game game = newGame(players, nbPlayers);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
 
-	bool quit = false;
-	while(!quit)
+
+	while(*generalState == GS_Game)
 	{
 		// Event handling
 		InputElement inputElement;
-		while (InputType_None != (inputElement = proccessInput(&inputProcessor, &boardRect)).type) {
+		while (InputType_None != (inputElement = proccessGameInput(&inputProcessor, &boardRect)).type) {
 
 			switch (inputElement.type)
 			{
@@ -59,7 +40,7 @@ int main(int argc, char* argv[])
 				switch (inputElement.data.uiAction)
 				{
 				case UIAction_Quit:
-					quit = true;
+					*generalState = GS_Quit;
 					break;
 				case UIAction_Validate:
 					break;
@@ -75,6 +56,8 @@ int main(int argc, char* argv[])
 				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
 				
 				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
+
+				drawMovePiece
 				break;
 			case InputType_ClickGame:
 				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
@@ -114,17 +97,9 @@ int main(int argc, char* argv[])
 		SDL_Delay(20);
 	}
 
-	statut = EXIT_SUCCESS;
-
 Quit:
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
-	if(renderer != NULL) {
-		SDL_DestroyRenderer(renderer);
-	}
-	if(window != NULL) {
-		SDL_DestroyWindow(window);
-	}
 	
 	SDL_Quit();
 	return statut;
