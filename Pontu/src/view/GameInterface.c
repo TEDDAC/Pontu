@@ -52,17 +52,31 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
     SDL_Color menuBackgroundColor = {0,255,0,255};
 
     //Postion text label
-    //SDL_Point pos 
+    SDL_Point positonNbTurnLabel = {.x=60, .y=800};
+    SDL_Point positionTimeLablel = {.x=770, .y=800};
+
+    //Color labal
+    SDL_Color colorLabel = {0, 255, 0, 255};
+
+    //Position label
+    POSITIONX_TYPE positionX = POSX_CENTER;
+    POSITIONY_TYPE positionY = POSY_CENTER;
+
 
 
     //SDL_Texture *buttonTexture = createGenericButtonTexture("Menu", NULL, 125, menuBorderColor,menuBackgroundColor,24,5,&sizex,&sizey,renderer);
     SDL_Texture *menuButtonTexture = createGenericButtonTexture("Menu", fontHandler.fonts[FONT_retro], 125, menuBorderColor,menuBorderColor,24,5,&sizex,&sizey,renderer);
     SDL_Texture *menuButtonHoverTexture = createGenericButtonTexture("MenuHover", fontHandler.fonts[FONT_retro], 125, menuBorderColor,menuBackgroundColor,24,5,&sizex,&sizey,renderer);
 
+    //Buttons
     P_Button menuButton = createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action); //top left corner (rectangle)
     P_Button settingButton = createButton(menuButtonTexture, menuButtonHoverTexture, 750,10,50,50,&action); //top right corner (square or circle)
     P_Button soundButton = createButton(menuButtonTexture, menuButtonHoverTexture, 825,10,50,50,&action); //top right cornre (square or circle)
-    //TextLabel nbTurn = createTextLabel("Turn",)
+
+    //Labels
+    TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+    TextLabel timeLabel = createTextLabel("Time : ",&positionTimeLablel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+
 
 
     //bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button);
@@ -108,10 +122,15 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
         drawButtonOnRenderer(renderer,&menuButton);
         drawButtonOnRenderer(renderer,&settingButton);
         drawButtonOnRenderer(renderer,&soundButton);
+        drawTextLabel(renderer,&nbTurnLabel);
+        drawTextLabel(renderer,&timeLabel);
         SDL_RenderPresent(renderer);
 
         SDL_Delay(20);
     }
+
+
+    //FREE TEXT LABEL + BUTTON 
 
 
 
