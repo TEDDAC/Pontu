@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
-		goto Quit;   
+		goto Quit;
 	}
 
 	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 	int wBoardRect=99*3, hBoardRect=99*3;
 	SDL_Rect boardRect = {.x=windowSize.w/2 - wBoardRect/2, .y=windowSize.h/2 - hBoardRect/2, .w=wBoardRect, .h=99*3};
 	const char* pseudos[] = {"Azerty","Bépo"};
+	const Player [2];
 	Game game = newGame(2, pseudos);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
 				fprintf(stderr, "Move on board\n");
 				fprintf(stderr, "From (%d; %d)\n", inputElement.data.move.start.x, inputElement.data.move.start.y);
 				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
-				
+
 				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 				break;
 			case InputType_ClickGame:
@@ -89,21 +90,21 @@ int main(int argc, char* argv[])
 					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
-				
+
 
 				break;
 			case InputType_None:
 			default:
 				break;
 			}
-			
+
 			array_Coord_Free(&interactiveCases);
 			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
 			fprintf(stderr, "Interactive cases : {");
 			array_Coord_Foreach(&interactiveCases, *printCoord);
 			fprintf(stderr, "}\n");
 		}
-			
+
 		fflush(stderr);
 
 		// Drawing
@@ -125,7 +126,7 @@ Quit:
 	if(window != NULL) {
 		SDL_DestroyWindow(window);
 	}
-	
+
 	SDL_Quit();
 	return statut;
 }
