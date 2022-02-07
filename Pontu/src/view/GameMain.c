@@ -56,7 +56,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				fprintf(stderr, "Move on board\n");
 				fprintf(stderr, "From (%d; %d)\n", inputElement.data.move.start.x, inputElement.data.move.start.y);
 				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
-				
+
 				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 
 				
@@ -74,21 +74,21 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
-				
+
 
 				break;
 			case InputType_None:
 			default:
 				break;
 			}
-			
+
 			array_Coord_Free(&interactiveCases);
 			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
 			fprintf(stderr, "Interactive cases : {");
 			array_Coord_Foreach(&interactiveCases, *printCoord);
 			fprintf(stderr, "}\n");
 		}
-			
+
 		fflush(stderr);
 
 		// Drawing
