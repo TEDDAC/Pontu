@@ -1,11 +1,9 @@
-#include <SDL2/SDL.h>
+#include "view/GameMain.h"
 #include <stdio.h>
-#include <stdbool.h>
 #include "engine/GameInputProcessor.h"
 #include "engine/InputElement.h"
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
-#include "view/GameDrawer.h"
 #include "model/arrayCoord.h"
 #include "debug/printer.h"
 
@@ -26,7 +24,11 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(players, nbPlayers);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
+	int windowW;
+	int windowH;
 
+	SDL_GetWindowSize(window, &windowW, &windowH);
+	SDL_Rect boardRect = boardRectFromWindowSize(windowW, windowH);
 
 	while(*generalState == GS_Game)
 	{
@@ -57,7 +59,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				
 				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
 
-				drawMovePiece
+				
 				break;
 			case InputType_ClickGame:
 				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
