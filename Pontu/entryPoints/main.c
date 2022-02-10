@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
 #include "engine/GeneralState.h"
 #include "view/MainMenu.h"
+#include "view/MenuEndGame.h"
+#include "view/GameCreationMenu.h"
+#include "view/GameMain.h"
 #include "engine/FontLoader.h"
+#include "model/Player.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     GeneralState generalState;
-
+	
     SDL_Window* window = NULL;
 	SDL_Rect windowSize = {10, 10, 900, 900};
 	SDL_Renderer* renderer = NULL;
@@ -18,7 +23,7 @@ int main(int argc, char const *argv[]) {
 		goto Quit;
 	}
 
-	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
@@ -37,13 +42,41 @@ int main(int argc, char const *argv[]) {
         exit(2);
     }
     FontHandler fontHandler = loadFonts();
+    AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_Quit;
+    generalState = GS_GameCreationMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
-            case GS_MainMenu:
-            mainMenu(renderer,window,&generalState, fontHandler);
-            break;
+			case GS_MainMenu:
+				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
+				break;
+			case GS_GameCreationMenu:{
+				int windowW;
+				int windowH;
+
+				SDL_GetWindowSize(window, &windowW, &windowH);
+				
+				size_t nbPlayers = 2;
+				Player* players = (Player*)malloc(sizeof(Player)*2);
+				players[0] = newPlayer("Bépo", PlayerViolet);
+				players[1] = newPlayer("Azeryty", PlayerYellow);
+				//players[2] = newPlayer("Adcsg", PlayerRed);
+
+				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+
+			/*	if (crashed) {
+					fprintf(stderr,"sorry");
+					exit(-1);
+				}*/
+				generalState = GS_Game;
+				gameView(&generalState, window, renderer, players, nbPlayers);
+
+				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
+				break;
+			}
+			case GS_Game: {
+				break;
+			}
         }
     }
 

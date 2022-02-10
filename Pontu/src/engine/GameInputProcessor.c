@@ -81,11 +81,16 @@ InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL
 		{
 			for (size_t i = 0; i<gameInputProcessor->tabButton.size; ++i) {
 				P_Button* b = &gameInputProcessor->tabButton.elems[i];
-				isHover(b, event.motion.x, event.motion.y);
+				isButtonEntry(b, event.motion.x, event.motion.y);
 			}
+			break;
 		}
+		case SDL_WINDOWEVENT:
+			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+				return createInputElementResizeWindow(event.window.data1, event.window.data2);
+			}
+			break;
 	}
 
 	return createInputElementNone();
 }
-

@@ -16,7 +16,7 @@
  * \enum InputType
  * \brief Different types for input
 */
-typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI} InputType;
+typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize} InputType;
 
 /**
  * \enum UIAction
@@ -43,6 +43,10 @@ typedef struct {
         } move; ///< Pair of coordinates for move on the board
         
         UIAction uiAction; ///< L'action 
+		struct windowSize {
+			int w;
+			int h;
+		} windowSize; ///< La nouvelle taille de l'ecran
     } data; ///< Informations about the input
     
     InputType type; ///< Type of input
@@ -74,5 +78,12 @@ InputElement createInputElementClickBoard(const Coord newCoord);
  * \return A move on board input element
 */
 InputElement createInputElementMoveBoard(const Coord start, const Coord end);
+
+/**
+ * @brief Create a Input Element Resize Window
+ * 
+ * @return InputElement InputType_Window_Resize
+ */
+InputElement createInputElementResizeWindow();
 
 #endif // INPUT_ELEMENT_INCLUDED

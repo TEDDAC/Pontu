@@ -48,14 +48,18 @@ inline void array_##T##_Free(struct array_##T* array) { \
 inline void array_##T##_Reserve(struct array_##T* array, const size_t space) { \
 	array->space = space; \
 	array->elems = realloc(array->elems, sizeof(T)*(array->space)); \
-	if (array->elems == NULL) exit(errno); \
+	if (array->elems == NULL) { \
+		perror("Realloc arrayUtils"); exit(errno); \
+	} \
 } \
 \
 /*Fit space to size for an array*/\
 inline void array_##T##_FitToSize(struct array_##T* array) { \
 	array->space = array->size; \
 	array->elems = realloc(array->elems, sizeof(T)*(array->space)); \
-	if (array->elems == NULL) exit(errno); \
+	if (array->elems == NULL) { \
+		perror("Realloc arrayUtils"); exit(errno); \
+	}  \
 } \
 \
 /*Add an element to an array*/\
@@ -64,7 +68,9 @@ inline void array_##T##_AddElement(struct array_##T* array, const T element) { \
 	if (array->size > array->space) { \
 		++(array->space); \
 		array->elems = realloc(array->elems, sizeof(T)*(array->space)); \
-		if (array->elems == NULL) exit(errno); \
+		if (array->elems == NULL) { \
+			perror("Realloc arrayUtils"); exit(errno); \
+		}  \
 	} \
 	\
 	array->elems[array->size - 1] = element; \
