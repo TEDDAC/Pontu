@@ -13,6 +13,7 @@ int testCreationMenu(void) {
     char* path = "rsrc/img/Lenna.png";
     int i=0;
     int w, h;
+    int nbPlayer=1;
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr, "Erreur SDL_INIT: %s\n", SDL_GetError());
@@ -42,7 +43,7 @@ int testCreationMenu(void) {
 	goto Quit;
     }
 
-    if(0 != SDL_SetRenderDrawColor(renderer, 0,0,0,0))  //choisi la couleur avec laquelle travailler
+    if(0 != SDL_SetRenderDrawColor(renderer, 55,120,175,0))  //choisi la couleur avec laquelle travailler
     {
         fprintf(stderr, "Erreur SDL_SetRenderDrawColor: %s\n", SDL_GetError());
         goto Quit;
@@ -61,30 +62,12 @@ int testCreationMenu(void) {
     }
 
 
-    SDL_bool quit = SDL_FALSE;
-    SDL_Event event;
-    
     FontHandler fontHandler = loadFonts();
 
     SDL_GetWindowSize(window, &w, &h);
-    while(!quit)
-    {
-        while(SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-            case SDL_QUIT:
-                quit = SDL_TRUE;
-                break;
-            case SDL_MOUSEBUTTONUP:
-                break;
-            }
-        }
-	drawGameCreationMenu(renderer, fontHandler.fonts[FONT_retro], w, h);
-	SDL_RenderPresent(renderer);
-
-        SDL_Delay(20);
-    }
+    GeneralState generalState = GS_GameCreationMenu;
+    printf("%d/%d\n", w, h);
+    gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_retro], w, h);
 
 Quit:
     freeFonts(fontHandler);
