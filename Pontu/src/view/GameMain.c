@@ -9,6 +9,7 @@
 #include "view/PiecesDrawer.h"
 #include "view/BoardDrawer.h"
 #include "view/GameDrawer.h"
+#include "view/GameInterface.h"
 
 #include "engine/UIElementUtils.h"
 
@@ -30,7 +31,7 @@ void redrawGameBoard(SDL_Renderer* renderer, const Player players[], const size_
 	}
 }
 
-void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers)
+void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler)
 {
 	if (*generalState != GS_Game) {
 		return;
@@ -41,6 +42,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
+	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler);
 	
 	SDL_Rect windowRect = {0,0,0,0};
 	SDL_GetWindowSize(window, &windowRect.w, &windowRect.h);
@@ -49,7 +51,12 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	SDL_Rect boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
 
 	//Draw 
+	SDL_SetRenderDrawColor(renderer, 50,10,10, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(renderer);
 	redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
+	for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
+		drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
+	}
 	SDL_RenderPresent(renderer);
 
 
@@ -99,7 +106,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				switch (actionRealized)
 				{
 				case GameAction_PlacePiece:
-					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID-1>0) ? game.currentPlayerID-1 : game.nbPlayers-1].color, &inputElement.data.coord);
+					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID<game.nbPlayers-1) ? game.currentPlayerID+1 : 0].color, &inputElement.data.coord);
 					SDL_RenderPresent(renderer);
 					break;
 				case GameAction_RemoveBridge:
@@ -123,6 +130,10 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
 
 				redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
+				for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
+					drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
+				}
+
 				SDL_RenderPresent(renderer);
 			}
 			case InputType_None:

@@ -172,7 +172,7 @@ bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* 
 		return false;
 	}
 
-	textInput->value = (char*) malloc(strlen(""));
+	textInput->value = (char*) malloc(sizeof(char));
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");

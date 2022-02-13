@@ -65,6 +65,25 @@ void eliminatePlayer(Game* game, const size_t playerId) {
 
 void endGame(Game* game) {
 	game->phase = GAME_ENDED;
+
+	for (size_t i=0; i<game->nbPlayers; ++i) {
+		if (game->arrPlayers[i].rank==1) {
+			game->arrPlayers[i].eliminationTurn = game->nb_rounds;
+			return;
+		}
+	}
+}
+
+
+Piece* getNonPlacedPieceFromPlayer(Piece arrPieces[], const size_t nbPieces, const size_t currentPlayerID) {
+	for (size_t i = 0; i < nbPieces; ++i)
+	{
+		if (arrPieces[i].idJ == currentPlayerID && islandEqual(arrPieces[i].island, newIsland(-1,-1)))
+		{
+			return &arrPieces[i];
+		}
+	}
+	return NULL;
 }
 
 void changePhaseOrPlayerTurn(Game* game)
@@ -72,28 +91,31 @@ void changePhaseOrPlayerTurn(Game* game)
 	switch (game->phase)
 	{
 		case PLACEMENT:
-			if (game->currentPlayerID == 0)
-			{
-				game->phase = MOVE_PIECE;
+			//Joueur suivant
+			if (game->currentPlayerID == 0) {
+				game->currentPlayerID = game->nbPlayers-1;
 			}
-			else
-			{
+			else {
 				game->currentPlayerID--;
+			}
+
+			if (getNonPlacedPieceFromPlayer(game->board.arrPieces, game->board.nbPieces, game->currentPlayerID) == NULL) {
+				game->phase = MOVE_PIECE;
 			}
 			break;
 		case MOVE_PIECE:
 			game->phase = RM_BRIDGE;
 			break;
 		case RM_BRIDGE:
-		{
-			const size_t lastPlayerId = game->currentPlayerID;
-			if (areAllPlayerPiecesStucked(lastPlayerId, game->board.arrPieces, game->board.nbPieces)) {
-				eliminatePlayer(game, lastPlayerId);
-				if (game->lastRank == 2) {
-					endGame(game);
-					return;
-				}
+		{	
+			// check if all players are eliminated
+			if (game->lastRank == 2) {
+				endGame(game);
+				return;
 			}
+				
+			
+			
 
 			do
 			{
@@ -102,19 +124,6 @@ void changePhaseOrPlayerTurn(Game* game)
 				{
 					game->currentPlayerID = 0;
 				}
-				/*if (lastPlayerId == game->currentPlayerID) {
-					game->phase = GAME_ENDED;
-					return;
-				}*/
-
-				if (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0 && areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces, game->board.nbPieces)) {
-					eliminatePlayer(game, game->currentPlayerID);
-					if (game->lastRank == 2) {
-						endGame(game);
-						return;
-					}
-				}
-
 			} while (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0);
 
 
@@ -286,10 +295,15 @@ void updatePieceIsolated(Game* game, const Island* island)
 {
 	Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, *island);
 	if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board))
-	{ // Check is a piece is isolated //and then if the player is eliminated
+	{ // Check is a piece is isolated and then if the player is eliminated
 		piecePotentialyIsolated->stuck = true;
+		if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces, game->board.nbPieces)) {
+			eliminatePlayer(game, piecePotentialyIsolated->idJ);
+		}
 	}
 }
+
+
 
 GameAction clickOnBoard(const Coord coord, Game* game)
 {
@@ -301,7 +315,9 @@ GameAction clickOnBoard(const Coord coord, Game* game)
 			if (islandOrBridge.type == ISLAND)
 			{
 				Piece* piece = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, islandOrBridge.data.island);
-				if (piece != NULL) {
+				if (piece == NULL) { // No piece here
+					piece = getNonPlacedPieceFromPlayer(game->board.arrPieces, game->board.nbPieces, game->currentPlayerID);
+
 					if (placePiece(piece, islandOrBridge.data.island, &game->board)) {
 						changePhaseOrPlayerTurn(game);
 						return GameAction_PlacePiece;
@@ -362,8 +378,8 @@ GameAction moveOnBoard(const Coord start, const Coord end, Game* game)
 					if (pieceMoved)
 					{
 						changePhaseOrPlayerTurn(game);
+						return GameAction_MovePiece;
 					}
-					return pieceMoved ? GameAction_MovePiece : GameAction_None;
 				}
 			}
 			break;

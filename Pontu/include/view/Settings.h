@@ -17,6 +17,12 @@
 #include <SDL2/SDL_ttf.h>
 #include "engine/TextLabel.h"
 #include "engine/FontLoader.h"
+#include "engine/arrayButton.h"
+
+typedef struct {
+	struct array_P_Button arr_buttons;
+	TextLabel* arr_textLabel;
+} RetValues;
 
 /**
  * \brief Generates a settings view
@@ -24,7 +30,8 @@
  * \param[in] ah The AudioHandler in use
  * \return true if the view could be generated, else false
  */
-bool settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh);
+RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh);
 
+void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh);
 
 #endif // SETTINGS_H
