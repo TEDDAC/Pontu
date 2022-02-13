@@ -11,7 +11,7 @@
 #include <SDL2/SDL.h>
 #include "engine/Button.h" 
 #include <engine/FontLoader.h>
-
+#include "engine/arrayButton.h"
 
 
 //move pion
@@ -33,6 +33,7 @@ void drawButtons(SDL_Renderer* renderer,FontHandler fontHandler);
 
 //draw timer (bottom right corner)
 
+struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler);
 
 
 #endif

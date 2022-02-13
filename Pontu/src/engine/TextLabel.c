@@ -34,7 +34,7 @@ void copyTextIntoTextLabel(TextLabel* label, const char text[]) {
 
 TextLabel createUnsizedTextLabel(const char text[], const SDL_Color* color, TTF_Font* font, SDL_Renderer* renderer) {
 	TextLabel label = {
-		.color = color,
+		.color = *color,
 		.texture = NULL
 	};
 

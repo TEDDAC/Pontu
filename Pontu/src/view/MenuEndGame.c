@@ -56,20 +56,6 @@ P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, cons
 }
 
 /**
- * @brief Draw title for End Game 
- * 
- * @param renderer The renderer where title will be drawn
- * @param rect Rect in which the endGameMenu is drawn
- * @param font Font used for title
- */
-void drawTitle(SDL_Renderer* renderer, const SDL_Rect* rect, TTF_Font* font) {
-
-	/*drawTextLabel(renderer, &titre);
-
-	freeTextLabel(&titre);*/
-}
-
-/**
  * @brief Draw Pseudo and rank for end game menu
  * 
  * @param renderer The renderer where pseudo and rank will be drawn
@@ -141,8 +127,6 @@ void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_
     
     SDL_SetRenderDrawColor(renderer, 220,220,220,255);
     SDL_RenderFillRect(renderer, rect);
-
-	drawTitle(renderer, rect, fontHandler->fonts[FONT_retro]);
     
     drawPlayersScores(renderer, players, nbPlayers, rect, fontHandler->fonts[FONT_retro]);
 }
@@ -173,7 +157,7 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_retro]));
 	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitleRect100(&array_TextLabel_Last(&labels.textLabels)->textZone));
 
-
+	// Lignes de score
 
 	return labels;
 }
@@ -200,6 +184,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 		.w = 30,
 		.h = 30*buttonMenuEndGame->rect.h/buttonMenuEndGame->rect.w
 	};
+	PositionSpecifier positionSpecifierButtonRetour = newPositionSpecifier(&base100, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_H);
 	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
 	
 	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
@@ -245,7 +230,9 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 						drawTextLabel(renderer, &labels.textLabels.elems[i]);
 					}
 
-					//buttonMenuEndGame->rect = adaptPosToRect(&base100, &rectM, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_W);
+					buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &rectM);
+					drawButtonOnRenderer(renderer, buttonMenuEndGame);
+
 					fprintf(stderr, "Resize\n"); fflush(stderr);
 				} 
 				default:

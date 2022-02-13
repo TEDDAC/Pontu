@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 				}*/
 				generalState = GS_Game;
 
-				gameView(&generalState, window, renderer, players, nbPlayers);
+				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;
