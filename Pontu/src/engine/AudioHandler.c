@@ -191,7 +191,7 @@ void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
 	}
 
 	// Playing the SFX once (0 repetitions)
-	if (Mix_PlayChannel(channel,chunkSFX,0) != 0) {
+	if (Mix_PlayChannel(channel,chunkSFX,0) == -1) {
 		fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 		return;
 	}

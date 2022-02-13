@@ -21,7 +21,6 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
     *nb = 0;
     SDL_Color lightBlue = {.r = 0,.g = 195,.b = 255,.a = 0}; //0, 195, 255
     SDL_Color darkBlue = {.r = 0,.g = 123,.b = 161,.a = 0}; //0, 123, 161
-    char* path = "../rsrc/img/Lenna.png";
 
     SDL_SetRenderTarget(renderer, NULL);
     TTF_Font* font = fontHandler.fonts[FONT_retro];
@@ -63,15 +62,16 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
 
 
     SDL_SetRenderTarget(renderer,NULL);
-    SDL_Texture* picture = createTextureFromPath(renderer, path);
-    SDL_RenderCopy(renderer, picture, NULL, NULL);
     SDL_RenderPresent(renderer);
-    SDL_DestroyTexture(picture);
 	return buttons;
 }
 
 int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler, AudioHandler audioHandler){
     int statut = EXIT_FAILURE;
+
+    char* path = "../rsrc/img/Lenna.png";
+    SDL_SetRenderTarget(renderer,NULL);
+    SDL_Texture* picture = createTextureFromPath(renderer, path);
     //Initialisation
 
     P_Button* buttons = NULL;
@@ -80,9 +80,11 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
     SDL_SetRenderDrawColor(renderer, 0,0,0,0);
     SDL_RenderClear(renderer);
 
-    SDL_Rect rect = {.x = 0, .y = 0, .w = 0, .h = 0};
-    SDL_GetWindowSize(window,&(rect.w),&(rect.h));
-    if(!(buttons = drawMainMenu(renderer,fontHandler,&nb,&rect, generalState))){
+    SDL_RenderCopy(renderer, picture, NULL, NULL);
+
+    SDL_Rect windowSize = {.x = 0, .y = 0, .w = 0, .h = 0};
+    SDL_GetWindowSize(window,&(windowSize.w),&(windowSize.h));
+    if(!(buttons = drawMainMenu(renderer,fontHandler,&nb,&windowSize, generalState))){
         fprintf(stderr, "Le menu principale ne s'est pas déssiné correctement\n");
         return statut;
     }
@@ -114,6 +116,21 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                     playSFX(SFX_menu_sound_effect, audioHandler);
                 }
                 break;
+            case SDL_WINDOWEVENT:
+                if(event.window.event == SDL_WINDOWEVENT_RESIZED){
+                    SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+                    SDL_RenderClear(renderer);
+                    SDL_RenderCopy(renderer, picture, NULL, NULL);
+                    printf("Window %d resized to %dx%d\n",
+                        event.window.windowID, event.window.data1,
+                        event.window.data2);
+                    windowSize.w = event.window.data1;
+                    windowSize.h = event.window.data2;
+                    buttons[0].rect.x = (windowSize.w/2)-(buttons[0].rect.w/2);
+                    buttons[1].rect.x = (windowSize.w/2)-(buttons[1].rect.w/2);
+                    buttons[2].rect.x = (windowSize.w/2)-(buttons[2].rect.w/2);
+                }
+            break;
             default:
                 break;
             }
