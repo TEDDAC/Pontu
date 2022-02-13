@@ -54,7 +54,7 @@ int main(int argc, char const *argv[]) {
 				int windowH;
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
-				
+
 				size_t nbPlayers = 2;
 				SDL_Color color = {0,0,0,0};
 				Player* players = (Player*)malloc(sizeof(Player)*2);
@@ -83,6 +83,7 @@ int main(int argc, char const *argv[]) {
 
 Quit:
     freeFonts(fontHandler);
+    freeAudioHandler(&audioHandler);
 	if(renderer != NULL) {
 		SDL_DestroyRenderer(renderer);
 	}
