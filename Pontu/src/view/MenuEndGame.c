@@ -23,6 +23,20 @@ void setStateToMainMenu(P_Button* caller) {
 	*((GeneralState*)caller->arg) = GS_MainMenu;
 }
 
+SDL_Rect getEndGameMenuRect(SDL_Window* window) {
+	int windowW;
+	int windowH;
+	SDL_GetWindowSize(window, &windowW, &windowH);
+
+	SDL_Rect rect = {
+		.x=windowW/10, 
+		.y=0, 
+		.w=windowW*80/100, 
+		.h=windowH
+	};
+	return rect;
+}
+
 /**
  * @brief Create button For EndGameMenu
  * 
@@ -55,96 +69,71 @@ P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, cons
 	return buttonMenuEndGame;
 }
 
-/**
- * @brief Draw Pseudo and rank for end game menu
- * 
- * @param renderer The renderer where pseudo and rank will be drawn
- * @param rect Rect in which the endGameMenu is drawn
- * @param height Height of line in score table
- * @param font Font used for pseudo and rank
- * @param color Color used for pseudo and rank
- * @param rank 
- * @param pseudo 
- */
-void drawPseudoAndRank(SDL_Renderer* renderer, const SDL_Rect* rect, const int height, TTF_Font* font, const SDL_Color* color, const size_t rank, const char *const pseudo) {
-	const SDL_Point posRangPseudo = {
-		.x = rect->x+rect->w*0.05, 
-		.y = height
-	};
-
-	char *const text = (char*) malloc(sizeof(char)*(4+strlen(pseudo)));// potentialy one character wider than necesarry
-	if (text == NULL) {
-		fprintf(stderr,"allocation error\n");
-		fflush(stderr);
-		return;
-	}
-	sprintf(text, "%lld. %s", rank, pseudo);
-
-	TextLabel joueur = createTextLabel(text, &posRangPseudo, 1, color, font, renderer, POSX_LEFT, POSY_TOP);
-	free(text);
-
-	drawTextLabel(renderer, &joueur);
-
-	freeTextLabel(&joueur);
-}
-
-void drawEliminationTurn(SDL_Renderer* renderer, const SDL_Rect* rect, const int height, TTF_Font* font, const SDL_Color* color, const int eliminationTurn) {
-	SDL_Point posTourElimination = {
-		.x = rect->x+rect->w*0.95,
-		.y = height
-	};
-
-
-	char *const text = (char*) malloc(sizeof(char*) * 10);
-	if (text == NULL) {
-		fprintf(stderr,"allocation error\n");
-		fflush(stderr);
-		return;
-	}
-	sprintf(text, "Tour: %d", eliminationTurn);
-
-	TextLabel label = createTextLabel(text, &posTourElimination, 1, color, font, renderer, POSX_RIGHT, POSY_TOP);
-	
-	free(text);
-	drawTextLabel(renderer, &label);
-	
-	freeTextLabel(&label);
-	
-}
-
-void drawPlayersScores(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, TTF_Font* font) {
-	SDL_Color black = {0,0,0,0};
-	for (size_t i=0; i<nbPlayers; ++i) {
-		const int height = rect->y+(players[i].rank+1)*rect->h/10+rect->y+rect->h/100;
-
-		drawPseudoAndRank(renderer, rect, height, font, &black,  i, players[i].pseudo);
-		
-		drawEliminationTurn(renderer, rect, height, font, &black, players[i].eliminationTurn);
-	}
-}
-
-void drawEndGameMenu(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, FontHandler* fontHandler) {
-    
-    SDL_SetRenderDrawColor(renderer, 220,220,220,255);
-    SDL_RenderFillRect(renderer, rect);
-    
-    drawPlayersScores(renderer, players, nbPlayers, rect, fontHandler->fonts[FONT_retro]);
-}
-
 TextLabel createTitleLabel(SDL_Renderer* renderer, TTF_Font* font) {
 	SDL_Color color = {0,0,0,0};
 
 	return createUnsizedTextLabel("Scores", &color, font, renderer);
 }
 
-PositionSpecifier getTitleRect100(SDL_Rect* labelSize) {
+TextLabel createEliminationTurnLabel(SDL_Renderer* renderer, TTF_Font* font, const SDL_Color* color, const int eliminationTurn) {
+	char *const text = (char*) malloc(sizeof(char*) * 10);
+	if (text == NULL) {
+		fprintf(stderr,"allocation error\n");
+		fflush(stderr);
+		return createUnsizedTextLabel("Error allocation", color, font, renderer);
+	}
+	sprintf(text, "Tour: %d", eliminationTurn);
+
+	TextLabel label = createUnsizedTextLabel(text, color, font, renderer);
+	
+	free(text);
+
+	return label;
+}
+
+TextLabel createPseudoAndRankLabel(SDL_Renderer* renderer, TTF_Font* font, const SDL_Color* color, const int rank, const char *const pseudo) {
+	char *const text = (char*) malloc(sizeof(char)*(4+strlen(pseudo)));// potentialy one character wider than necesarry
+	if (text == NULL) {
+		fprintf(stderr,"allocation error\n");
+		fflush(stderr);
+		return createUnsizedTextLabel("Error allocation", color, font, renderer);
+	}
+	sprintf(text, "%d. %s", rank, pseudo);
+
+	TextLabel pseudoRankLbl = createUnsizedTextLabel(text, color, font, renderer);
+	free(text);
+
+	return pseudoRankLbl;
+}
+
+PositionSpecifier getPseudoAndRankPositionSpecifier(const SDL_Rect* labelSize, const int rank) {
+	SDL_Rect base100 = {
+		.x=2,
+		.y=20+8*(rank-1),
+		.w = 5*labelSize->w/labelSize->h,
+		.h = 5
+	};
+	return newPositionSpecifier(&base100, POSX_LEFT, POSY_TOP, ASPECT_KEEP_FIT);
+}
+
+PositionSpecifier getEliminationTurnPositionSpecifier(const SDL_Rect* labelSize, const int rank) {
+	SDL_Rect base100 = {
+		.x=98,
+		.y=20+8*(rank-1),
+		.w = 5*labelSize->w/labelSize->h,
+		.h = 5
+	};
+	return newPositionSpecifier(&base100, POSX_RIGHT, POSY_TOP, ASPECT_KEEP_FIT);
+}
+
+PositionSpecifier getTitlePositionClassifier(const SDL_Rect* labelSize) {
 	SDL_Rect base100 = {
 		.x=50,
 		.y=1,
-		.w = 30,
-		.h = 30*labelSize->h/labelSize->w
+		.w = 15*labelSize->w/labelSize->h,
+		.h = 15
 	};
-	return newPositionSpecifier(&base100, POSX_CENTER, POSY_TOP, ASPECT_KEEP_W);
+	return newPositionSpecifier(&base100, POSX_CENTER, POSY_TOP, ASPECT_KEEP_FIT);
 }
 
 struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, FontHandler* fontHandler) {
@@ -155,43 +144,51 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 
 	// Titre
 	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_retro]));
-	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitleRect100(&array_TextLabel_Last(&labels.textLabels)->textZone));
+	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitlePositionClassifier(&array_TextLabel_Last(&labels.textLabels)->textZone));
 
 	// Lignes de score
-
+	for (size_t i=0; i<nbPlayers; ++i) {
+		array_TextLabel_AddElement(&labels.textLabels, createPseudoAndRankLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].rank, players[i].pseudo));
+		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getPseudoAndRankPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
+		
+		array_TextLabel_AddElement(&labels.textLabels, createEliminationTurnLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].eliminationTurn));
+		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getEliminationTurnPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
+	}
 	return labels;
 }
 
-void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
-	int windowW;
-	int windowH;
 
-	SDL_GetWindowSize(window, &windowW, &windowH);
-
-	SDL_Rect rectMenuEndGame = {
-		.x=windowW/10, 
-		.y=0, 
-		.w=windowW*80/100, 
-		.h=windowH
-	};
+void drawEndGameMenu(SDL_Renderer* renderer, const SDL_Rect rectMenuEndGame, struct endGameMenuTextLabel* labels) {
 	
+    SDL_SetRenderDrawColor(renderer, 220,220,220,255);
+    SDL_RenderFillRect(renderer, &rectMenuEndGame);
+    
+	for (size_t i=0; i<labels->textLabels.size; ++i) {
+		labels->textLabels.elems[i].textZone = adaptPosToRect(&labels->positionSpecifiers.elems[i], &rectMenuEndGame);
+		drawTextLabel(renderer, &labels->textLabels.elems[i]);
+	}
+
+	SDL_RenderPresent(renderer);
+}
+
+void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
 	InputProcessor inputProcessor = createInputProcessor();
-	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &rectMenuEndGame, generalState));
+	const SDL_Rect endGameMenuRect = getEndGameMenuRect(window);
+	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &endGameMenuRect, generalState));
 	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
 	SDL_Rect base100 = {
 		.x = 50,
 		.y = 99,
-		.w = 30,
-		.h = 30*buttonMenuEndGame->rect.h/buttonMenuEndGame->rect.w
+		.w = 90,
+		.h = 90*buttonMenuEndGame->rect.h/buttonMenuEndGame->rect.w
 	};
-	PositionSpecifier positionSpecifierButtonRetour = newPositionSpecifier(&base100, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_H);
-	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
+	PositionSpecifier positionSpecifierButtonRetour = newPositionSpecifier(&base100, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_FIT);
+	buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &endGameMenuRect);
+	buttonMenuEndGame->drawn = false;
 	
 	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
-	for (size_t i=0; i<labels.textLabels.size; ++i) {
-		labels.textLabels.elems[i].textZone = adaptPosToRect(&labels.positionSpecifiers.elems[i], &rectMenuEndGame);
-		drawTextLabel(renderer, &labels.textLabels.elems[i]);
-	}
+	
+	drawEndGameMenu(renderer, endGameMenuRect, &labels);
 
 	while(*generalState == GS_EndOfGameMenu)
 	{
@@ -217,21 +214,16 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					break;
 				case InputType_Window_Resize: {
 					
-					SDL_Rect rectM = {
+					const SDL_Rect rectM = {
 						.x=inputElement.data.windowSize.w/10, 
 						.y=0, 
 						.w=inputElement.data.windowSize.w*80/100, 
 						.h=inputElement.data.windowSize.h
 					};
-					drawEndGameMenu(renderer, players, nbPlayers, &rectM, fontHandler);
+					drawEndGameMenu(renderer, rectM, &labels);
 					
-					for (size_t i=0; i<labels.textLabels.size; ++i) {
-						labels.textLabels.elems[i].textZone = adaptPosToRect(&labels.positionSpecifiers.elems[i], &rectM);
-						drawTextLabel(renderer, &labels.textLabels.elems[i]);
-					}
-
 					buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &rectM);
-					drawButtonOnRenderer(renderer, buttonMenuEndGame);
+					buttonMenuEndGame->drawn = false;
 
 					fprintf(stderr, "Resize\n"); fflush(stderr);
 				} 
@@ -241,12 +233,22 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 			}
 		}
 
-		drawButtonOnRenderer(renderer, buttonMenuEndGame);
-
+		if (!buttonMenuEndGame->drawn) {
+			drawButtonOnRenderer(renderer, buttonMenuEndGame);
+			SDL_RenderPresent(renderer);
+		}
 		
-		SDL_RenderPresent(renderer);
 		SDL_Delay(50);
 	}
 
 	freeInputProcessor(&inputProcessor);
+	
+	for (size_t i=0; i<labels.textLabels.size; ++i) {
+		freeTextLabel(&labels.textLabels.elems[i]);
+	}
+
+	array_TextLabel_Free(&labels.textLabels);
+	array_PositionSpecifier_Free(&labels.positionSpecifiers);
+
+	freeButton(buttonMenuEndGame);
 }

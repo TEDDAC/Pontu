@@ -106,7 +106,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				switch (actionRealized)
 				{
 				case GameAction_PlacePiece:
-					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID-1>0) ? game.currentPlayerID-1 : game.nbPlayers-1].color, &inputElement.data.coord);
+					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID<game.nbPlayers-1) ? game.currentPlayerID+1 : 0].color, &inputElement.data.coord);
 					SDL_RenderPresent(renderer);
 					break;
 				case GameAction_RemoveBridge:

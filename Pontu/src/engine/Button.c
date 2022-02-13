@@ -63,8 +63,10 @@ bool isButtonEntry(P_Button * button,const int x,const int y){
 	coord.y = y;
 	if(isHover(button)){
 		button->hover = SDL_PointInRect(&coord,&(button->rect));
+		button->drawn = button->hover;
 		return false;
 	}
 	button->hover = SDL_PointInRect(&coord,&(button->rect));
+	button->drawn = !button->hover;
 	return button->hover;
 }

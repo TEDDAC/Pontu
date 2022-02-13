@@ -10,10 +10,9 @@
 #include "model/Player.h"
 
 int main(int argc, char *argv[]) {
-    GeneralState generalState;
-
-    SDL_Window* window = NULL;
 	SDL_Rect windowSize = {10, 10, 900, 900};
+	
+    SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
 
 	int statut = EXIT_FAILURE;
@@ -44,7 +43,7 @@ int main(int argc, char *argv[]) {
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_MainMenu;
+    GeneralState generalState = GS_MainMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
 			case GS_MainMenu:
@@ -56,11 +55,12 @@ int main(int argc, char *argv[]) {
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
 
-				size_t nbPlayers = 2;
+				size_t nbPlayers = 3;
 				Player players[] = {
 					newPlayer("Bépo", PlayerViolet),
-					newPlayer("Azeryty", PlayerYellow),
-					//newPlayer("Adcsg", PlayerRed)
+					newPlayer("Azeryty", PlayerBlue),
+					newPlayer("Adcsg", PlayerRed),
+					//newPlayer("qsdfqsdfq", PlayerYellow)
 				};
 				//players[2] = ;
 
@@ -73,6 +73,15 @@ int main(int argc, char *argv[]) {
 				generalState = GS_Game;
 
 				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
+				
+				//Pour tester le endGameMenu directement
+				/*generalState = GS_EndOfGameMenu;
+				players[0].eliminationTurn = 10;
+				players[0].rank = 3;
+				players[1].eliminationTurn = 15;
+				players[1].rank = 2;
+				players[2].eliminationTurn = 0;
+				players[2].rank = 1;*/
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;
