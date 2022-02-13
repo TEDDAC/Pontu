@@ -90,6 +90,10 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
     }
     SDL_Event event;
 
+    drawButtonOnRenderer(renderer,&(buttons[0]));
+    drawButtonOnRenderer(renderer,&(buttons[1]));
+    drawButtonOnRenderer(renderer,&(buttons[2]));
+
     while(*generalState == GS_MainMenu)
     {
         while(SDL_PollEvent(&event))
@@ -110,10 +114,32 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 }
                 break;
             case SDL_MOUSEMOTION:
-                if(isButtonEntry(&(buttons[0]),event.motion.x,event.motion.y) ||
-                    isButtonEntry(&(buttons[1]),event.motion.x,event.motion.y) ||
-                    isButtonEntry(&(buttons[2]),event.motion.x,event.motion.y)){
-                    playSFX(SFX_menu_sound_effect, audioHandler);
+                switch (isButtonInteractWithCursor(&(buttons[0]),event.motion.x,event.motion.y)) {
+                    case 1:
+                        drawButtonOnRenderer(renderer,&(buttons[0]));
+                        playSFX(SFX_menu_sound_effect, audioHandler);
+                        break;
+                    case 2:
+                        drawButtonOnRenderer(renderer,&(buttons[0]));
+                        break;
+                }
+                switch (isButtonInteractWithCursor(&(buttons[1]),event.motion.x,event.motion.y)) {
+                    case 1:
+                        drawButtonOnRenderer(renderer,&(buttons[1]));
+                        playSFX(SFX_menu_sound_effect, audioHandler);
+                        break;
+                    case 2:
+                        drawButtonOnRenderer(renderer,&(buttons[1]));
+                        break;
+                }
+                switch (isButtonInteractWithCursor(&(buttons[2]),event.motion.x,event.motion.y)) {
+                    case 1:
+                        drawButtonOnRenderer(renderer,&(buttons[2]));
+                        playSFX(SFX_menu_sound_effect, audioHandler);
+                        break;
+                    case 2:
+                        drawButtonOnRenderer(renderer,&(buttons[2]));
+                        break;
                 }
                 break;
             case SDL_WINDOWEVENT:
@@ -135,9 +161,6 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 break;
             }
         }
-        drawButtonOnRenderer(renderer,&(buttons[0]));
-        drawButtonOnRenderer(renderer,&(buttons[1]));
-        drawButtonOnRenderer(renderer,&(buttons[2]));
         SDL_RenderPresent(renderer);
 
         SDL_Delay(20);

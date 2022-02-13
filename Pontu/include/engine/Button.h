@@ -63,9 +63,9 @@ bool isHover(P_Button* button);// dit si le bouton est survolé en donnant les c
  * \param[in]   button	the button target
  * \param[in]   x	x of the point
  * \param[in]   y	y of the point
- * \return true if the cursor has juste entered the button.
+ * \return 1 if the cursor has just entry in the button, 2 if it has just exit, else 0
  */
-bool isButtonEntry(P_Button * button,const int x,const int y);
+int isButtonInteractWithCursor(P_Button * button,const int x,const int y);
 
 /**
  * \brief Free the texture of a button.

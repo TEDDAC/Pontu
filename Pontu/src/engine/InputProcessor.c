@@ -39,7 +39,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 		{
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
-				isButtonEntry(b, event.motion.x, event.motion.y);
+				isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
 			}
 			break;
 		}
