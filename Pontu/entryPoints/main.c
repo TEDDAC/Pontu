@@ -58,16 +58,17 @@ int main(int argc, char *argv[]) {
 				
 				size_t nbPlayers = 2;
 				Player* players = (Player*)malloc(sizeof(Player)*2);
-				players[0] = newPlayer("Bépo", PlayerViolet);
-				players[1] = newPlayer("Azeryty", PlayerYellow);
+				/*players[0] = newPlayer("Bépo", PlayerViolet);
+				players[1] = newPlayer("Azeryty", PlayerYellow);*/
 				//players[2] = newPlayer("Adcsg", PlayerRed);
 
-				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+				bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
 
-			/*	if (crashed) {
+				if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
-				}*/
+				}
+				
 				generalState = GS_Game;
 				gameView(&generalState, window, renderer, players, nbPlayers);
 

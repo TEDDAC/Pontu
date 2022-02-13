@@ -30,7 +30,7 @@ typedef struct
 typedef struct
 {
 	Player* p;
-	SDL_Color color;
+	PlayersColors color;
 } ChangeColorParams;
 
 typedef struct

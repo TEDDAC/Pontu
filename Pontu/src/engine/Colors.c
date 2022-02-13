@@ -4,7 +4,10 @@ const SDL_Color COLOR_GENERIC_BUTTON_BACKGROUND = {225, 225, 225, 255};
 const SDL_Color COLOR_GENERIC_BUTTON_BORDER = {10, 10, 10, 255};
 const SDL_Color COLOR_GENERIC_BUTTON_BACKGROUND_HOVER = {250, 250, 250, 255};
 
-const SDL_Color PLAYER_ONE_COLOR = {166, 58, 252, 255};
-const SDL_Color PLAYER_TWO_COLOR = {14, 159, 100, 255};
-const SDL_Color PLAYER_THREE_COLOR = {240, 45, 45, 255};
-const SDL_Color PLAYER_FOUR_COLOR = {255, 255, 255, 255};
+const SDL_Color PLAYER_SDL_COLORS[] = {//Order mater (need to be the same as in model/PlayersColors.h)
+	{241, 0, 4	, 255}, // Red
+	{175, 0, 202, 255}, // Violet
+	{6	, 0, 202, 255}, // Blue
+	{202, 152, 0, 255}, // Yellow
+};
+
