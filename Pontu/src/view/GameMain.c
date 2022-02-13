@@ -5,22 +5,35 @@
 #include "engine/TextureHandler.h"
 #include "model/Game.h"
 #include "model/arrayCoord.h"
-#include "debug/printer.h"
 
 #include "view/PiecesDrawer.h"
 #include "view/BoardDrawer.h"
 #include "view/GameDrawer.h"
 
-SDL_Rect boardRectFromWindowSize(int windowW, int windowH) {
-	SDL_Rect boardRect = {.x=windowW/10.0, .y=windowH/10, .w=windowW*8.0/10.0, .h=windowH*8.0/10.0};
+#include "engine/UIElementUtils.h"
 
-	return boardRect;
+
+PositionSpecifier boardRectPositionSpecifier() {
+	SDL_Rect b100 = {
+		.x= 50, 
+		.y= 50, 
+		.w= 80, 
+		.h= 80,
+	};
+	return newPositionSpecifier(&b100, POSX_CENTER, POSY_CENTER, ASPECT_KEEP_FIT);
+}
+
+void redrawGameBoard(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const TextureHandler* textureHandler, const SDL_Rect* boardRect, const Board* board) {
+	drawFullBoard(renderer, boardRect, board, textureHandler->textures[TEXTURE_Island], textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
+	for (size_t iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
+		drawPiecesPlayer(renderer, boardRect, board->arrPieces, board->nbPieces, iPlayer, textureHandler, players[iPlayer].color);
+	}
 }
 
 void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers)
 {
 	if (*generalState != GS_Game) {
-		return ;
+		return;
 	}
 	GameInputProcessor inputProcessor = createGameInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
@@ -28,19 +41,15 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-	int windowW;
-	int windowH;
+	
+	SDL_Rect windowRect = {0,0,0,0};
+	SDL_GetWindowSize(window, &windowRect.w, &windowRect.h);
+	PositionSpecifier boardRPositionSpecifier = boardRectPositionSpecifier();
 
-	SDL_GetWindowSize(window, &windowW, &windowH);
-	SDL_Rect boardRect = boardRectFromWindowSize(windowW, windowH);
+	SDL_Rect boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
 
 	//Draw 
-	drawFullBoard(renderer, &boardRect, &game.board, textureHandler.textures[TEXTURE_Island], textureHandler.textures[TEXTURE_Bridge], textureHandler.textures[TEXTURE_Water]);
-	for (int iPlayer=0; iPlayer<nbPlayers; ++iPlayer) {
-		drawPiecesPlayer(renderer, &boardRect, game.board.arrPieces, game.board.nbPieces, iPlayer, textureHandler.textures[TEXTURE_PieceRed]);
-		//SDL_Renderer* renderer, const SDL_Rect* boardRect, const Piece arrPieces[], const size_t nbPieces, const size_t numPlayer,  SDL_Texture* piece
-	}
-	
+	redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
 	SDL_RenderPresent(renderer);
 
 
@@ -66,31 +75,56 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					break;
 				}
 				break;
-			case InputType_MoveGame:
-				fprintf(stderr, "Move on board\n");
-				fprintf(stderr, "From (%d; %d)\n", inputElement.data.move.start.x, inputElement.data.move.start.y);
-				fprintf(stderr, "To (%d; %d)\n", inputElement.data.move.end.x, inputElement.data.move.end.y);
-
-				moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
-
-				
+			case InputType_MoveGame: {
+				const GameAction actionRealized = moveOnBoard(inputElement.data.move.start, inputElement.data.move.end, &game);
+				switch (actionRealized)
+				{
+				case GameAction_MovePiece:
+					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, &textureHandler, game.arrPlayers[game.currentPlayerID].color);
+					SDL_RenderPresent(renderer);
+					if (game.phase == GAME_ENDED) {
+						*generalState = GS_EndOfGameMenu;
+					}
+					break;
+				}
+			
 				break;
-			case InputType_ClickGame:
-				fprintf(stderr, "Clic on board (%d; %d)\n", inputElement.data.coord.x, inputElement.data.coord.y);
-				fprintf(stderr, "\tSelected case : (%d; %d)\n", inputProcessor.selectedCase.x, inputProcessor.selectedCase.y);
-
+			}
+			case InputType_ClickGame: {
 				if(!array_Coord_Contains(&interactiveCases, inputElement.data.coord, *coordEqual)) {
-					fprintf(stderr, "\tselected case reset\n");
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
-				if (clickOnBoard(inputElement.data.coord, &game)) {
-					fprintf(stderr, "\tselected case reset\n");
-					inputProcessor.selectedCase = newCoord(-1,-1);
+				const GameAction actionRealized = clickOnBoard(inputElement.data.coord, &game);
+				switch (actionRealized)
+				{
+				case GameAction_PlacePiece:
+					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID-1>0) ? game.currentPlayerID-1 : game.nbPlayers-1].color, &inputElement.data.coord);
+					SDL_RenderPresent(renderer);
+					break;
+				case GameAction_RemoveBridge:
+					drawRemoveBridge(renderer, &boardRect, textureHandler.textures[TEXTURE_Water], &inputElement.data.coord);
+					SDL_RenderPresent(renderer);
+					break;
 				}
 
+				if (actionRealized != GameAction_None) {
+					inputProcessor.selectedCase = newCoord(-1,-1);
+					if (game.phase == GAME_ENDED) {
+						*generalState = GS_EndOfGameMenu;
+					}
+				}
 
 				break;
+			}
+			case InputType_Window_Resize: {
+				windowRect.w = inputElement.data.windowSize.w;
+				windowRect.h = inputElement.data.windowSize.h;
+				boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
+
+				redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
+				SDL_RenderPresent(renderer);
+			}
 			case InputType_None:
 			default:
 				break;
@@ -98,16 +132,17 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 			array_Coord_Free(&interactiveCases);
 			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
-			fprintf(stderr, "Interactive cases : {");
-			array_Coord_Foreach(&interactiveCases, *printCoord);
-			fprintf(stderr, "}\n");
 		}
 
-		SDL_Delay(20);
+		SDL_Delay(5);
+	}
+
+	for (size_t i = 0; i<nbPlayers; ++i) {
+		players[i].rank = game.arrPlayers[i].rank;
+		players[i].eliminationTurn = game.arrPlayers[i].eliminationTurn;
 	}
 
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
-	
-	SDL_Quit();
+	freeGameInputProcessor(&inputProcessor);
 }

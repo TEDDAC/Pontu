@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
 #include "engine/GeneralState.h"
 #include "view/MainMenu.h"
 #include "view/MenuEndGame.h"
@@ -8,9 +9,9 @@
 #include "engine/FontLoader.h"
 #include "model/Player.h"
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
     GeneralState generalState;
-
+	
     SDL_Window* window = NULL;
 	SDL_Rect windowSize = {10, 10, 900, 900};
 	SDL_Renderer* renderer = NULL;
@@ -22,7 +23,7 @@ int main(int argc, char const *argv[]) {
 		goto Quit;
 	}
 
-	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
@@ -43,7 +44,7 @@ int main(int argc, char const *argv[]) {
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_MainMenu;
+    generalState = GS_GameCreationMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
 			case GS_MainMenu:
@@ -56,17 +57,20 @@ int main(int argc, char const *argv[]) {
 				SDL_GetWindowSize(window, &windowW, &windowH);
 
 				size_t nbPlayers = 2;
-				SDL_Color color = {0,0,0,0};
-				Player* players = (Player*)malloc(sizeof(Player)*2);
-				players[0] = newPlayer("Bépo", color);
-				players[1] = newPlayer("Azeryty", color);
+				Player players[] = {
+					newPlayer("Bépo", PlayerViolet),
+					newPlayer("Azeryty", PlayerYellow),
+					//newPlayer("Adcsg", PlayerRed)
+				};
+				//players[2] = ;
 
 				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
 
-			/*	if (crashed) {
+				/*if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
 				}*/
+				generalState = GS_Game;
 
 				gameView(&generalState, window, renderer, players, nbPlayers);
 

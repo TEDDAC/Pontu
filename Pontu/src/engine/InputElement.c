@@ -22,3 +22,11 @@ InputElement createInputElementMoveBoard(const Coord start, const Coord end) {
     InputElement i = {.type=InputType_MoveGame, .data.move={.start=start, .end=end}};
     return i;
 }
+
+InputElement createInputElementResizeWindow(const int w, const int h) {
+	InputElement i = {
+		.type = InputType_Window_Resize,
+		.data.windowSize={.w = w, .h = h}
+	};
+	return i;
+}

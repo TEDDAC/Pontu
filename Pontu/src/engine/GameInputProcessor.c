@@ -83,7 +83,13 @@ InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL
 				P_Button* b = &gameInputProcessor->tabButton.elems[i];
 				isButtonEntry(b, event.motion.x, event.motion.y);
 			}
+			break;
 		}
+		case SDL_WINDOWEVENT:
+			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+				return createInputElementResizeWindow(event.window.data1, event.window.data2);
+			}
+			break;
 	}
 
 	return createInputElementNone();

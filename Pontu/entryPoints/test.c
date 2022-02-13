@@ -2,11 +2,12 @@
 // #include "../test/testFontLoader.c"
 // #include "../test/testAudioHandler.c"
 // #include "../test/testGenerateurTexture.c"
-//#include "../test/testButton.c"
-//#include "../test/testTextInput.c"
+//#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
-//#include "../test/testMenuEndGame.c"
-#include "../test/testGameInterface.c"
+//#include "../test/testDrawMainMenu.c
+//#include "../test/testSettingsView.c"
+#include "../test/testCreationMenu.c"
+//#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
 //#include "../test/testDrawMainMenu.c"
 //#include "../test/testSettingsView.c"
@@ -25,9 +26,10 @@ int main(int argc, char *argv[]) {
 	//testConnectionMenu();
 	//testMenuEndGame();
 	//testButton();
-	testGameInterface();
+	//testGameInterface();
 	//testConnectionMenu();
 	//testDrawMainMenu();
+	testCreationMenu();
     //testSettingsView();
 
 	return 0;

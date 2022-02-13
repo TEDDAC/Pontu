@@ -37,12 +37,16 @@ Game newGame(const size_t nbPlayers, const Player player[])
 		.nb_rounds = 0,
 		.phase = PLACEMENT,
 		.board = newBoard(nbPlayers),
-		.nbPlayers = nbPlayers
+		.nbPlayers = nbPlayers,
+		.lastRank = nbPlayers+1
 	};
 
 	for (size_t player_i = 0; player_i < nbPlayers; player_i++)
 	{
-		g.arrPlayers[player_i] = player[player_i];
+		g.arrPlayers[player_i].color = player[player_i].color;
+		g.arrPlayers[player_i].eliminationTurn = player[player_i].eliminationTurn;
+		g.arrPlayers[player_i].rank = player[player_i].rank;
+		strcpy(g.arrPlayers[player_i].pseudo, player[player_i].pseudo);
 	}
 
 	if (nbPlayers == 2)
@@ -53,6 +57,15 @@ Game newGame(const size_t nbPlayers, const Player player[])
 	return g;
 }
 
+void eliminatePlayer(Game* game, const size_t playerId) {
+	game->arrPlayers[playerId].eliminationTurn = game->nb_rounds;
+	game->arrPlayers[playerId].rank = --game->lastRank;
+	fprintf(stderr, "Rank : %d, %d\n", game->lastRank, game->arrPlayers[playerId].rank);
+}
+
+void endGame(Game* game) {
+	game->phase = GAME_ENDED;
+}
 
 void changePhaseOrPlayerTurn(Game* game)
 {
@@ -74,6 +87,14 @@ void changePhaseOrPlayerTurn(Game* game)
 		case RM_BRIDGE:
 		{
 			const size_t lastPlayerId = game->currentPlayerID;
+			if (areAllPlayerPiecesStucked(lastPlayerId, game->board.arrPieces, game->board.nbPieces)) {
+				eliminatePlayer(game, lastPlayerId);
+				if (game->lastRank == 2) {
+					endGame(game);
+					return;
+				}
+			}
+
 			do
 			{
 				game->currentPlayerID++;
@@ -81,21 +102,28 @@ void changePhaseOrPlayerTurn(Game* game)
 				{
 					game->currentPlayerID = 0;
 				}
-				if (lastPlayerId == game->currentPlayerID) {
+				/*if (lastPlayerId == game->currentPlayerID) {
 					game->phase = GAME_ENDED;
 					return;
+				}*/
+
+				if (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0 && areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces, game->board.nbPieces)) {
+					eliminatePlayer(game, game->currentPlayerID);
+					if (game->lastRank == 2) {
+						endGame(game);
+						return;
+					}
 				}
 
-			} while (areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces,
-											   game->board.nbPieces));
+			} while (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0);
 
 
-			fprintf(stderr, "Player n°%ld turn\n", game->currentPlayerID);
 			fflush(stderr);
 
 			if (anyOfPlayersPiecesCanMove(game->currentPlayerID, &game->board))
 			{
 				game->phase = MOVE_PIECE;
+				game->nb_rounds++;
 			}
 			break;
 		}
@@ -258,17 +286,12 @@ void updatePieceIsolated(Game* game, const Island* island)
 {
 	Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, *island);
 	if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board))
-	{ // Check is a piece is isolated and then if the player is eliminated
+	{ // Check is a piece is isolated //and then if the player is eliminated
 		piecePotentialyIsolated->stuck = true;
-		if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces,
-									  game->board.nbPieces))
-		{
-			game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds; // TODO : See what we put in rank
-		}
 	}
 }
 
-bool clickOnBoard(const Coord coord, Game* game)
+GameAction clickOnBoard(const Coord coord, Game* game)
 {
 	const IslandOrBridge islandOrBridge = coordToEntity(coord);
 
@@ -281,7 +304,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 				if (piece != NULL) {
 					if (placePiece(piece, islandOrBridge.data.island, &game->board)) {
 						changePhaseOrPlayerTurn(game);
-						return true;
+						return GameAction_PlacePiece;
 					}
 				}
 			}
@@ -296,7 +319,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 
 					changePhaseOrPlayerTurn(game);
 
-					return true;
+					return GameAction_RemoveBridge;
 				}
 			}
 			break;
@@ -304,7 +327,7 @@ bool clickOnBoard(const Coord coord, Game* game)
 			break;
 	}
 
-	return false;
+	return GameAction_None;
 }
 
 Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Island island)
@@ -319,7 +342,7 @@ Piece* getPieceFromIsland(Piece arrPieces[9], const size_t logicalSize, const Is
 	return NULL;
 }
 
-bool moveOnBoard(const Coord start, const Coord end, Game* game)
+GameAction moveOnBoard(const Coord start, const Coord end, Game* game)
 {
 	const IslandOrBridge islandOrBridgeStart = coordToEntity(start);
 	const IslandOrBridge islandOrBridgeEnd	 = coordToEntity(end);
@@ -340,7 +363,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game)
 					{
 						changePhaseOrPlayerTurn(game);
 					}
-					return pieceMoved;
+					return pieceMoved ? GameAction_MovePiece : GameAction_None;
 				}
 			}
 			break;
@@ -348,7 +371,7 @@ bool moveOnBoard(const Coord start, const Coord end, Game* game)
 			break;
 	}
 
-	return false;
+	return GameAction_None;
 }
 
 bool rmBridge(Bridge bridge, Board* board)
