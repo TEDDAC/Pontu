@@ -21,7 +21,7 @@
 typedef struct {
 	char pseudo[PSEUDO_LENMAX]; //< The player's pseudo
 	PlayersColors color; //< The player's Piece' color
-	int rank; //< The player's rank (0 if the player isn't out yet)
+	int rank; //< The player's rank (1 if the player isn't out yet)
 	int eliminationTurn; //< When the player has been eliminated (0 if the player isn't out yet)
 } Player;
 

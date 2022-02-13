@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
     GeneralState generalState;
-	
+
     SDL_Window* window = NULL;
 	SDL_Rect windowSize = {10, 10, 900, 900};
 	SDL_Renderer* renderer = NULL;
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_GameCreationMenu;
+    generalState = GS_MainMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
 			case GS_MainMenu:
@@ -55,20 +55,23 @@ int main(int argc, char *argv[]) {
 				int windowH;
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
-				
+
 				size_t nbPlayers = 2;
-				Player* players = (Player*)malloc(sizeof(Player)*2);
-				players[0] = newPlayer("Bépo", PlayerViolet);
-				players[1] = newPlayer("Azeryty", PlayerYellow);
-				//players[2] = newPlayer("Adcsg", PlayerRed);
+				Player players[] = {
+					newPlayer("Bépo", PlayerViolet),
+					newPlayer("Azeryty", PlayerYellow),
+					//newPlayer("Adcsg", PlayerRed)
+				};
+				//players[2] = ;
 
 				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
 
-			/*	if (crashed) {
+				/*if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
 				}*/
 				generalState = GS_Game;
+
 				gameView(&generalState, window, renderer, players, nbPlayers);
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
@@ -84,6 +87,7 @@ int main(int argc, char *argv[]) {
 
 Quit:
     freeFonts(fontHandler);
+    freeAudioHandler(&audioHandler);
 	if(renderer != NULL) {
 		SDL_DestroyRenderer(renderer);
 	}

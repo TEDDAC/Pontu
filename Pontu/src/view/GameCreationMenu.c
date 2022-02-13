@@ -107,12 +107,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 	int const hColorBtn = 32;
 	int const colorBtnXMargin = 8;
 	SDL_Texture* btnTexture, *btnTextureHover;
-	SDL_Color const colors[NB_COLORS]= {
-		PLAYER_ONE_COLOR,
-		PLAYER_TWO_COLOR,
-		PLAYER_THREE_COLOR,
-		PLAYER_FOUR_COLOR
-	};
+	
 	P_Button* colorsBtn = (P_Button*) malloc(sizeof(P_Button)*NB_COLORS);
 	P_Button ai = createButton(NULL, NULL, xmin, y, 0, 0, NULL);
 
@@ -134,11 +129,11 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 	{
 		params = (ChangeColorParams*) malloc(sizeof(ChangeColorParams));
 		params->p = player;
-	        params->color=colors[i];
+	        params->color=playersColors[i];
 		colorsBtn[i] = createButton(NULL, NULL, xmax-wColorBtn*(i+1), y, wColorBtn, hColorBtn, changePlayerColor);
 		colorsBtn[i].arg = params;
-		btnTexture = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BORDER, colors[i], 4, 8, NULL, NULL, renderer);
-		btnTextureHover = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BACKGROUND, colors[i], 4, 8, NULL, NULL, renderer);
+		btnTexture = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BORDER, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
+		btnTextureHover = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BACKGROUND, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
 		colorsBtn[i].texture = btnTexture;
 		colorsBtn[i].hoverTexture = btnTextureHover;
 

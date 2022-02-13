@@ -1,4 +1,5 @@
 #include "engine/TextureHandler.h"
+#include <errno.h>
 
 #define MACRO_TO_TEXTURE_NAME(N) #N".png",
 

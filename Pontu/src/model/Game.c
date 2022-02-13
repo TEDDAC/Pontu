@@ -38,7 +38,7 @@ Game newGame(const size_t nbPlayers, const Player player[])
 		.phase = PLACEMENT,
 		.board = newBoard(nbPlayers),
 		.nbPlayers = nbPlayers,
-		.lastRank = 0
+		.lastRank = nbPlayers+1
 	};
 
 	for (size_t player_i = 0; player_i < nbPlayers; player_i++)
@@ -59,9 +59,8 @@ Game newGame(const size_t nbPlayers, const Player player[])
 
 void eliminatePlayer(Game* game, const size_t playerId) {
 	game->arrPlayers[playerId].eliminationTurn = game->nb_rounds;
-	++game->lastRank;
-	game->arrPlayers[playerId].rank = game->lastRank;
-	fprintf(stderr, "Rank : %d\n", game->lastRank);
+	game->arrPlayers[playerId].rank = --game->lastRank;
+	fprintf(stderr, "Rank : %d, %d\n", game->lastRank, game->arrPlayers[playerId].rank);
 }
 
 void endGame(Game* game) {
@@ -90,7 +89,7 @@ void changePhaseOrPlayerTurn(Game* game)
 			const size_t lastPlayerId = game->currentPlayerID;
 			if (areAllPlayerPiecesStucked(lastPlayerId, game->board.arrPieces, game->board.nbPieces)) {
 				eliminatePlayer(game, lastPlayerId);
-				if (game->nbPlayers-1 == game->lastRank) {
+				if (game->lastRank == 2) {
 					endGame(game);
 					return;
 				}
@@ -108,15 +107,15 @@ void changePhaseOrPlayerTurn(Game* game)
 					return;
 				}*/
 
-				if (game->arrPlayers[game->currentPlayerID].rank != 0 && areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces, game->board.nbPieces)) {
+				if (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0 && areAllPlayerPiecesStucked(game->currentPlayerID, game->board.arrPieces, game->board.nbPieces)) {
 					eliminatePlayer(game, game->currentPlayerID);
-					if (game->nbPlayers-1 == game->lastRank) {
+					if (game->lastRank == 2) {
 						endGame(game);
 						return;
 					}
 				}
 
-			} while (game->arrPlayers[game->currentPlayerID].rank != 0);
+			} while (game->arrPlayers[game->currentPlayerID].eliminationTurn != 0);
 
 
 			fflush(stderr);
@@ -124,6 +123,7 @@ void changePhaseOrPlayerTurn(Game* game)
 			if (anyOfPlayersPiecesCanMove(game->currentPlayerID, &game->board))
 			{
 				game->phase = MOVE_PIECE;
+				game->nb_rounds++;
 			}
 			break;
 		}
@@ -286,13 +286,8 @@ void updatePieceIsolated(Game* game, const Island* island)
 {
 	Piece* piecePotentialyIsolated = getPieceFromIsland(game->board.arrPieces, game->board.nbPieces, *island);
 	if (piecePotentialyIsolated != NULL && isPieceIsolated(piecePotentialyIsolated, &game->board))
-	{ // Check is a piece is isolated and then if the player is eliminated
+	{ // Check is a piece is isolated //and then if the player is eliminated
 		piecePotentialyIsolated->stuck = true;
-		if (areAllPlayerPiecesStucked(piecePotentialyIsolated->idJ, game->board.arrPieces,
-									  game->board.nbPieces))
-		{
-			game->arrPlayers[piecePotentialyIsolated->idJ].rank = game->nb_rounds; // TODO : See what we put in rank
-		}
 	}
 }
 

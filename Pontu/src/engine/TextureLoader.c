@@ -95,5 +95,9 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
     SDL_RenderCopy(renderer, message, NULL, &Message_rect);
 
     SDL_SetRenderTarget(renderer, NULL);
+
+	//Free
+	SDL_DestroyTexture(message);
+	SDL_FreeSurface(surfaceMessage);
 	return texture;
 }
