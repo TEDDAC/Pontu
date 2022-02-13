@@ -5,9 +5,9 @@
 //#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
 //#include "../test/testDrawMainMenu.c
-//#include "../test/testSettingsView.c"
+#include "../test/testSettingsView.c"
 //#include "../test/testCreationMenu.c"
-#include "../test/testGameInterface.c"
+//#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
 //#include "../test/testDrawMainMenu.c"
 //#include "../test/testSettingsView.c"
@@ -26,11 +26,11 @@ int main(int argc, char *argv[]) {
 	//testConnectionMenu();
 	//testMenuEndGame();
 	//testButton();
-	testGameInterface();
+	//testGameInterface();
 	//testConnectionMenu();
 	//testDrawMainMenu();
 	//testCreationMenu();
-    //testSettingsView();
+    testSettingsView();
 
 	return 0;
 }

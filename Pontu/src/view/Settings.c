@@ -117,14 +117,14 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
 	SDL_RenderFillRect(renderer,&title_area);
 
-	retValues = drawSettingsView(renderer,ah,fh, &textLabels);
+	retValues = drawSettingsView(renderer,ah,fh);
 
 	for (size_t i = 0; i < retValues.arr_buttons.size; i++) {
 		drawButtonOnRenderer(renderer, &(retValues.arr_buttons.elems[i]));
 	}
 	
 	for (size_t i = 0; i < NB_TEXT_LABEL; i++) {
-		drawTextLabel(renderer, &retValues.arr_extLabels[i]);
+		drawTextLabel(renderer, &retValues.arr_textLabel[i]);
 	}
 
 

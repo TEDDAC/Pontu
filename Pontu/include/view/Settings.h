@@ -30,7 +30,7 @@ typedef struct {
  * \param[in] ah The AudioHandler in use
  * \return true if the view could be generated, else false
  */
-RetValue drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh);
+RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh);
 
 void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh);
 
