@@ -137,9 +137,12 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 		SDL_Delay(5);
 	}
 
+	for (size_t i = 0; i<nbPlayers; ++i) {
+		players[i].rank = game.arrPlayers[i].rank;
+		players[i].eliminationTurn = game.arrPlayers[i].eliminationTurn;
+	}
+
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
 	freeGameInputProcessor(&inputProcessor);
-	
-	SDL_Quit();
 }

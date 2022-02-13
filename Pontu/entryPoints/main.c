@@ -57,19 +57,21 @@ int main(int argc, char *argv[]) {
 				SDL_GetWindowSize(window, &windowW, &windowH);
 				
 				size_t nbPlayers = 2;
-				Player* players = (Player*)malloc(sizeof(Player)*2);
-				/*players[0] = newPlayer("Bépo", PlayerViolet);
-				players[1] = newPlayer("Azeryty", PlayerYellow);*/
-				//players[2] = newPlayer("Adcsg", PlayerRed);
+				Player players[] = {
+					newPlayer("Bépo", PlayerViolet),
+					newPlayer("Azeryty", PlayerYellow),
+					//newPlayer("Adcsg", PlayerRed)
+				};
+				//players[2] = ;
 
-				bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
 
-				if (crashed) {
+				/*if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
-				}
-				
+				}*/
 				generalState = GS_Game;
+
 				gameView(&generalState, window, renderer, players, nbPlayers);
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);

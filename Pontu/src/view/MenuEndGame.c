@@ -163,7 +163,7 @@ PositionSpecifier getTitleRect100(SDL_Rect* labelSize) {
 	return newPositionSpecifier(&base100, POSX_CENTER, POSY_TOP, ASPECT_KEEP_W);
 }
 
-struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, const SDL_Rect* rect, FontHandler* fontHandler) {
+struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player players[], const size_t nbPlayers, FontHandler* fontHandler) {
 	struct endGameMenuTextLabel labels = {
 		.textLabels = array_TextLabel_Create(),
 		.positionSpecifiers = array_PositionSpecifier_Create()
@@ -172,6 +172,8 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 	// Titre
 	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_retro]));
 	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitleRect100(&array_TextLabel_Last(&labels.textLabels)->textZone));
+
+
 
 	return labels;
 }
@@ -200,6 +202,12 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	};
 	drawEndGameMenu(renderer, players, nbPlayers, &rectMenuEndGame, fontHandler);
 	
+	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
+	for (size_t i=0; i<labels.textLabels.size; ++i) {
+		labels.textLabels.elems[i].textZone = adaptPosToRect(&labels.positionSpecifiers.elems[i], &rectMenuEndGame);
+		drawTextLabel(renderer, &labels.textLabels.elems[i]);
+	}
+
 	while(*generalState == GS_EndOfGameMenu)
 	{
 		{
@@ -231,7 +239,12 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 						.h=inputElement.data.windowSize.h
 					};
 					drawEndGameMenu(renderer, players, nbPlayers, &rectM, fontHandler);
-		
+					
+					for (size_t i=0; i<labels.textLabels.size; ++i) {
+						labels.textLabels.elems[i].textZone = adaptPosToRect(&labels.positionSpecifiers.elems[i], &rectM);
+						drawTextLabel(renderer, &labels.textLabels.elems[i]);
+					}
+
 					//buttonMenuEndGame->rect = adaptPosToRect(&base100, &rectM, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_W);
 					fprintf(stderr, "Resize\n"); fflush(stderr);
 				} 
