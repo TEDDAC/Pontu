@@ -1,4 +1,5 @@
 #include "engine/TextureHandler.h"
+#include <errno.h>
 
 #define MACRO_TO_TEXTURE_NAME(N) #N".png",
 
@@ -15,6 +16,9 @@ TextureHandler newTextureHandler(SDL_Renderer* renderer) {
 
 	for (size_t i = 0; i<NB_TEXTURES_DEFINED; ++i) {
 		char* path = (char*)malloc((strlen(directoryPath)+strlen(texturesNames[i])+1)*sizeof(char));
+		if (path == NULL) {
+			perror("Malloc newTextureHandler"); exit(errno);
+		}
 		strcpy(path, directoryPath);
 		tH.textures[i] = createTextureFromPath(renderer, strcat(path,texturesNames[i]));
 		free(path);

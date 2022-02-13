@@ -1,14 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL2/SDL.h>
 #include "engine/GeneralState.h"
 #include "view/MainMenu.h"
+#include "view/MenuEndGame.h"
+#include "view/GameCreationMenu.h"
+#include "view/GameMain.h"
 #include "engine/FontLoader.h"
+#include "model/Player.h"
 
-int main(int argc, char const *argv[]) {
-    GeneralState generalState;
-
-    SDL_Window* window = NULL;
+int main(int argc, char *argv[]) {
 	SDL_Rect windowSize = {10, 10, 900, 900};
+	
+    SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
 
 	int statut = EXIT_FAILURE;
@@ -18,7 +22,7 @@ int main(int argc, char const *argv[]) {
 		goto Quit;
 	}
 
-	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Pontu",windowSize.x, windowSize.y, windowSize.w, windowSize.h, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (!window)
 	{
 		fprintf(stderr, "Error : %s\n", SDL_GetError());
@@ -37,13 +41,54 @@ int main(int argc, char const *argv[]) {
         exit(2);
     }
     FontHandler fontHandler = loadFonts();
+    AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
-    generalState = GS_Quit;
+    GeneralState generalState = GS_MainMenu;
     while(generalState != GS_Quit){
         switch (generalState) {
-            case GS_MainMenu:
-            mainMenu(renderer,window,&generalState, fontHandler);
-            break;
+			case GS_MainMenu:
+				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
+				break;
+			case GS_GameCreationMenu:{
+				int windowW;
+				int windowH;
+
+				SDL_GetWindowSize(window, &windowW, &windowH);
+
+				size_t nbPlayers = 3;
+				Player players[] = {
+					newPlayer("Bépo", PlayerViolet),
+					newPlayer("Azeryty", PlayerBlue),
+					newPlayer("Adcsg", PlayerRed),
+					//newPlayer("qsdfqsdfq", PlayerYellow)
+				};
+				//players[2] = ;
+
+				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+
+				/*if (crashed) {
+					fprintf(stderr,"sorry");
+					exit(-1);
+				}*/
+				generalState = GS_Game;
+
+				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
+				
+				//Pour tester le endGameMenu directement
+				/*generalState = GS_EndOfGameMenu;
+				players[0].eliminationTurn = 10;
+				players[0].rank = 3;
+				players[1].eliminationTurn = 15;
+				players[1].rank = 2;
+				players[2].eliminationTurn = 0;
+				players[2].rank = 1;*/
+
+				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
+				break;
+			}
+			case GS_Game: {
+				break;
+			}
         }
     }
 
@@ -51,6 +96,7 @@ int main(int argc, char const *argv[]) {
 
 Quit:
     freeFonts(fontHandler);
+    freeAudioHandler(&audioHandler);
 	if(renderer != NULL) {
 		SDL_DestroyRenderer(renderer);
 	}

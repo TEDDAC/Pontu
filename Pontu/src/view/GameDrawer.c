@@ -16,11 +16,11 @@ bool drawGame(SDL_Renderer* renderer, const SDL_Rect* windowSize, const SDL_Rect
 	//P_Button menu = createButton(menuTexture, NULL, 10, 10, 50, 70, NULL);
 
 
-	drawBoard(renderer, boardRect, &(game->board), textureHandler->textures[TEXTURE_Island],  textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
+	//drawBoard(renderer, boardRect, &(game->board), textureHandler->textures[TEXTURE_Island],  textureHandler->textures[TEXTURE_Bridge], textureHandler->textures[TEXTURE_Water]);
 	
 	
-	drawPiecesPlayer(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, 0, textureHandler->textures[TEXTURE_PieceRed]);
+	/*drawPiecesPlayer(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, 0, textureHandler->textures[TEXTURE_PieceRed]);
 	drawPiecesPlayer(renderer, boardRect, game->board.arrPieces, game->board.nbPieces, 1, textureHandler->textures[TEXTURE_PieceViolet]);
-
+*/
 	return true;
 }
