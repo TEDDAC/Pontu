@@ -1,11 +1,11 @@
 // #include "../test/testTextureLoader.c"
 // #include "../test/testFontLoader.c"
-// #include "../test/testAudioHandler.c"
+ #include "../test/testAudioHandler.c"
 // #include "../test/testGenerateurTexture.c"
 //#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
 //#include "../test/testDrawMainMenu.c
-#include "../test/testSettingsView.c"
+//#include "../test/testSettingsView.c"
 //#include "../test/testCreationMenu.c"
 //#include "../test/testGameInterface.c"
 //#include "../test/testConnectionMenu.c"
@@ -18,7 +18,7 @@
 
 int main(int argc, char *argv[]) {
 	//testTextureLoader();
-	//testAudioHandler();
+	testAudioHandler();
 	//testFontLoader();
 	//testGenerateurTexture();
 	//testTextInput();
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 	//testConnectionMenu();
 	//testDrawMainMenu();
 	//testCreationMenu();
-    testSettingsView();
+	// testSettingsView();
 
 	return 0;
 }

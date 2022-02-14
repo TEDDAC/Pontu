@@ -14,27 +14,28 @@
 #include "engine/arrayButton.h"
 
 
-//move pion
-
-//delete pion
-
-//draw menu Ponton (top left corner)
 /**
  * \brief Draw different buttons on the game interface : menu, setting, sound, nbTurn, and timers
  * param Renderer 
  */
 void drawButtons(SDL_Renderer* renderer,FontHandler fontHandler);
 
-//draw setting button (top right corner)
-
-//draw sound button (top right corner)
-
-//draw nbTurn (bottom left corner)
-
-//draw timer (bottom right corner)
-
+/**
+ * \brief Create an array of P_Button for the game interface
+ * \param renderer The renderer on which we create P_buttons  
+ * \param fontHandler The fontHandler to apply 
+ * \return an array of P_Button to draw on the renderer
+ */
 struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler);
 
+
+/**
+ * \brief Create an array of TextLabel for the game interface
+ * \param renderer The renderer on which we create TextLabel
+ * \param fontHandler The fontHandler to apply
+ * \return an array of TextLabel to draw on the renderer
+ */
+struct array_TextLabel createGameInterfaceLabels(SDL_Renderer* renderer, FontHandler* fontHandler);
 
 #endif
 
