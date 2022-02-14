@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         switch (generalState) {
 			case GS_MainMenu:
 				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
-				playSFX(validate_sound, audioHandler)
+				playSFX(SFX_validate_sound, audioHandler);
 				break;
 			case GS_GameCreationMenu:{
 				int windowW;
