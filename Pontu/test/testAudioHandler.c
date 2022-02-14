@@ -10,7 +10,7 @@ void testAudioHandler(void) {
 		exit(errno);
 	}
 
-	AudioHandler ah = newAudioHandler(100, 100);
+	AudioHandler ah = newAudioHandler(10, 10, 10);
 	if (ah.canPlayAudio == false) {
 		perror("AudioHandler");
 		SDL_Quit();
@@ -61,13 +61,13 @@ void testAudioHandler(void) {
 
 	printf("Playing louder (vol = 128) the SFX, testing with SFX_testClick\n");
 
-	changeSFXVol(128);
+	changeSFXVol(&ah, 128);
 	playSFX(SFX_testClick, ah);
 	SDL_Delay(2000);
 
 	printf("Playing quieter (vol = 10) the SFX, testing with SFX_testClick\n");
 
-	changeSFXVol(10);
+	changeSFXVol(&ah, 1);
 	playSFX(SFX_testClick, ah);
 	SDL_Delay(2000);
 
