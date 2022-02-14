@@ -10,6 +10,8 @@
 
 #include "engine/Button.h"
 #include "engine/arrayButton.h"
+#include "engine/TextInput.h"
+#include "engine/arrayTextInput.h"
 #include "engine/InputElement.h"
 
 /**
@@ -19,6 +21,8 @@
 typedef struct
 {
 	struct array_P_Button tabButton;
+	struct array_TextInput tabTextInput;
+	TextInput* selectedTextInput;
 } InputProcessor;
 
 
