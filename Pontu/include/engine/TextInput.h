@@ -43,7 +43,7 @@ typedef struct
  * \author Allan Point
  * \date 05/01/2022
  */
-bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd);
+bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd);
 
 /**
  * \brief Remove a character from the TextInput

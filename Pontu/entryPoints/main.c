@@ -40,6 +40,8 @@ int main(int argc, char *argv[]) {
         printf("TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
+    SDL_StopTextInput();
+
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
 
@@ -56,12 +58,12 @@ int main(int argc, char *argv[]) {
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
 
-				size_t nbPlayers = 3;
+				size_t nbPlayers = 4;
 				Player players[] = {
 					newPlayer("Bépo", PlayerViolet),
 					newPlayer("Azeryty", PlayerBlue),
 					newPlayer("Adcsg", PlayerRed),
-					//newPlayer("qsdfqsdfq", PlayerYellow)
+					newPlayer("qsdfqsdfq", PlayerYellow)
 				};
 				//players[2] = ;
 
