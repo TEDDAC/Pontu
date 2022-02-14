@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         switch (generalState) {
 			case GS_MainMenu:
 				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
-				playSFX(validate_sound, audioHandler)
+				playSFX(SFX_validate_sound, audioHandler);
 				break;
 			case GS_GameCreationMenu:{
 				int windowW;
@@ -76,8 +76,8 @@ int main(int argc, char *argv[]) {
 				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
 
 				//Pour tester le endGameMenu directement
-				/*generalState = GS_EndOfGameMenu;
-				players[0].eliminationTurn = 10;
+				generalState = GS_EndOfGameMenu;
+				/*players[0].eliminationTurn = 10;
 				players[0].rank = 3;
 				players[1].eliminationTurn = 15;
 				players[1].rank = 2;

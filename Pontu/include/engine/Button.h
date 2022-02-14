@@ -13,7 +13,7 @@
 
 struct P_buttonArg;
 
-enum BUTTON_EVENT {BUTTON_NOTHING, BUTTON_ENTRY, BUTTON_EXIT};
+typedef enum {BUTTON_NOTHING, BUTTON_ENTRY, BUTTON_EXIT} ButtonEvent;
 
 /**
  * \struct P_Button
