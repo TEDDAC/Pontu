@@ -114,3 +114,8 @@ void drawTextLabel(SDL_Renderer* renderer, TextLabel* label) {
     SDL_RenderCopy(renderer, label->texture, NULL, &label->textZone);
 }
 
+void clearTextLabel(SDL_Renderer* renderer, const TextLabel* label, SDL_Color color) {
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderFillRect(renderer, &label->textZone);
+}
+

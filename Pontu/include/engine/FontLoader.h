@@ -5,6 +5,7 @@
 
 #define MACRO_FOR_ALL_FONTS(M)       \
         M(retro)\
+        M(PublicPixel)\
         M(Curvilingus)
 #define MACRO_FONT_ENUM_GEN(E) FONT_##E,
 
@@ -17,7 +18,7 @@
 
 typedef enum
 {
-        MACRO_FOR_ALL_FONTS(MACRO_FONT_ENUM_GEN) 
+        MACRO_FOR_ALL_FONTS(MACRO_FONT_ENUM_GEN)
         NB_FONTS_DEFINED ///< Contains the number of fonts
 } EnumFont;
 

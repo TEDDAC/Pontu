@@ -36,6 +36,17 @@ int main(int argc, char *argv[]) {
 		goto Quit;
 	}
 
+	char* path = "../rsrc/img/PieceViolet.png";
+	SDL_Surface* icon = IMG_Load(path);
+	if(icon == NULL)
+	{
+		fprintf(stderr, "WARNNING: %s\n", SDL_GetError());
+		return NULL;
+	}
+	//icon->w = 64;
+	//icon->h = 64;
+	SDL_SetWindowIcon(window, icon);
+
     if(TTF_Init()==-1) {
         printf("TTF_Init: %s\n", TTF_GetError());
         exit(2);
@@ -102,6 +113,7 @@ int main(int argc, char *argv[]) {
 Quit:
     freeFonts(fontHandler);
     freeAudioHandler(&audioHandler);
+	SDL_FreeSurface(icon);
 	if(renderer != NULL) {
 		SDL_DestroyRenderer(renderer);
 	}
