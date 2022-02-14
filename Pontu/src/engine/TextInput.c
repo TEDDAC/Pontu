@@ -1,31 +1,32 @@
 #include "engine/TextInput.h"
 
-bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd)
+bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd)
 {
+	const size_t lenText = strlen(textInput->value);
 	if(textInput == NULL)
 	{
 		return false;
 	}
-	if(textInput->cursorPosition > strlen(textInput->value))
+	if(textInput->cursorPosition > lenText)
 	{
-		return false;
+		textInput->cursorPosition = lenText;
 	}
-	char newValue[strlen(textInput->value)+1];
+	const size_t lenStrToAdd = strlen(strToAdd);
+	char newValue[lenText+lenStrToAdd+1];
 
-	strcpy(newValue, "");
+	//strcpy(newValue, "");
 	strncat(newValue, textInput->value, textInput->cursorPosition);
-	strcat(newValue, &charToAdd);
+	strcat(newValue, strToAdd);
 	strcat(newValue, textInput->value+textInput->cursorPosition);
 
-	free(textInput->value);
-	textInput->value = (char*) malloc(strlen(newValue));
+	textInput->value = (char*) realloc(textInput->value, strlen(newValue));
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
 		return false;
 	}
 	strcpy(textInput->value, newValue);
-	textInput->cursorPosition += 1;
+	textInput->cursorPosition += lenStrToAdd;
 
 	return true;
 }
