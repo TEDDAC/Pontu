@@ -159,7 +159,8 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 
 
 void drawEndGameMenu(SDL_Renderer* renderer, const SDL_Rect rectMenuEndGame, struct endGameMenuTextLabel* labels) {
-	
+    SDL_SetRenderDrawColor(renderer, 0,0,0,255);
+    SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 220,220,220,255);
     SDL_RenderFillRect(renderer, &rectMenuEndGame);
     
@@ -167,8 +168,6 @@ void drawEndGameMenu(SDL_Renderer* renderer, const SDL_Rect rectMenuEndGame, str
 		labels->textLabels.elems[i].textZone = adaptPosToRect(&labels->positionSpecifiers.elems[i], &rectMenuEndGame);
 		drawTextLabel(renderer, &labels->textLabels.elems[i]);
 	}
-
-	SDL_RenderPresent(renderer);
 }
 
 void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
@@ -189,6 +188,8 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
 	
 	drawEndGameMenu(renderer, endGameMenuRect, &labels);
+	drawButtonOnRenderer(renderer, buttonMenuEndGame);
+	SDL_RenderPresent(renderer);
 
 	while(*generalState == GS_EndOfGameMenu)
 	{
@@ -238,7 +239,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 			SDL_RenderPresent(renderer);
 		}
 		
-		SDL_Delay(50);
+		SDL_Delay(10);
 	}
 
 	freeInputProcessor(&inputProcessor);
