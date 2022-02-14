@@ -1,8 +1,40 @@
 #include "view/Settings.h"
+#include "engine/UIElementUtils.h"
 
 #define NB_TEXT_LABEL 7
 #define NB_TEXTURES 2
 #define NB_BUTTONS 7 
+
+struct volModifStruct {
+	AudioHandler* ah;
+	int currentVol;
+	int (*changeVol) (AudioHandler* ah, int newVol);
+	SDL_Renderer* renderer;
+	TextLabel* volLabel;
+	float sizeFactor;
+	SDL_Point pos;
+	TTF_Font* font;
+	PositionX_Type posXType;
+	PositionY_Type posYType;
+};
+
+// Local functions
+
+void reduceVol(P_Button* buttonCaller) {
+	struct volModifStruct* args = buttonCaller->arg;
+	char tmp_str[4];
+	SDL_Color white = {255,255,255,255};
+
+	args->currentVol = args->changeVol(args->ah, args->currentVol - 1);
+
+	sprintf(tmp_str, "%d", args->currentVol);
+	TextLabel tmp = createTextLabel(tmp_str, &args->pos, args->sizeFactor, &args->volLabel->color,
+					args->font, args->renderer, args->posXType, args->posYType);
+	clearTextLabel(args->renderer, args->volLabel, args->volLabel->color);
+	freeTextLabel(args->volLabel);
+	drawTextLabel(args->renderer, &tmp);
+	args->volLabel = &tmp;
+}
 
 void onClick(P_Button* buttonCaller) {
 	printf("j'ai perdu %d\n",buttonCaller->rect.x);
@@ -17,8 +49,10 @@ RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontH
 	SDL_Point masterVolTitle_point = {150,75};
 	SDL_Color blue = {52,158,235,255};
 	SDL_Color black = {0,0,0,255};
-	int hMinus, wMinus, hPlus, wPlus, wBack, hBack;
+	int hMinus, wMinus, hPlus, wPlus, wBack, hBack, tmp_posX, tmp_posY;
 	TextLabel* arr_textLabel;
+	struct volModifStruct* volModifTmp;
+
 	if (NULL == (arr_textLabel = (TextLabel*)malloc(NB_TEXT_LABEL*sizeof(TextLabel)))) {
 		fprintf(stderr, "Malloc error with TextLabel\n");
 		return retValues;
@@ -52,7 +86,37 @@ RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontH
 
 	// Current value
 	sprintf(tmp_str, "%d", ah->masterVol);
-	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[1].rect.y+arr_buttons.elems[1].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+	tmp_posX = 150;
+	tmp_posY = arr_buttons.elems[1].rect.y + arr_buttons.elems[1].rect.h/2;
+	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {tmp_posX, tmp_posY}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+
+	// Adding actual onClick functions
+	arr_buttons.elems[0].onClick = reduceVol;
+	arr_buttons.elems[0].arg = &(struct volModifStruct) {
+		.ah = ah,
+		.currentVol = ah->masterVol,
+		.changeVol = changeMasterVol,
+		.renderer = renderer,
+		.volLabel = &arr_textLabel[2],
+		.sizeFactor = 1.5,
+		.pos = (SDL_Point) {tmp_posX, tmp_posY},
+		.font = fh->fonts[FONT_retro],
+		.posXType = POSX_CENTER,
+		.posYType = POSY_CENTER
+	};
+	arr_buttons.elems[1].onClick = reduceVol;
+	arr_buttons.elems[1].arg = &(struct volModifStruct) {
+		.ah = ah,
+		.currentVol = ah->masterVol,
+		.changeVol = changeMasterVol,
+		.renderer = renderer,
+		.volLabel = &arr_textLabel[2],
+		.sizeFactor = 1.5,
+		.pos = (SDL_Point) {tmp_posX, tmp_posY},
+		.font = fh->fonts[FONT_retro],
+		.posXType = POSX_CENTER,
+		.posYType = POSY_CENTER
+	};
 
 	/* Music volume */
 	// Title
