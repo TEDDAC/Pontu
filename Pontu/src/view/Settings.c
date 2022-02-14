@@ -102,6 +102,8 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	SDL_Rect title_area = {0,0,300,50};
 	RetValues retValues;
 	struct array_P_Button array_buttons;
+	bool stayInLoop = true;
+	SDL_Event event;
 
 	if (0 != SDL_CreateWindowAndRenderer(300,600,SDL_WINDOW_SHOWN, &window, &renderer)) {
 		fprintf(stderr,"Error when trying to create window or renderer: %s\n", SDL_GetError());
@@ -127,7 +129,40 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 		drawTextLabel(renderer, &retValues.arr_textLabel[i]);
 	}
 
+	while (stayInLoop) {
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+				case SDL_WINDOWEVENT:
+					switch (event.window.event) {
+						case SDL_WINDOWEVENT_CLOSE:
+							stayInLoop = false;
+							printf("Quit\n");
+							fflush(stdout);
+							break;
+						default:
+						break;
+					}
+					break;
+				case SDL_MOUSEBUTTONUP:
+					printf("MOUSEBUTTONUP\n");
+					for (int i = 0; i < NB_BUTTONS; i++) {
+						printf("%d\n",i);
+						if (isButtonInteractWithCursor(&(retValues.arr_buttons.elems[i]),event.button.x,event.button.y)) {
+							printf("isHover\n");
+							retValues.arr_buttons.elems[i].onClick(&(retValues.arr_buttons.elems[i]));
+							fflush(stdout);
+							break;
+						}
+					}
+					break;
+				default:
+				break;	
+			}
 
-	SDL_RenderPresent(renderer);
+		}
+
+		SDL_RenderPresent(renderer);
+		SDL_Delay(20);
+	}
 }
 
