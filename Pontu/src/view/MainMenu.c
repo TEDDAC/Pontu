@@ -7,6 +7,8 @@
 #include "view/MainMenu.h"
 #include "engine/GeneralState.h"
 
+enum {NEWGAME, OPTION, QUIT};
+
 void quit(P_Button* buttonCaller) {
     *((GeneralState*)(buttonCaller->arg)) = GS_Quit;
 }
@@ -30,35 +32,35 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
     *nb = 3;
     buttons = (P_Button*)malloc(sizeof(P_Button)*(*nb));
 
-    buttons[0] = createButton(NULL,NULL,20, 20, 20, 20, generalStateToNewGame);
+    buttons[NEWGAME] = createButton(NULL,NULL,20, 20, 20, 20, generalStateToNewGame);
 
-    SDL_Texture* newGameButtonTexture = createGenericButtonTexture("Nouvelle Partie",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[0].rect.w),&(buttons[0].rect.h),renderer);
+    SDL_Texture* newGameButtonTexture = createGenericButtonTexture("Nouvelle Partie",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[NEWGAME].rect.w),&(buttons[NEWGAME].rect.h),renderer);
     SDL_Texture* newGameButtonTextureHover = createGenericButtonTexture("Nouvelle Partie",font,fontSize,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
 
-    buttons[0].texture = newGameButtonTexture;
-    buttons[0].hoverTexture = newGameButtonTextureHover;
+    buttons[NEWGAME].texture = newGameButtonTexture;
+    buttons[NEWGAME].hoverTexture = newGameButtonTextureHover;
 
-    buttons[0].rect.x = (windowSize->w/2)-(buttons[0].rect.w/2);
-    buttons[0].arg = generalState;
+    buttons[NEWGAME].rect.x = (windowSize->w/2)-(buttons[NEWGAME].rect.w/2);
+    buttons[NEWGAME].arg = generalState;
 
-    buttons[1] = createButton(NULL,NULL,20, buttons[0].rect.y+buttons[0].rect.h+20, 20, 20, NULL);
+    buttons[OPTION] = createButton(NULL,NULL,20, buttons[NEWGAME].rect.y+buttons[NEWGAME].rect.h+20, 20, 20, NULL);
 
-    SDL_Texture* optionButtonTexture = createGenericButtonTexture("Options",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[1].rect.w),&(buttons[1].rect.h),renderer);
+    SDL_Texture* optionButtonTexture = createGenericButtonTexture("Options",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[OPTION].rect.w),&(buttons[OPTION].rect.h),renderer);
     SDL_Texture* optionButtonTextureHover = createGenericButtonTexture("Options",font,fontSize,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
 
-    buttons[1].texture = optionButtonTexture;
-    buttons[1].hoverTexture = optionButtonTextureHover;
-    buttons[1].rect.x = (windowSize->w/2)-(buttons[1].rect.w/2);
+    buttons[OPTION].texture = optionButtonTexture;
+    buttons[OPTION].hoverTexture = optionButtonTextureHover;
+    buttons[OPTION].rect.x = (windowSize->w/2)-(buttons[OPTION].rect.w/2);
 
-    buttons[2] = createButton(NULL,NULL,20, buttons[1].rect.y+buttons[1].rect.h+20, 20, 20, quit);
+    buttons[QUIT] = createButton(NULL,NULL,20, buttons[OPTION].rect.y+buttons[OPTION].rect.h+20, 20, 20, quit);
 
-    SDL_Texture* quitButtonTexture = createGenericButtonTexture("Quitter",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[2].rect.w),&(buttons[2].rect.h),renderer);
+    SDL_Texture* quitButtonTexture = createGenericButtonTexture("Quitter",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[QUIT].rect.w),&(buttons[QUIT].rect.h),renderer);
     SDL_Texture* quitButtonTextureHover = createGenericButtonTexture("Quitter",font,fontSize,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
 
-    buttons[2].texture = quitButtonTexture;
-    buttons[2].hoverTexture = quitButtonTextureHover;
-    buttons[2].rect.x = (windowSize->w/2)-(buttons[2].rect.w/2);
-    buttons[2].arg = generalState;
+    buttons[QUIT].texture = quitButtonTexture;
+    buttons[QUIT].hoverTexture = quitButtonTextureHover;
+    buttons[QUIT].rect.x = (windowSize->w/2)-(buttons[QUIT].rect.w/2);
+    buttons[QUIT].arg = generalState;
 
 
     SDL_SetRenderTarget(renderer,NULL);
@@ -90,9 +92,9 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
     }
     SDL_Event event;
 
-    drawButtonOnRenderer(renderer,&(buttons[0]));
-    drawButtonOnRenderer(renderer,&(buttons[1]));
-    drawButtonOnRenderer(renderer,&(buttons[2]));
+    drawButtonOnRenderer(renderer,&(buttons[NEWGAME]));
+    drawButtonOnRenderer(renderer,&(buttons[OPTION]));
+    drawButtonOnRenderer(renderer,&(buttons[QUIT]));
 
     while(*generalState == GS_MainMenu)
     {
@@ -104,13 +106,11 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 *generalState = GS_Quit;
                 break;
             case SDL_MOUSEBUTTONUP:
-                if(isHover(&(buttons[2]))){
-                    buttons[2].onClick(&(buttons[2]));
-                    break;
-                }
-                if(isHover(&(buttons[0]))){
-                    buttons[0].onClick(&(buttons[0]));
-                    break;
+                for (size_t i = 0; i < nb; i++) {
+                    if(isHover(&(buttons[i]))){
+                        buttons[i].onClick(&(buttons[i]));
+                        break;
+                    }
                 }
                 break;
             case SDL_MOUSEMOTION:
@@ -143,7 +143,7 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 }
             break;
             default:
-                break;
+            break;
             }
         }
         SDL_RenderPresent(renderer);
