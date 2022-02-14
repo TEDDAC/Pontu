@@ -28,8 +28,8 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
     //SDL_Texture *settingsButtonTexture = createGenericButtonTexture("Settings", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
     SDL_Texture *settingsButtonHoverTexture = createGenericButtonTexture("SettingsHover", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
 
-    //SDL_Texture *muteButtonTexture = createTextureFromPath(renderer,"rsrc/img/SoundResized");
-    SDL_Texture *muteButtonTexture = createGenericButtonTexture("Mute", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
+    SDL_Texture *muteButtonTexture = createTextureFromPath(renderer,"rsrc/img/SoundResized.png");
+    //SDL_Texture *muteButtonTexture = createGenericButtonTexture("Mute", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
     SDL_Texture *muteButtonHoverTexture = createGenericButtonTexture("MuteHover", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);    
 
 	struct array_P_Button buttons = array_P_Button_Create();
