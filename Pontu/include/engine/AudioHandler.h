@@ -32,7 +32,8 @@
  */
 #define MACRO_FOR_ALL_SFX(M)		\
 	M(testClick)	\
-	M(menu_sound_effect)
+	M(menu_sound_effect) \
+	M(validate_sound)
 
 /**
  * Macro used to generate the entries for the musics in #EnumAudios.

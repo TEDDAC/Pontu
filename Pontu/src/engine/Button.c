@@ -6,7 +6,7 @@
 P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller))
 {
 	// Declarations
-	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .drawn = false};
+	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .enable = true};
 	if(onClick == NULL)
 		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton.\n");
 	b.texture = texture;
@@ -18,19 +18,20 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button)
 {
 	SDL_SetRenderTarget(renderer, NULL);
+	if(button->enable == false)
+		return false;
 	if(SDL_RenderCopy(renderer,button->hover && button->hoverTexture != NULL ? button->hoverTexture : button->texture,NULL,&(button->rect)))
 	{
 		fprintf(stderr,"SDLWarning: %s\n",SDL_GetError());
 		return false;
 	}
-	button->drawn = true;
 	//printf("Redraw de %p\n",button);
 	return true;
 }
 
 bool isHover(P_Button* button)
 {
-	return button->hover && button->drawn;
+	return button->hover && button->enable;
 }
 
 bool changeButtonTexture(P_Button* button, SDL_Texture* texture)
@@ -65,12 +66,12 @@ int isButtonInteractWithCursor(P_Button * button,const int x,const int y){
 	if(isHover(button)){
 		button->hover = SDL_PointInRect(&coord,&(button->rect));
 		if(button->hover == false){
-			return 2;
+			return BUTTON_EXIT;
 		}
-		return 0;
+		return BUTTON_NOTHING;
 	}
 	button->hover = SDL_PointInRect(&coord,&(button->rect));
 	if(button->hover)
-		return 1;
-	return 0;
+		return BUTTON_ENTRY;
+	return BUTTON_NOTHING;
 }
