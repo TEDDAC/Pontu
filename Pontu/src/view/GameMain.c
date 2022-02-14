@@ -61,6 +61,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
 		drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
 	}
+	for (size_t i=0; i<tabLabel.size; ++i){
+		drawTextLabel(renderer,&tabLabel.elems[i]);
+	}
 	SDL_RenderPresent(renderer);
 
 
@@ -137,7 +140,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
 					drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
 				}
-
+				for (size_t i=0; i<tabLabel.size; ++i){
+					drawTextLabel(renderer,&tabLabel.elems[i]);
+				}
 				SDL_RenderPresent(renderer);
 			}
 			case InputType_None:
