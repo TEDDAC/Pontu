@@ -3,12 +3,18 @@
 #include <assert.h>
 #include <stdbool.h>
 
+void onClickDefault(struct P_button* buttonCaller){
+	//printf("Clicked on button: %p\n", buttonCaller);
+}
+
 P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller))
 {
 	// Declarations
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .enable = true};
-	if(onClick == NULL)
-		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton.\n");
+	if(onClick == NULL){
+		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton. Il prend le onClick par défaut\n");
+		b.onClick = onClickDefault;
+	}
 	b.texture = texture;
 	b.hoverTexture = hoverTexture;
 	b.arg = NULL;
@@ -69,11 +75,11 @@ bool isHover(P_Button * button) {
 
 int isButtonInteractWithCursor(P_Button * button,const int x,const int y){
 	if (!button->enable) return BUTTON_NOTHING;
-	
+
 	SDL_Point coord;
 	coord.x = x;
 	coord.y = y;
-	
+
 	if(button->hover){
 		button->hover = SDL_PointInRect(&coord,&(button->rect));
 		if(button->hover == false){

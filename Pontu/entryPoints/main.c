@@ -75,9 +75,10 @@ int main(int argc, char *argv[]) {
 				}*/
 				generalState = GS_Game;
 
-				//gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
+				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
 
 				//Pour tester le endGameMenu directement
+				/*
 				generalState = GS_EndOfGameMenu;
 				players[0].eliminationTurn = 10;
 				players[0].rank = 3;
@@ -85,6 +86,7 @@ int main(int argc, char *argv[]) {
 				players[1].rank = 2;
 				players[2].eliminationTurn = 0;
 				players[2].rank = 1;
+				*/
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;
