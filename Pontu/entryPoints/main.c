@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 		goto Quit;
 	}
 
-	char* path = "../rsrc/img/PieceViolet.png";
+	char* path = "rsrc/img/PieceViolet.png";
 	SDL_Surface* icon = IMG_Load(path);
 	if(icon == NULL)
 	{
