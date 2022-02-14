@@ -79,6 +79,11 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 		case SDL_TEXTEDITING:
 			inputProcessor->selectedTextInput->cursorPosition = event.edit.start;
 			break;
+		case SDL_KEYDOWN:
+			if (inputProcessor->selectedTextInput != NULL && event.key.keysym.sym == SDLK_BACKSPACE) {
+				removeCharacterToInputTextValueAtCursor(inputProcessor->selectedTextInput);
+			}
+			break;
 	}
 
 	return createInputElementNone();

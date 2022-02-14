@@ -33,6 +33,16 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 
 bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 {
+	size_t removeSize = 0;
+	size_t lenText = strlen(textInput->value); 
+	while (lenText>removeSize && textInput->value[textInput->cursorPosition - 1] < -64) {
+		removeSize++;
+	}
+	if (lenText>removeSize) {
+		removeSize++;
+	}
+	
+
 	int textLen = 0;
 	if(textInput == NULL)
 	{
@@ -47,21 +57,20 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 		return true;
 	}
 
-	textLen = strlen(textInput->value);
-	char tmp[textLen];
+	char tmp[lenText];
 	
-	if(textInput->cursorPosition-1 > textLen)
+	if(textInput->cursorPosition-1 > lenText)
 	{
 		return false;
 	}
-	if(textLen == 0)
+	if(lenText == 0)
 	{
 		return true;
 	}
 	
 	strcpy(tmp, textInput->value);
-	strcpy(textInput->value, "");
-	strncat(textInput->value, tmp, textInput->cursorPosition-2);
+	//strcpy(textInput->value, "");
+	strncpy(textInput->value, tmp, textInput->cursorPosition-removeSize);
 	strcat(textInput->value, tmp+textInput->cursorPosition);
 	textInput->cursorPosition -= 1;
 	return true;
