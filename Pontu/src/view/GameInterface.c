@@ -36,8 +36,8 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
 
 struct array_TextLabel createGameInterfaceLabels(SDL_Renderer* renderer, FontHandler* fontHandler) {
     //Postion text label
-    SDL_Point positonNbTurnLabel = {.x=60, .y=800};
-    SDL_Point positionTimeLablel = {.x=770, .y=800};
+    SDL_Point positonNbTurnLabel = {.x=60, .y=850};
+    SDL_Point positionTimeLablel = {.x=770, .y=850};
 
     //Color labal
     SDL_Color colorLabel = {0, 255, 0, 255};
@@ -179,10 +179,6 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
 
         SDL_Delay(20);
     }
-
-
-    //FREE TEXT LABEL + BUTTON 
-
 
 
 
