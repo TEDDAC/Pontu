@@ -20,4 +20,6 @@ void freeTextLabel(TextLabel* label);
 
 void drawTextLabel(SDL_Renderer* renderer, TextLabel* label);
 
+void clearTextLabel(SDL_Renderer* renderer, const TextLabel* label, SDL_Color color);
+
 #endif //TEXT_LABEL_INCLUDED
