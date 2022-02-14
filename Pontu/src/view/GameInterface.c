@@ -3,6 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <engine/FontLoader.h>
 #include <engine/TextLabel.h>
+#include <engine/arrayButton.h>
+#include <engine/arrayTextLabel.h>
 
 //void action boutton
 
