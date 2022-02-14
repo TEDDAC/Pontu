@@ -91,26 +91,29 @@ AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	return audioHandler;
 }
 
-void changeMusicVol(AudioHandler* ah, int volMusic) {
+int changeMusicVol(AudioHandler* ah, int volMusic) {
 	if (volMusic > 10) volMusic = 10;
 	if (volMusic < 0) volMusic = 0;
 	ah->volMusic = volMusic;
 	Mix_VolumeMusic(ah->volMusic * ah->masterVol);
+	return ah->volMusic;
 }
 
-void changeSFXVol(AudioHandler* ah, int volSFX) {
+int changeSFXVol(AudioHandler* ah, int volSFX) {
 	if (volSFX > 10) volSFX = 10;
 	if (volSFX < 0) volSFX = 0;
 	ah->volSFX = volSFX;
 	Mix_Volume(-1, ah->volSFX * ah->masterVol);
+	return ah->volSFX;
 }
 
-void changeMasterVol(AudioHandler* ah, int masterVol) {
+int changeMasterVol(AudioHandler* ah, int masterVol) {
 	if (masterVol > 10) masterVol = 10;
 	if (masterVol < 0) masterVol = 0;
 	ah->masterVol = masterVol;
 	Mix_VolumeMusic(ah->volMusic * ah->masterVol);
 	Mix_Volume(-1, ah->volSFX * ah->masterVol);
+	return ah->masterVol;
 }
 
 void freeAudioHandler(AudioHandler* audioHandler) {

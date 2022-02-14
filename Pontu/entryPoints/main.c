@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
         printf("TTF_Init: %s\n", TTF_GetError());
         exit(2);
     }
+    SDL_StopTextInput();
 
     FontHandler fontHandler = loadFonts();
     AudioHandler audioHandler = newAudioHandler(128, 128, 128);
@@ -68,12 +69,12 @@ int main(int argc, char *argv[]) {
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
 
-				size_t nbPlayers = 3;
+				size_t nbPlayers = 4;
 				Player players[] = {
 					newPlayer("Bépo", PlayerViolet),
 					newPlayer("Azeryty", PlayerBlue),
 					newPlayer("Adcsg", PlayerRed),
-					//newPlayer("qsdfqsdfq", PlayerYellow)
+					newPlayer("qsdfqsdfq", PlayerYellow)
 				};
 				//players[2] = ;
 
@@ -85,9 +86,10 @@ int main(int argc, char *argv[]) {
 				}*/
 				generalState = GS_Game;
 
-				//gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
+				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
 
 				//Pour tester le endGameMenu directement
+				/*
 				generalState = GS_EndOfGameMenu;
 				players[0].eliminationTurn = 10;
 				players[0].rank = 3;
@@ -95,6 +97,7 @@ int main(int argc, char *argv[]) {
 				players[1].rank = 2;
 				players[2].eliminationTurn = 0;
 				players[2].rank = 1;
+				*/
 
 				endGameMenu(&generalState, window, renderer, &fontHandler, players, nbPlayers);
 				break;

@@ -234,7 +234,6 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					switch (inputElement.data.buttonEvent.event) {
 						case BUTTON_ENTRY:
 						case BUTTON_EXIT:
-							fprintf(stderr, "Button changed"); fflush(stderr);
 							drawButtonOnRenderer(renderer, inputElement.data.buttonEvent.button);
 							needToPresent = true;
 							break;
