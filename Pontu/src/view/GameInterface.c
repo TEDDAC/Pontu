@@ -50,9 +50,9 @@ struct array_TextLabel createGameInterfaceLabels(SDL_Renderer* renderer, FontHan
     struct array_TextLabel labels = array_TextLabel_Create();
 
     // Label : Nb Turn
-    TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+    TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler->fonts[FONT_retro],renderer,positionX,positionY);
     // Label : Time of the game
-    TextLabel timeLabel = createTextLabel("Time : ",&positionTimeLablel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+    TextLabel timeLabel = createTextLabel("Time : ",&positionTimeLablel,1,&colorLabel,fontHandler->fonts[FONT_retro],renderer,positionX,positionY);
 
     //Add TextLabel to the array
     array_TextLabel_AddElement(&labels, nbTurnLabel);
@@ -179,10 +179,6 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
 
         SDL_Delay(20);
     }
-
-
-    //FREE TEXT LABEL + BUTTON 
-
 
 
 
