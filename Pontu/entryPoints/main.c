@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
 	SDL_Rect windowSize = {10, 10, 900, 900};
-	
+
     SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
 
@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
         switch (generalState) {
 			case GS_MainMenu:
 				mainMenu(renderer,window,&generalState, fontHandler, audioHandler);
+				playSFX(validate_sound, audioHandler)
 				break;
 			case GS_GameCreationMenu:{
 				int windowW;
@@ -73,7 +74,7 @@ int main(int argc, char *argv[]) {
 				generalState = GS_Game;
 
 				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
-				
+
 				//Pour tester le endGameMenu directement
 				/*generalState = GS_EndOfGameMenu;
 				players[0].eliminationTurn = 10;

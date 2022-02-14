@@ -16,7 +16,7 @@ struct endGameMenuTextLabel {
 
 /**
  * @brief Button handle which set a generalState to GS_MainMenu
- * 
+ *
  * @param caller The button clicked
  */
 void setStateToMainMenu(P_Button* caller) {
@@ -29,9 +29,9 @@ SDL_Rect getEndGameMenuRect(SDL_Window* window) {
 	SDL_GetWindowSize(window, &windowW, &windowH);
 
 	SDL_Rect rect = {
-		.x=windowW/10, 
-		.y=0, 
-		.w=windowW*80/100, 
+		.x=windowW/10,
+		.y=0,
+		.w=windowW*80/100,
 		.h=windowH
 	};
 	return rect;
@@ -39,17 +39,17 @@ SDL_Rect getEndGameMenuRect(SDL_Window* window) {
 
 /**
  * @brief Create button For EndGameMenu
- * 
- * @param renderer The renderer where buttons will be drawn
+ *
+ * @param renderer The renderer where buttons will be enable
  * @param font Font used by buttons
- * @param rect Rect in which the endGameMenu is drawn
- * @param state generalState which will be attached to the button 
- * @return P_Button 
+ * @param rect Rect in which the endGameMenu is enable
+ * @param state generalState which will be attached to the button
+ * @return P_Button
  */
 P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, const SDL_Rect* rect, GeneralState* state) {
 	int sizeX;
 	int sizeY;
-	
+
 	SDL_Texture* texture = createGenericButtonTexture("Retour menu", font, 50, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 4, &sizeX, &sizeY, renderer);
 	if (texture == NULL) {
 		perror(SDL_GetError());
@@ -60,7 +60,7 @@ P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, cons
 		perror(SDL_GetError());
 		exit(errno);
 	}
-	
+
 
 	P_Button buttonMenuEndGame = createButton(texture, textureHover, rect->x, rect->y, sizeX, sizeY, &setStateToMainMenu);
 	buttonMenuEndGame.arg = state;
@@ -85,7 +85,7 @@ TextLabel createEliminationTurnLabel(SDL_Renderer* renderer, TTF_Font* font, con
 	sprintf(text, "Tour: %d", eliminationTurn);
 
 	TextLabel label = createUnsizedTextLabel(text, color, font, renderer);
-	
+
 	free(text);
 
 	return label;
@@ -150,7 +150,7 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 	for (size_t i=0; i<nbPlayers; ++i) {
 		array_TextLabel_AddElement(&labels.textLabels, createPseudoAndRankLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].rank, players[i].pseudo));
 		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getPseudoAndRankPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
-		
+
 		array_TextLabel_AddElement(&labels.textLabels, createEliminationTurnLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].eliminationTurn));
 		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getEliminationTurnPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
 	}
@@ -159,10 +159,10 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 
 
 void drawEndGameMenu(SDL_Renderer* renderer, const SDL_Rect rectMenuEndGame, struct endGameMenuTextLabel* labels) {
-	
+
     SDL_SetRenderDrawColor(renderer, 220,220,220,255);
     SDL_RenderFillRect(renderer, &rectMenuEndGame);
-    
+
 	for (size_t i=0; i<labels->textLabels.size; ++i) {
 		labels->textLabels.elems[i].textZone = adaptPosToRect(&labels->positionSpecifiers.elems[i], &rectMenuEndGame);
 		drawTextLabel(renderer, &labels->textLabels.elems[i]);
@@ -184,10 +184,10 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	};
 	PositionSpecifier positionSpecifierButtonRetour = newPositionSpecifier(&base100, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_FIT);
 	buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &endGameMenuRect);
-	buttonMenuEndGame->drawn = false;
-	
+	buttonMenuEndGame->enable = false;
+
 	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
-	
+
 	drawEndGameMenu(renderer, endGameMenuRect, &labels);
 
 	while(*generalState == GS_EndOfGameMenu)
@@ -213,36 +213,36 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					}
 					break;
 				case InputType_Window_Resize: {
-					
+
 					const SDL_Rect rectM = {
-						.x=inputElement.data.windowSize.w/10, 
-						.y=0, 
-						.w=inputElement.data.windowSize.w*80/100, 
+						.x=inputElement.data.windowSize.w/10,
+						.y=0,
+						.w=inputElement.data.windowSize.w*80/100,
 						.h=inputElement.data.windowSize.h
 					};
 					drawEndGameMenu(renderer, rectM, &labels);
-					
+
 					buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &rectM);
-					buttonMenuEndGame->drawn = false;
+					buttonMenuEndGame->enable = false;
 
 					fprintf(stderr, "Resize\n"); fflush(stderr);
-				} 
+				}
 				default:
 					break;
 				}
 			}
 		}
 
-		if (!buttonMenuEndGame->drawn) {
+		if (!buttonMenuEndGame->enable) {
 			drawButtonOnRenderer(renderer, buttonMenuEndGame);
 			SDL_RenderPresent(renderer);
 		}
-		
+
 		SDL_Delay(50);
 	}
 
 	freeInputProcessor(&inputProcessor);
-	
+
 	for (size_t i=0; i<labels.textLabels.size; ++i) {
 		freeTextLabel(&labels.textLabels.elems[i]);
 	}

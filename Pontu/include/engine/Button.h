@@ -13,6 +13,8 @@
 
 struct P_buttonArg;
 
+enum {BUTTON_NOTHING, BUTTON_ENTRY, BUTTON_EXIT};
+
 /**
  * \struct P_Button
  * \brief Represents a button
@@ -23,7 +25,7 @@ typedef struct P_button
 	SDL_Texture* hoverTexture; ///> texture to draw when the button is hovered
 	SDL_Rect rect;		   ///> defines coordinates and size for hitbox and display
 	void (*onClick)(struct P_button* buttonCaller); ///> action done on click
-	bool drawn;	///> is the button drawn
+	bool enable;	///> is the button enable and drawable
 	bool hover;	///> is the button hovered
 	void* arg;
 } P_Button;

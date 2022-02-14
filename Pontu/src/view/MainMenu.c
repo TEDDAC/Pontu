@@ -114,32 +114,16 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                 }
                 break;
             case SDL_MOUSEMOTION:
-                switch (isButtonInteractWithCursor(&(buttons[0]),event.motion.x,event.motion.y)) {
-                    case 1:
-                        drawButtonOnRenderer(renderer,&(buttons[0]));
-                        playSFX(SFX_menu_sound_effect, audioHandler);
-                        break;
-                    case 2:
-                        drawButtonOnRenderer(renderer,&(buttons[0]));
-                        break;
-                }
-                switch (isButtonInteractWithCursor(&(buttons[1]),event.motion.x,event.motion.y)) {
-                    case 1:
-                        drawButtonOnRenderer(renderer,&(buttons[1]));
-                        playSFX(SFX_menu_sound_effect, audioHandler);
-                        break;
-                    case 2:
-                        drawButtonOnRenderer(renderer,&(buttons[1]));
-                        break;
-                }
-                switch (isButtonInteractWithCursor(&(buttons[2]),event.motion.x,event.motion.y)) {
-                    case 1:
-                        drawButtonOnRenderer(renderer,&(buttons[2]));
-                        playSFX(SFX_menu_sound_effect, audioHandler);
-                        break;
-                    case 2:
-                        drawButtonOnRenderer(renderer,&(buttons[2]));
-                        break;
+                for (size_t i = 0; i < nb; i++) {
+                    switch (isButtonInteractWithCursor(&(buttons[i]),event.motion.x,event.motion.y)) {
+                        case 1:
+                            drawButtonOnRenderer(renderer,&(buttons[i]));
+                            playSFX(SFX_menu_sound_effect, audioHandler);
+                            break;
+                        case 2:
+                            drawButtonOnRenderer(renderer,&(buttons[i]));
+                            break;
+                    }
                 }
                 break;
             case SDL_WINDOWEVENT:
@@ -152,9 +136,10 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                         event.window.data2);
                     windowSize.w = event.window.data1;
                     windowSize.h = event.window.data2;
-                    buttons[0].rect.x = (windowSize.w/2)-(buttons[0].rect.w/2);
-                    buttons[1].rect.x = (windowSize.w/2)-(buttons[1].rect.w/2);
-                    buttons[2].rect.x = (windowSize.w/2)-(buttons[2].rect.w/2);
+                    for (size_t i = 0; i < nb; i++) {
+                        buttons[i].rect.x = (windowSize.w/2)-(buttons[i].rect.w/2);
+                        drawButtonOnRenderer(renderer,&(buttons[i]));
+                    }
                 }
             break;
             default:
