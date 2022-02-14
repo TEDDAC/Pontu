@@ -183,13 +183,13 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	};
 	PositionSpecifier positionSpecifierButtonRetour = newPositionSpecifier(&base100, POSX_CENTER, POSY_BOTTOM, ASPECT_KEEP_FIT);
 	buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &endGameMenuRect);
-	buttonMenuEndGame->enable = false;
 
 	struct endGameMenuTextLabel labels =  createLabels(renderer, players, nbPlayers, fontHandler);
 
 	drawEndGameMenu(renderer, endGameMenuRect, &labels);
 	drawButtonOnRenderer(renderer, buttonMenuEndGame);
-	SDL_RenderPresent(renderer);
+	
+	bool needToPresent = true;
 
 	while(*generalState == GS_EndOfGameMenu)
 	{
@@ -224,9 +224,21 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 					drawEndGameMenu(renderer, rectM, &labels);
 
 					buttonMenuEndGame->rect = adaptPosToRect(&positionSpecifierButtonRetour, &rectM);
-					buttonMenuEndGame->enable = false;
-
-					fprintf(stderr, "Resize\n"); fflush(stderr);
+					
+					drawButtonOnRenderer(renderer, buttonMenuEndGame);
+					
+					needToPresent = true;
+					break;
+				}
+				case InputType_ButtonChanged: {
+					switch (inputElement.data.buttonEvent.event) {
+						case BUTTON_ENTRY:
+						case BUTTON_EXIT:
+							fprintf(stderr, "Button changed"); fflush(stderr);
+							drawButtonOnRenderer(renderer, inputElement.data.buttonEvent.button);
+							needToPresent = true;
+							break;
+					}
 				}
 				default:
 					break;
@@ -234,9 +246,9 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 			}
 		}
 
-		if (!buttonMenuEndGame->enable) {
-			drawButtonOnRenderer(renderer, buttonMenuEndGame);
+		if (needToPresent) {
 			SDL_RenderPresent(renderer);
+			needToPresent = false;
 		}
 
 		SDL_Delay(10);

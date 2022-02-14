@@ -3,6 +3,8 @@
 #include "engine/GameInputProcessor.h"
 #include "engine/InputElement.h"
 #include "engine/TextureHandler.h"
+#include "engine/arrayButton.h"
+#include "engine/arrayTextLabel.h"
 #include "model/Game.h"
 #include "model/arrayCoord.h"
 
@@ -43,6 +45,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
 	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler);
+	struct array_TextLabel tabLabel = createGameInterfaceLabels(renderer,fontHandler);
+
 	
 	SDL_Rect windowRect = {0,0,0,0};
 	SDL_GetWindowSize(window, &windowRect.w, &windowRect.h);
@@ -56,6 +60,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
 	for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
 		drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
+	}
+	for (size_t i=0; i<tabLabel.size; ++i){
+		drawTextLabel(renderer,&tabLabel.elems[i]);
 	}
 	SDL_RenderPresent(renderer);
 
@@ -133,7 +140,9 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
 					drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
 				}
-
+				for (size_t i=0; i<tabLabel.size; ++i){
+					drawTextLabel(renderer,&tabLabel.elems[i]);
+				}
 				SDL_RenderPresent(renderer);
 			}
 			case InputType_None:

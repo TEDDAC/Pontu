@@ -27,7 +27,8 @@
 typedef struct
 {
 	char* value;
-	int cursorPosition;
+	Sint32 cursorPosition;
+	
 	SDL_Rect size;
 	bool isActive;
 	SDL_Color textColor;

@@ -2,7 +2,8 @@
 
 InputProcessor createInputProcessor() {
 	InputProcessor inputProcessor = {
-		.tabButton = array_P_Button_Create()
+		.tabButton = array_P_Button_Create(),
+		.tabTextInput = array_TextInput_Create()
 	};
 	return inputProcessor;
 }
@@ -33,13 +34,32 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 					b->onClick(b);
 				}
 			}
+			bool textInputClicked = false;
+			for (size_t i = 0; i<inputProcessor->tabTextInput.size; ++i) {
+				TextInput* ti = &inputProcessor->tabTextInput.elems[i];
+				if (SDL_PointInRect(&mousePoint, &ti->size)) {
+					if (inputProcessor->selectedTextInput == NULL) {
+						SDL_StartTextInput();
+					}
+					inputProcessor->selectedTextInput = ti;
+					textInputClicked = true;
+					break;
+				}
+			}
+			if (!textInputClicked) {
+				inputProcessor->selectedTextInput = NULL;
+				SDL_StopTextInput();
+			}
 			return createInputElementNone();
 		}
 		case SDL_MOUSEMOTION:
 		{
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
-				isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
+				int res = isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
+				if (res != BUTTON_NOTHING) {
+					return createInputElementButtonClicked(b, res);
+				}
 			}
 			break;
 		}
@@ -48,7 +68,12 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				return createInputElementResizeWindow(event.window.data1, event.window.data2);
 			}
 			break;
-
+		case SDL_TEXTINPUT:
+			
+			break;
+		case SDL_TEXTEDITING:
+		
+			break;
 	}
 
 	return createInputElementNone();

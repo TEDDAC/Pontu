@@ -3,6 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <engine/FontLoader.h>
 #include <engine/TextLabel.h>
+#include <engine/arrayButton.h>
+#include <engine/arrayTextLabel.h>
 
 //void action boutton
 
@@ -34,8 +36,8 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
 
 struct array_TextLabel createGameInterfaceLabels(SDL_Renderer* renderer, FontHandler* fontHandler) {
     //Postion text label
-    SDL_Point positonNbTurnLabel = {.x=60, .y=800};
-    SDL_Point positionTimeLablel = {.x=770, .y=800};
+    SDL_Point positonNbTurnLabel = {.x=60, .y=850};
+    SDL_Point positionTimeLablel = {.x=770, .y=850};
 
     //Color labal
     SDL_Color colorLabel = {0, 255, 0, 255};
@@ -48,9 +50,9 @@ struct array_TextLabel createGameInterfaceLabels(SDL_Renderer* renderer, FontHan
     struct array_TextLabel labels = array_TextLabel_Create();
 
     // Label : Nb Turn
-    TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+    TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler->fonts[FONT_retro],renderer,positionX,positionY);
     // Label : Time of the game
-    TextLabel timeLabel = createTextLabel("Time : ",&positionTimeLablel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);
+    TextLabel timeLabel = createTextLabel("Time : ",&positionTimeLablel,1,&colorLabel,fontHandler->fonts[FONT_retro],renderer,positionX,positionY);
 
     //Add TextLabel to the array
     array_TextLabel_AddElement(&labels, nbTurnLabel);
@@ -177,10 +179,6 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
 
         SDL_Delay(20);
     }
-
-
-    //FREE TEXT LABEL + BUTTON 
-
 
 
 
