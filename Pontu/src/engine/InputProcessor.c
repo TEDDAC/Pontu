@@ -39,7 +39,10 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 		{
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
-				isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
+				int res = isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
+				if (res != BUTTON_NOTHING) {
+					return createInputElementButtonClicked(b, res);
+				}
 			}
 			break;
 		}
@@ -48,7 +51,6 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				return createInputElementResizeWindow(event.window.data1, event.window.data2);
 			}
 			break;
-
 	}
 
 	return createInputElementNone();

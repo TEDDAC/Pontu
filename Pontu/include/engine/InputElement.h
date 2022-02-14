@@ -10,13 +10,14 @@
 
 
 #include "model/Coord.h"
+#include "engine/Button.h"
 
 
 /**
  * \enum InputType
  * \brief Different types for input
 */
-typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize} InputType;
+typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize, InputType_ButtonChanged} InputType;
 
 /**
  * \enum UIAction
@@ -47,6 +48,12 @@ typedef struct {
 			int w;
 			int h;
 		} windowSize; ///< La nouvelle taille de l'ecran
+
+        struct buttonEvent {
+            P_Button* button;
+            ButtonEvent event;
+        } buttonEvent;
+        
     } data; ///< Informations about the input
     
     InputType type; ///< Type of input
@@ -85,5 +92,8 @@ InputElement createInputElementMoveBoard(const Coord start, const Coord end);
  * @return InputElement InputType_Window_Resize
  */
 InputElement createInputElementResizeWindow();
+
+
+InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent event);
 
 #endif // INPUT_ELEMENT_INCLUDED

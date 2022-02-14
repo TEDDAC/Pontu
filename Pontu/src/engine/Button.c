@@ -29,9 +29,9 @@ bool drawButtonOnRenderer(SDL_Renderer* renderer, P_Button* button)
 	return true;
 }
 
-bool isHover(P_Button* button)
+bool isEnable(P_Button* button)
 {
-	return button->hover && button->enable;
+	return button->enable;
 }
 
 bool changeButtonTexture(P_Button* button, SDL_Texture* texture)
@@ -59,11 +59,18 @@ void freeButton(P_Button * button){
 	SDL_DestroyTexture(button->hoverTexture);
 }
 
+bool isHover(P_Button * button) {
+	return button->hover;
+}
+
 int isButtonInteractWithCursor(P_Button * button,const int x,const int y){
+	if (!button->enable) return BUTTON_NOTHING;
+	
 	SDL_Point coord;
 	coord.x = x;
 	coord.y = y;
-	if(isHover(button)){
+	
+	if(button->hover){
 		button->hover = SDL_PointInRect(&coord,&(button->rect));
 		if(button->hover == false){
 			return BUTTON_EXIT;
