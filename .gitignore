@@ -95,3 +95,5 @@ Documentation/doxygen/
 # Support for Project snippet scope
 !.vscode/*.code-snippets
 
+# .idea since only 1 person uses CLion
+Pontu/.idea/
