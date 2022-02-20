@@ -41,12 +41,17 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 					if (inputProcessor->selectedTextInput == NULL) {
 						SDL_StartTextInput();
 					}
+					else {
+						inputProcessor->selectedTextInput->isActive = false;
+					}
 					inputProcessor->selectedTextInput = ti;
 					textInputClicked = true;
+					inputProcessor->selectedTextInput->isActive = true;
 					break;
 				}
 			}
 			if (!textInputClicked) {
+				inputProcessor->selectedTextInput->isActive = false;
 				inputProcessor->selectedTextInput = NULL;
 				SDL_StopTextInput();
 			}
@@ -69,10 +74,15 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			}
 			break;
 		case SDL_TEXTINPUT:
-			
+			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);
 			break;
 		case SDL_TEXTEDITING:
-		
+			inputProcessor->selectedTextInput->cursorPosition = event.edit.start;
+			break;
+		case SDL_KEYDOWN:
+			if (inputProcessor->selectedTextInput != NULL && event.key.keysym.sym == SDLK_BACKSPACE) {
+				removeCharacterToInputTextValueAtCursor(inputProcessor->selectedTextInput);
+			}
 			break;
 	}
 

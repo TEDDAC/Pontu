@@ -1,37 +1,48 @@
 #include "engine/TextInput.h"
 
-bool addCharacterToInputTextValueAtCursor(TextInput* textInput, const char charToAdd)
+bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd)
 {
+	const size_t lenText = strlen(textInput->value);
 	if(textInput == NULL)
 	{
 		return false;
 	}
-	if(textInput->cursorPosition > strlen(textInput->value))
+	if(textInput->cursorPosition > lenText)
 	{
-		return false;
+		textInput->cursorPosition = lenText;
 	}
-	char newValue[strlen(textInput->value)+1];
+	const size_t lenStrToAdd = strlen(strToAdd);
+	char newValue[lenText+lenStrToAdd+1];
 
-	strcpy(newValue, "");
+	//strcpy(newValue, "");
 	strncat(newValue, textInput->value, textInput->cursorPosition);
-	strcat(newValue, &charToAdd);
+	strcat(newValue, strToAdd);
 	strcat(newValue, textInput->value+textInput->cursorPosition);
 
-	free(textInput->value);
-	textInput->value = (char*) malloc(strlen(newValue));
+	textInput->value = (char*) realloc(textInput->value, strlen(newValue));
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
 		return false;
 	}
 	strcpy(textInput->value, newValue);
-	textInput->cursorPosition += 1;
+	textInput->cursorPosition += lenStrToAdd;
 
 	return true;
 }
 
 bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 {
+	size_t removeSize = 0;
+	size_t lenText = strlen(textInput->value); 
+	while (lenText>removeSize && textInput->value[textInput->cursorPosition - 1] < -64) {
+		removeSize++;
+	}
+	if (lenText>removeSize) {
+		removeSize++;
+	}
+	
+
 	int textLen = 0;
 	if(textInput == NULL)
 	{
@@ -46,21 +57,20 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 		return true;
 	}
 
-	textLen = strlen(textInput->value);
-	char tmp[textLen];
+	char tmp[lenText];
 	
-	if(textInput->cursorPosition-1 > textLen)
+	if(textInput->cursorPosition-1 > lenText)
 	{
 		return false;
 	}
-	if(textLen == 0)
+	if(lenText == 0)
 	{
 		return true;
 	}
 	
 	strcpy(tmp, textInput->value);
-	strcpy(textInput->value, "");
-	strncat(textInput->value, tmp, textInput->cursorPosition-2);
+	//strcpy(textInput->value, "");
+	strncpy(textInput->value, tmp, textInput->cursorPosition-removeSize);
 	strcat(textInput->value, tmp+textInput->cursorPosition);
 	textInput->cursorPosition -= 1;
 	return true;

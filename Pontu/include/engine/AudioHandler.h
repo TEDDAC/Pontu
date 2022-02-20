@@ -104,11 +104,11 @@ AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX);
  * \brief Changes volume for the SFX.
  * \param[in]	volSFX	The new volume for the SFX.
  */
-void changeSFXVol(AudioHandler* ah, int volSFX);
+int changeSFXVol(AudioHandler* ah, int volSFX);
 
-void changeMusicVol(AudioHandler* ah, int volMusic);
+int changeMusicVol(AudioHandler* ah, int volMusic);
 
-void changeMasterVol(AudioHandler* ah, int masterVol);
+int changeMasterVol(AudioHandler* ah, int masterVol);
 
 /**
  * \brief Frees the music and SFX, and un-initializes the audio.
