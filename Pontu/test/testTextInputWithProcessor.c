@@ -8,7 +8,7 @@
 
 void testTextInputProcessor() {
 
-SDL_Rect windowSize = {10, 10, 900, 900};
+	SDL_Rect windowSize = {10, 10, 900, 900};
 
     SDL_Window* window = NULL;
 	SDL_Renderer* renderer = NULL;
@@ -60,7 +60,7 @@ SDL_Rect windowSize = {10, 10, 900, 900};
 
     drawTextInputOnRenderer(renderer, textInput);
 
-bool quit = false;
+	bool quit = false;
 	while(!quit)
 	{
 		{
@@ -111,6 +111,8 @@ bool quit = false;
 
 		SDL_Delay(10);
 	}
+
+	fprintf(stderr, "Texte tapé : %s\n", textInput->value);
 
 	freeInputProcessor(&inputProcessor);
 }

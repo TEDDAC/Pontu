@@ -6,6 +6,7 @@ InputProcessor createInputProcessor() {
 		.tabTextInput = array_TextInput_Create(),
 		.selectedTextInput = NULL
 	};
+	SDL_StopTextInput();
 	return inputProcessor;
 }
 
@@ -48,15 +49,14 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 					inputProcessor->selectedTextInput = ti;
 					textInputClicked = true;
 					inputProcessor->selectedTextInput->isActive = true;
+					inputProcessor->selectedTextInput->cursorPosition = strlen(inputProcessor->selectedTextInput->value);
 					break;
 				}
 			}
-			if (!textInputClicked) {
-				if(inputProcessor->selectedTextInput != NULL)
-				{
-					inputProcessor->selectedTextInput->isActive = false;
-					inputProcessor->selectedTextInput = NULL;
-				}
+			if (!textInputClicked && inputProcessor->selectedTextInput != NULL) {
+				inputProcessor->selectedTextInput->isActive = false;
+				inputProcessor->selectedTextInput = NULL;
+				
 				SDL_StopTextInput();
 			}
 			return createInputElementNone();
@@ -81,11 +81,6 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);
 			break;
 		case SDL_TEXTEDITING:
-			if(inputProcessor->selectedTextInput == NULL)
-			{
-				fprintf(stderr, "WARNING: selectedTextInput is NULL\n");
-				break;
-			}
 			inputProcessor->selectedTextInput->cursorPosition = event.edit.start;
 			break;
 		case SDL_KEYDOWN:
