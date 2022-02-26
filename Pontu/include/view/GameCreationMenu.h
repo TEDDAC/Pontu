@@ -25,6 +25,10 @@ typedef struct
 	P_Button* colorButtons;
 	TextInput pseudoInput;
 	Player* player;
+	int w;
+	int h;
+	int x;
+	int y;
 }CreateMenuLine;
 
 typedef struct
@@ -36,12 +40,14 @@ typedef struct
 typedef struct
 {
 	int* nbPlayers;
+	TextLabel* nbPlayersLbl;
 	TTF_Font* font;
 	int minx;
 	int maxx;
 	int miny;
 	CreateMenuLine* lines;
 	SDL_Renderer* renderer;
+	SDL_Color* bg;
 }IncrementParams;
 
 typedef struct
@@ -49,6 +55,9 @@ typedef struct
 	int* nbPlayers;
 	CreateMenuLine* lines;
 	SDL_Renderer* renderer;
+	TextLabel* nbPlayersLbl;
+	SDL_Color* bg;
+	TTF_Font* font;
 }DecrementParams;
 
 bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, TTF_Font* font, int width, int height);

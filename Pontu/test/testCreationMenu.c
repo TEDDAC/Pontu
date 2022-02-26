@@ -13,7 +13,7 @@ int testCreationMenu(void) {
     char* path = "rsrc/img/Lenna.png";
     int i=0;
     int w, h;
-    int nbPlayer=1;
+    int nbPlayer=3;
     if(0 != SDL_Init(SDL_INIT_VIDEO))
     {
         fprintf(stderr, "Erreur SDL_INIT: %s\n", SDL_GetError());

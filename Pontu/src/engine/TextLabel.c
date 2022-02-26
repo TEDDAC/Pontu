@@ -3,6 +3,13 @@
 #include "engine/TextureLoader.h"
 #include <errno.h>
 
+void replaceTextAndTextureOfTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* font, char* text, SDL_Color* bg)
+{
+	copyTextIntoTextLabel(label, text);
+	clearTextLabel(renderer, label, *bg);
+	attachTextureToTextLabel(renderer, label, font);
+}
+
 void attachTextureToTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* font) {
 	SDL_Surface* surface = TTF_RenderText_Solid(font, label->text, label->color);
 
