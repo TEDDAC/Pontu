@@ -52,7 +52,7 @@ SDL_Rect windowSize = {10, 10, 900, 900};
     TextInput* textInput = array_TextInput_Last(&inputProcessor.tabTextInput);
     SDL_Rect size = {.x=10, .y=10, .w=90, .h=20};
 
-    if(!initTextInput(textInput, &size, NULL, fontHandler.fonts[FONT_retro]))
+    if(!initTextInput(textInput, &size, NULL, fontHandler.fonts[FONT_PublicPixel]))
     {
 	fprintf(stderr, "WARNING: can't init TextInput\n");
     return;

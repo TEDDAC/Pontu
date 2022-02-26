@@ -3,7 +3,8 @@
 InputProcessor createInputProcessor() {
 	InputProcessor inputProcessor = {
 		.tabButton = array_P_Button_Create(),
-		.tabTextInput = array_TextInput_Create()
+		.tabTextInput = array_TextInput_Create(),
+		.selectedTextInput = NULL
 	};
 	return inputProcessor;
 }
