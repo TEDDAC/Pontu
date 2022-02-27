@@ -2,10 +2,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <engine/ButtonActions.h>
 
-void onClickDefault(struct P_button* buttonCaller){
-	//printf("Clicked on button: %p\n", buttonCaller);
-}
 
 P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int coordx, const int coordy, const int sizex, const int sizey, void (*onClick)(P_Button* buttonCaller))
 {
@@ -13,7 +11,7 @@ P_Button createButton(SDL_Texture* texture, SDL_Texture* hoverTexture ,const int
 	P_Button b = { .rect = { .x = coordx, .y = coordy, .w = sizex, .h = sizey }, .onClick = onClick, .enable = true};
 	if(onClick == NULL){
 		fprintf(stderr, "Attention: aucune action onClick n'est passé au bouton. Il prend le onClick par défaut\n");
-		b.onClick = onClickDefault;
+		b.onClick = action_none;
 	}
 	b.texture = texture;
 	b.hoverTexture = hoverTexture;

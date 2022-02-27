@@ -60,4 +60,4 @@ typedef struct
 	TTF_Font* font;
 }DecrementParams;
 
-bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, TTF_Font* font, int width, int height);
+bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, TTF_Font* font, int width, int height, Player players[], int* nbPlayers);

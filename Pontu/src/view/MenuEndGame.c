@@ -7,21 +7,13 @@
 #include "engine/UIElementUtils.h"
 #include "engine/arrayTextLabel.h"
 #include "engine/arrayPositionSpecifier.h"
+#include "engine/ButtonActions.h"
 
 
 struct endGameMenuTextLabel {
 	struct array_TextLabel textLabels;
 	struct array_PositionSpecifier positionSpecifiers;
 };
-
-/**
- * @brief Button handle which set a generalState to GS_MainMenu
- *
- * @param caller The button clicked
- */
-void setStateToMainMenu(P_Button* caller) {
-	*((GeneralState*)caller->arg) = GS_MainMenu;
-}
 
 SDL_Rect getEndGameMenuRect(SDL_Window* window) {
 	int windowW;
@@ -62,7 +54,7 @@ P_Button createButtonForEndGameMenu(SDL_Renderer* renderer, TTF_Font* font, cons
 	}
 
 
-	P_Button buttonMenuEndGame = createButton(texture, textureHover, rect->x, rect->y, sizeX, sizeY, &setStateToMainMenu);
+	P_Button buttonMenuEndGame = createButton(texture, textureHover, rect->x, rect->y, sizeX, sizeY, &action_setStateToMainMenu);
 	buttonMenuEndGame.arg = state;
 	buttonMenuEndGame.rect.y = rect->h*8/10;
 	buttonMenuEndGame.rect.x = rect->x + rect->w/2-buttonMenuEndGame.rect.w/2;
@@ -171,6 +163,8 @@ void drawEndGameMenu(SDL_Renderer* renderer, const SDL_Rect rectMenuEndGame, str
 }
 
 void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, FontHandler* fontHandler, const Player players[], const size_t nbPlayers) {
+	if (*generalState != GS_EndOfGameMenu) return;
+	
 	InputProcessor inputProcessor = createInputProcessor();
 	const SDL_Rect endGameMenuRect = getEndGameMenuRect(window);
 	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &endGameMenuRect, generalState));

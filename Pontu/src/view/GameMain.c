@@ -44,7 +44,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler);
+	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler, generalState);
 	struct array_TextLabel tabLabel = createGameInterfaceLabels(renderer,fontHandler);
 
 	

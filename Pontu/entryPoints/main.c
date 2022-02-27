@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 
 				SDL_GetWindowSize(window, &windowW, &windowH);
 
-				size_t nbPlayers = 4;
+				int nbPlayers = 4;
 				Player players[] = {
 					newPlayer("Bépo", PlayerViolet),
 					newPlayer("Azeryty", PlayerBlue),
@@ -78,13 +78,13 @@ int main(int argc, char *argv[]) {
 				};
 				//players[2] = ;
 
-				//bool crashed = gameCreationMenu(renderer, &generalState, &fontHandler, windowW, windowH, &players, &nbPlayers);
+				bool crashed = gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_PublicPixel], windowW, windowH, players, &nbPlayers);
 
 				/*if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
 				}*/
-				generalState = GS_Game;
+				//generalState = GS_Game;
 
 				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
 

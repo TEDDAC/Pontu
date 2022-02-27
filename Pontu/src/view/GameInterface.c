@@ -5,15 +5,9 @@
 #include <engine/TextLabel.h>
 #include <engine/arrayButton.h>
 #include <engine/arrayTextLabel.h>
+#include <engine/ButtonActions.h>
 
-//void action boutton
-
-void action(P_Button* buttonCaller){
-    printf("Bouton menu\n");
-    //changeButtonTexture(arg->buttonCaller,arg->texture);
-}
-
-struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler) {
+struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState) {
 	SDL_Color menuBorderColor= {0,0,255,255};
     SDL_Color menuBackgroundColor = {0,255,0,255};
     //SDL_Color menuBackgroundColor = {0,0,255,255};
@@ -35,11 +29,12 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
 	struct array_P_Button buttons = array_P_Button_Create();
 
 	// Menu
-	array_P_Button_AddElement(&buttons, createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action)); //top left corner (rectangle)
+	array_P_Button_AddElement(&buttons, createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action_setStateToMainMenu)); //top left corner (rectangle)
+	array_P_Button_Last(&buttons)->arg = (void*)generalState;
 	// Settings
-	array_P_Button_AddElement(&buttons, createButton(settingsButtonTexture, settingsButtonHoverTexture, 750,10,50,50,&action)); //top right corner (square or circle)
+	array_P_Button_AddElement(&buttons, createButton(settingsButtonTexture, settingsButtonHoverTexture, 750,10,50,50,&action_print)); //top right corner (square or circle)
     // Mute/Unmute
-	array_P_Button_AddElement(&buttons, createButton(muteButtonTexture, muteButtonHoverTexture, 825,10,50,50,&action)); //top right cornre (square or circle)
+	array_P_Button_AddElement(&buttons, createButton(muteButtonTexture, muteButtonHoverTexture, 825,10,50,50,&action_print)); //top right cornre (square or circle)
 
 	return buttons;
 }
@@ -130,9 +125,9 @@ void drawButtons(SDL_Renderer* renderer, FontHandler fontHandler)
     SDL_Texture *menuButtonHoverTexture = createGenericButtonTexture("MenuHover", fontHandler.fonts[FONT_retro], 125, menuBorderColor,menuBackgroundColor,24,5,&sizex,&sizey,renderer);
 
     //Buttons
-    P_Button menuButton = createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action); //top left corner (rectangle)
-    P_Button settingButton = createButton(menuButtonTexture, menuButtonHoverTexture, 750,10,50,50,&action); //top right corner (square or circle)
-    P_Button soundButton = createButton(menuButtonTexture, menuButtonHoverTexture, 825,10,50,50,&action); //top right cornre (square or circle)
+    P_Button menuButton = createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action_print); //top left corner (rectangle)
+    P_Button settingButton = createButton(menuButtonTexture, menuButtonHoverTexture, 750,10,50,50,&action_print); //top right corner (square or circle)
+    P_Button soundButton = createButton(menuButtonTexture, menuButtonHoverTexture, 825,10,50,50,&action_print); //top right cornre (square or circle)
 
     //Labels
     TextLabel nbTurnLabel = createTextLabel("Turn : ",&positonNbTurnLabel,1,&colorLabel,fontHandler.fonts[FONT_retro],renderer,positionX,positionY);

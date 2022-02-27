@@ -12,6 +12,7 @@
 #include "engine/Button.h" 
 #include <engine/FontLoader.h>
 #include "engine/arrayButton.h"
+#include "engine/GeneralState.h"
 
 
 /**
@@ -26,7 +27,7 @@ void drawButtons(SDL_Renderer* renderer,FontHandler fontHandler);
  * \param fontHandler The fontHandler to apply 
  * \return an array of P_Button to draw on the renderer
  */
-struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler);
+struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState);
 
 
 /**
