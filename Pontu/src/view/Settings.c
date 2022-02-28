@@ -16,11 +16,11 @@ typedef struct {
 void reduceVol(P_Button* buttonCaller) {
 	SDL_Color color = {0,0,0,255};
 	ChgVolParams* args = (ChgVolParams*) buttonCaller->arg;
-	args->changeVol(args->ah, *args->currentValue);
-    char newVolume[3];
-    sprintf(newVolume, "%d", *args->currentValue-1);
+	changeMasterVol(args->ah, *args->currentValue);
+	char newVolume[11];
+	sprintf(newVolume, "%d", *args->currentValue-1);
 	replaceTextAndTextureOfTextLabel(args->renderer, args->label, args->fh->fonts[FONT_retro], newVolume, &color);
-    printf("> reduceVol\n");
+	printf("> reduceVol\n");
 }
 
 void onClick(P_Button* buttonCaller) {
@@ -29,7 +29,7 @@ void onClick(P_Button* buttonCaller) {
 
 // Global functions
 
-RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh) {
+RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, FontHandler* fh) {
 	RetValues retValues = { .arr_textLabel = NULL};	
 	struct array_P_Button arr_buttons = array_P_Button_Create();
 	SDL_Point title_point = {150,25};
@@ -73,10 +73,18 @@ RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontH
 	sprintf(tmp_str, "%d", ah->masterVol);
 	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[1].rect.y+arr_buttons.elems[1].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 
-    // Binding callback functions
-    // - button
-    arr_buttons.elems[0].arg = (void*)(&(ChgVolParams) {changeMasterVol, ah, fh, renderer, &arr_textLabel[2], &(ah->masterVol)});
-    //arr_buttons.elems[1].onClick = &reduceVol;
+	// Binding arguments
+	// - button
+	ChgVolParams tmp;
+	tmp.changeVol = changeMasterVol;
+	tmp.ah = ah;
+	tmp.fh = fh;
+	tmp.renderer = renderer;
+	tmp.label = &arr_textLabel[2];
+	tmp.currentValue = &(ah->masterVol);
+	arr_buttons.elems[0].arg = (void*) &tmp;
+	//arr_buttons.elems[0].arg = (void*)(&(ChgVolParams) {changeMasterVol, ah, fh, renderer, &arr_textLabel[2], &(ah->masterVol)});
+	//arr_buttons.elems[1].onClick = &reduceVol;
 
 	/* Music volume */
 	// Title

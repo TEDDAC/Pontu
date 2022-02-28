@@ -26,14 +26,14 @@ void testSettingsView(void) {
 		goto Quit;
 	}
 
-	ah = newAudioHandler(10,100,100);
+	ah = newAudioHandler(10,10,10);
 	fh = loadFonts();
 
 	SDL_SetRenderDrawColor(renderer,255,140,0,255);
 	printf("%s\n",SDL_GetError());
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
-    playMusic(MUSIC_testMus, ah);
+	playMusic(MUSIC_testMus, ah);
 	settingsView(window, &ah,&fh);
 
 
