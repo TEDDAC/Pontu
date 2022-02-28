@@ -78,13 +78,13 @@ int main(int argc, char *argv[]) {
 				};
 				//players[2] = ;
 
-				bool crashed = gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_PublicPixel], windowW, windowH, players, &nbPlayers);
+				//bool crashed = gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_PublicPixel], windowW, windowH, players, &nbPlayers);
 
 				/*if (crashed) {
 					fprintf(stderr,"sorry");
 					exit(-1);
 				}*/
-				//generalState = GS_Game;
+				generalState = GS_Game;
 
 				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler,audioHandler);
 

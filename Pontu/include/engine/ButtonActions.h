@@ -20,4 +20,10 @@ void action_setStateToMainMenu(P_Button* caller);
  */
 void action_muteSound(P_Button* caller);
 
+/**
+ * @brief Button handle which show Settings 
+ * @param caller The button clicked
+ */
+void action_showSettings(P_Button* caller);
+
 #endif //BUTTON_ACTION_INCLUDED

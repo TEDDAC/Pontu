@@ -19,5 +19,10 @@ void action_setStateToMainMenu(P_Button* caller)
 void action_muteSound(P_Button* caller)
 {
 	//Mute sound -> Master Volume = 0
-	changeMasterVol((AudioHandler*)caller->arg,0);
+	AudioHandler audioHandler = *((AudioHandler*)caller->arg);
+	changeMasterVol(&audioHandler,0);
+
+	//Change Icon -> Mute icon
+	
 }
+

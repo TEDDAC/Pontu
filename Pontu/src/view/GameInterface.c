@@ -21,11 +21,10 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
     SDL_Texture *menuButtonHoverTexture = createGenericButtonTexture("MenuHover", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
 
     SDL_Texture *settingsButtonTexture = createTextureFromPath(renderer,"rsrc/img/SettingsResized.png");    
-    //SDL_Texture *settingsButtonTexture = createGenericButtonTexture("Settings", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
     SDL_Texture *settingsButtonHoverTexture = createGenericButtonTexture("SettingsHover", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
 
-    SDL_Texture *muteButtonTexture = createTextureFromPath(renderer,"rsrc/img/SoundResized.png");
-    //SDL_Texture *muteButtonTexture = createGenericButtonTexture("Mute", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
+    //SDL_Texture *muteButtonTexture = createTextureFromPath(renderer,"rsrc/img/SoundResized.png");
+    SDL_Texture *muteButtonTexture = createTextureFromPath(renderer,"rsrc/img/NewSoundResized.png");
     SDL_Texture *muteButtonHoverTexture = createGenericButtonTexture("MuteHover", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);    
 
 	struct array_P_Button buttons = array_P_Button_Create();
@@ -33,13 +32,13 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
 	// Menu
 	array_P_Button_AddElement(&buttons, createButton(menuButtonTexture, menuButtonHoverTexture,20,20,100,50,&action_setStateToMainMenu)); //top left corner (rectangle)
 	array_P_Button_Last(&buttons)->arg = (void*)generalState;
-	
+
     // Settings
 	array_P_Button_AddElement(&buttons, createButton(settingsButtonTexture, settingsButtonHoverTexture, 750,10,50,50,&action_print)); //top right corner (square or circle)
-    
+
     // Mute/Unmute
 	array_P_Button_AddElement(&buttons, createButton(muteButtonTexture, muteButtonHoverTexture, 825,10,50,50,&action_muteSound)); //top right cornre (square or circle)
-    //array_P_Button_Last(&buttons)->arg = (void*)audioHandler;
+    array_P_Button_Last(&buttons)->arg = (void*)&audioHandler;
 
 	return buttons;
 }
