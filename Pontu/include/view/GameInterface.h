@@ -13,13 +13,8 @@
 #include <engine/FontLoader.h>
 #include "engine/arrayButton.h"
 #include "engine/GeneralState.h"
+#include "engine/AudioHandler.h"
 
-
-/**
- * \brief Draw different buttons on the game interface : menu, setting, sound, nbTurn, and timers
- * param Renderer 
- */
-void drawButtons(SDL_Renderer* renderer,FontHandler fontHandler);
 
 /**
  * \brief Create an array of P_Button for the game interface
@@ -27,7 +22,7 @@ void drawButtons(SDL_Renderer* renderer,FontHandler fontHandler);
  * \param fontHandler The fontHandler to apply 
  * \return an array of P_Button to draw on the renderer
  */
-struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState);
+struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState, AudioHandler audioHandler);
 
 
 /**

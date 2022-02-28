@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 				}*/
 				//generalState = GS_Game;
 
-				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler);
+				gameView(&generalState, window, renderer, players, nbPlayers, &fontHandler,audioHandler);
 
 				//Pour tester le endGameMenu directement
 				/*

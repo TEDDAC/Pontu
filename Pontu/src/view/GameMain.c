@@ -33,7 +33,7 @@ void redrawGameBoard(SDL_Renderer* renderer, const Player players[], const size_
 	}
 }
 
-void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler)
+void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler, AudioHandler audioHandler)
 {
 	if (*generalState != GS_Game) {
 		return;
@@ -44,7 +44,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler, generalState);
+	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler, generalState,audioHandler);
 	struct array_TextLabel tabLabel = createGameInterfaceLabels(renderer,fontHandler);
 
 	

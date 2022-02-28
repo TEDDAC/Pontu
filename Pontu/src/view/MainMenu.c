@@ -65,7 +65,6 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
 
 
     SDL_SetRenderTarget(renderer,NULL);
-    SDL_RenderPresent(renderer);
 	return buttons;
 }
 
