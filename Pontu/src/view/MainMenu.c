@@ -98,6 +98,7 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
     drawButtonOnRenderer(renderer,&(buttons[OPTION]));
     drawButtonOnRenderer(renderer,&(buttons[QUIT]));
 
+    bool drawSomething = true;
     while(*generalState == GS_MainMenu)
     {
         while(SDL_PollEvent(&event))
@@ -121,16 +122,18 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                         case 1:
                             drawButtonOnRenderer(renderer,&(buttons[i]));
                             playSFX(SFX_menu_sound_effect, audioHandler);
+                            drawSomething = true;
                             break;
                         case 2:
                             drawButtonOnRenderer(renderer,&(buttons[i]));
+                            drawSomething = true;
                             break;
                     }
                 }
                 break;
             case SDL_WINDOWEVENT:
                 if(event.window.event == SDL_WINDOWEVENT_RESIZED){
-                    SDL_SetRenderDrawColor(renderer, bg.r,bg.g,bg.b,0);
+                    SDL_SetRenderDrawColor(renderer, bg.r,bg.g,bg.b,bg.a);
                     SDL_RenderClear(renderer);
                     printf("Window %d resized to %dx%d\n",
                         event.window.windowID, event.window.data1,
@@ -141,13 +144,17 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                         buttons[i].rect.x = (windowSize.w/2)-(buttons[i].rect.w/2);
                         drawButtonOnRenderer(renderer,&(buttons[i]));
                     }
+                    drawSomething = true;
                 }
             break;
             default:
             break;
             }
         }
-        SDL_RenderPresent(renderer);
+        if (drawSomething) {
+            SDL_RenderPresent(renderer);
+            drawSomething = false;
+        }
 
         SDL_Delay(20);
     }
