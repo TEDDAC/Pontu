@@ -31,7 +31,7 @@ void incrementNbPlayer(P_Button* caller)
 	char nbPlayerStr[2] = {*nbPlayers + 48, 0};
 	replaceTextAndTextureOfTextLabel(params->renderer, params->nbPlayersLbl, params->font, nbPlayerStr, params->bg);
 	drawTextLabel(params->renderer, params->nbPlayersLbl);
-	SDL_RenderPresent(params->renderer);
+	//SDL_RenderPresent(params->renderer);
 }
 void decrementNbPlayer(P_Button* caller)
 {
@@ -56,7 +56,7 @@ void decrementNbPlayer(P_Button* caller)
 	freeCreateMenuLine(&params->lines[*nbPlayers]);
 
 	drawTextLabel(params->renderer, params->nbPlayersLbl);
-	SDL_RenderPresent(params->renderer);
+	//SDL_RenderPresent(params->renderer);
 	SDL_DestroyTexture(bedSheet);
 }
 
@@ -179,6 +179,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
         line.colorButtons=colorsBtn;
 	line.player=player;
 	line.pseudoInput=pseudoInput;
+	array_TextInput_AddElement(&inproc->tabTextInput, pseudoInput);
 	return line;
 }
 
@@ -392,6 +393,12 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 			}
 		}
 		nbPlayerLabel.text[0] = *nbPlayers+48;
+		for (int i = 0; i < *nbPlayers; i++) {
+			drawTextInputOnRenderer(renderer, &inputProcessor.tabTextInput.elems[i]);
+		}
+
+		SDL_RenderPresent(renderer);
+		SDL_Delay(20);
 	}
 
 	
