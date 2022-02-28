@@ -4,6 +4,25 @@
 #define NB_TEXTURES 2
 #define NB_BUTTONS 7 
 
+typedef struct {
+	int (*changeVol)(AudioHandler*, int);
+	AudioHandler* ah;
+	FontHandler* fh;
+	SDL_Renderer* renderer;
+	TextLabel* label;
+	int* currentValue;
+} ChgVolParams;
+
+void reduceVol(P_Button* buttonCaller) {
+	SDL_Color color = {0,0,0,255};
+	ChgVolParams* args = (ChgVolParams*) buttonCaller->arg;
+	args->changeVol(args->ah, *args->currentValue);
+    char newVolume[3];
+    sprintf(newVolume, "%d", *args->currentValue-1);
+	replaceTextAndTextureOfTextLabel(args->renderer, args->label, args->fh->fonts[FONT_retro], newVolume, &color);
+    printf("> reduceVol\n");
+}
+
 void onClick(P_Button* buttonCaller) {
 	printf("j'ai perdu %d\n",buttonCaller->rect.x);
 }
@@ -45,7 +64,7 @@ RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontH
                                            fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 
 	// - button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[0], NULL, 0, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wMinus, hMinus, onClick));
+	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[0], NULL, 0, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wMinus, hMinus, reduceVol));
 
 	// + button
 	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[1], NULL, 270, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wPlus, hPlus, onClick));
@@ -53,6 +72,11 @@ RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontH
 	// Current value
 	sprintf(tmp_str, "%d", ah->masterVol);
 	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[1].rect.y+arr_buttons.elems[1].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+
+    // Binding callback functions
+    // - button
+    arr_buttons.elems[0].arg = (void*)(&(ChgVolParams) {changeMasterVol, ah, fh, renderer, &arr_textLabel[2], &(ah->masterVol)});
+    //arr_buttons.elems[1].onClick = &reduceVol;
 
 	/* Music volume */
 	// Title

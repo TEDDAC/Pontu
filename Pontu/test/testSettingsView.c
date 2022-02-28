@@ -33,6 +33,7 @@ void testSettingsView(void) {
 	printf("%s\n",SDL_GetError());
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
+    playMusic(MUSIC_testMus, ah);
 	settingsView(window, &ah,&fh);
 
 
