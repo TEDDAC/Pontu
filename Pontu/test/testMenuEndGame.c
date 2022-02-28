@@ -3,6 +3,7 @@
 #include "view/MenuEndGame.h"
 #include "engine/FontLoader.h"
 #include "model/Player.h"
+#include "model/PlayersColors.h"
 #include "engine/InputProcessor.h"
 #include "engine/InputElement.h"
 
@@ -64,8 +65,7 @@ void testMenuEndGame() {
 	SDL_RenderPresent(renderer);
 	GeneralState generalState = GS_EndOfGameMenu;
 
-	SDL_Color color = {0,0,0,0};
-	Player players[2] = {newPlayer("Bépo", color), newPlayer("Azerty", color)};
+	Player players[2] = {newPlayer("Bépo", PlayerRed), newPlayer("Azerty", PlayerViolet)};
 	players[0].eliminationTurn = 10;
 	players[1].eliminationTurn = 10;
 	players[0].rank = 1;

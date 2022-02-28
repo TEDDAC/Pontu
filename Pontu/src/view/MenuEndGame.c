@@ -135,15 +135,15 @@ struct endGameMenuTextLabel createLabels(SDL_Renderer* renderer, const Player pl
 	};
 
 	// Titre
-	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_retro]));
+	array_TextLabel_AddElement(&labels.textLabels, createTitleLabel(renderer, fontHandler->fonts[FONT_PublicPixel]));
 	array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getTitlePositionClassifier(&array_TextLabel_Last(&labels.textLabels)->textZone));
 
 	// Lignes de score
 	for (size_t i=0; i<nbPlayers; ++i) {
-		array_TextLabel_AddElement(&labels.textLabels, createPseudoAndRankLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].rank, players[i].pseudo));
+		array_TextLabel_AddElement(&labels.textLabels, createPseudoAndRankLabel(renderer, fontHandler->fonts[FONT_PublicPixel], &PLAYER_SDL_COLORS[players[i].color], players[i].rank, players[i].pseudo));
 		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getPseudoAndRankPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
 
-		array_TextLabel_AddElement(&labels.textLabels, createEliminationTurnLabel(renderer, fontHandler->fonts[FONT_retro], &PLAYER_SDL_COLORS[players[i].color], players[i].eliminationTurn));
+		array_TextLabel_AddElement(&labels.textLabels, createEliminationTurnLabel(renderer, fontHandler->fonts[FONT_PublicPixel], &PLAYER_SDL_COLORS[players[i].color], players[i].eliminationTurn));
 		array_PositionSpecifier_AddElement(&labels.positionSpecifiers, getEliminationTurnPositionSpecifier(&array_TextLabel_Last(&labels.textLabels)->textZone, players[i].rank));
 	}
 	return labels;
@@ -167,7 +167,7 @@ void endGameMenu(GeneralState* generalState, SDL_Window* window, SDL_Renderer* r
 	
 	InputProcessor inputProcessor = createInputProcessor();
 	const SDL_Rect endGameMenuRect = getEndGameMenuRect(window);
-	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_retro], &endGameMenuRect, generalState));
+	array_P_Button_AddElement(&inputProcessor.tabButton, createButtonForEndGameMenu(renderer, fontHandler->fonts[FONT_PublicPixel], &endGameMenuRect, generalState));
 	P_Button* buttonMenuEndGame = array_P_Button_Last(&inputProcessor.tabButton);
 	SDL_Rect base100 = {
 		.x = 50,
