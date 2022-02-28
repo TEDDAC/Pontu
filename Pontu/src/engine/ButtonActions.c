@@ -23,6 +23,6 @@ void action_muteSound(P_Button* caller)
 	changeMasterVol(&audioHandler,0);
 
 	//Change Icon -> Mute icon
-	
+	//caller->texture = createTextureFromPath(renderer,"rsrc/img/MuteResized.png");
 }
 

@@ -14,6 +14,7 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
     SDL_Color menuBackgroundColor = {0,255,0,255};
     //SDL_Color menuBackgroundColor = {0,0,255,255};
 
+    //struct argsBouton
 	
 	int sizex=20,sizey=20;
 
