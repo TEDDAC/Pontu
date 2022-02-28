@@ -3,8 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 
 void freeCreateMenuLine(CreateMenuLine* line);
-CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, Player* player);
-void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines);
+CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, Player* player, InputProcessor* inproc);
+void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc, Player players[]);
 bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabels, P_Button* buttons, int nbButtons, CreateMenuLine* lines, int nbPlayer, const SDL_Color* bg);
 bool drawCreateMenuLine(SDL_Renderer* renderer, CreateMenuLine* line);
 void changePlayerColor(P_Button* caller);
@@ -24,14 +24,14 @@ void incrementNbPlayer(P_Button* caller)
 		return;
 	}
 
-	createPlayersLines(params->renderer, params->font, params->minx, params->maxx, params->lines[*nbPlayers-1].h+params->lines[*nbPlayers-1].y, 1, &params->lines[*nbPlayers]);
+	createPlayersLines(params->renderer, params->font, params->minx, params->maxx, params->lines[*nbPlayers-1].h+params->lines[*nbPlayers-1].y, 1, &params->lines[*nbPlayers], params->inproc, params->players);
 	drawCreateMenuLine(params->renderer, &params->lines[*nbPlayers]);
 
 	++(*nbPlayers);
 	char nbPlayerStr[2] = {*nbPlayers + 48, 0};
 	replaceTextAndTextureOfTextLabel(params->renderer, params->nbPlayersLbl, params->font, nbPlayerStr, params->bg);
 	drawTextLabel(params->renderer, params->nbPlayersLbl);
-	SDL_RenderPresent(params->renderer);
+	//SDL_RenderPresent(params->renderer);
 }
 void decrementNbPlayer(P_Button* caller)
 {
@@ -56,7 +56,7 @@ void decrementNbPlayer(P_Button* caller)
 	freeCreateMenuLine(&params->lines[*nbPlayers]);
 
 	drawTextLabel(params->renderer, params->nbPlayersLbl);
-	SDL_RenderPresent(params->renderer);
+	//SDL_RenderPresent(params->renderer);
 	SDL_DestroyTexture(bedSheet);
 }
 
@@ -64,14 +64,17 @@ void changePlayerColor(P_Button* caller)
 {
 	ChangeColorParams* params = (ChangeColorParams*)caller->arg;
 	params->p->color = params->color;
+	printf("change color %d\n", params->p->color);
+	fflush(stdout);
 }
 
 bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabels, P_Button* buttons, int nbButtons, CreateMenuLine* lines, int nbPlayer, const SDL_Color* bg)
 {
-	//Draw everything
+	//Draw background (blue-ish)
 	SDL_SetRenderDrawColor(renderer, bg->r, bg->g, bg->b, bg->a);
 	SDL_RenderClear(renderer);
 	
+	// Buttons
 	for(int i=0; i<nbButtons; ++i)
 	{
 		if(!drawButtonOnRenderer(renderer, &(buttons[i])))
@@ -81,10 +84,12 @@ bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabe
 		}
 	}
 
+	// TextLabels
 	for(int i=0; i<nbLabels; ++i)
 	{
 		drawTextLabel(renderer, labels[i]);
 	}
+	// Menu lines (1 for each player)
 	for(int i=0; i<nbPlayer; ++i)
 	{
 		drawCreateMenuLine(renderer, &lines[i]);
@@ -94,17 +99,17 @@ bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabe
 }
 
 
-void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines)
+void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc, Player players[])
 {
-	
-	Player players[nbPlayer];
 	for(int i=0; i<nbPlayer; ++i)
 	{
 		if(i==0)
 		{
-			lines[i] = createCreateMenuLine(renderer, minx, miny + 16, maxx,font, &players[i]);
+			// Position of first line is absolute
+			lines[i] = createCreateMenuLine(renderer, minx, miny + 16, maxx,font, &players[i], inproc);
 		}else{
-			lines[i] = createCreateMenuLine(renderer, minx, miny + 16 + 16 + i* lines[i-1].aiButton.rect.h, maxx,font, &players[i]);
+			// Position of other lines is relative to the first one (16 px (margin) + nb_lines_already_drawn * height of AI checkbox)
+			lines[i] = createCreateMenuLine(renderer, minx, miny + 16 + 16 + i* lines[i-1].aiButton.rect.h, maxx,font, &players[i], inproc);
 		}
 	}
 
@@ -113,16 +118,19 @@ void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int ma
 
 bool drawCreateMenuLine(SDL_Renderer* renderer, CreateMenuLine* line)
 {
+	// AI checkbox
 	drawButtonOnRenderer(renderer, &line->aiButton);
+	// Color chooser
 	for(int i=0; i<NB_COLORS; ++i)
 	{
 		drawButtonOnRenderer(renderer, &line->colorButtons[i]);
 	}
+	// TextInput
 	drawTextInputOnRenderer(renderer, &line->pseudoInput);
 	return true;
 }
 
-CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, Player* player)
+CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, Player* player, InputProcessor* inproc)
 {
 	int const wColorBtn = 32;
 	int const hColorBtn = 32;
@@ -134,6 +142,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 
 	CreateMenuLine line = {.x=xmin, y};
 
+	// AI checkbox
 	SDL_Texture* aiTexture =  createGenericButtonTexture("X", font, 16, COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BORDER, 4, 8, &(ai.rect.w), &(ai.rect.h), renderer);
 	SDL_Texture* aiTextureHovered =  createGenericButtonTexture("X", font, 16, COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 8, &ai.rect.w, &ai.rect.h, renderer);
 	line.h = ai.rect.h;
@@ -142,9 +151,11 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 
 	SDL_Rect rect = {.x = xmin + ai.rect.x + ai.rect.w, .y = y, .h = TTF_FontHeight(font),.w = xmax - ai.rect.w - NB_COLORS * (wColorBtn + colorBtnXMargin*2)- 16};
 
+	// Text input of nickname
 	TextInput pseudoInput;
 	initTextInput(&pseudoInput, &rect, NULL, font);
 
+	// Color chooser
 	ChangeColorParams* params;
 
 	for(int i=0; i<NB_COLORS; ++i)
@@ -158,13 +169,17 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 		btnTextureHover = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BACKGROUND, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
 		colorsBtn[i].texture = btnTexture;
 		colorsBtn[i].hoverTexture = btnTextureHover;
+		array_P_Button_AddElement(&inproc->tabButton, colorsBtn[i]);
 
 	}
+
+	// Filling struct
 	line.w = colorsBtn[0].rect.x + colorsBtn[0].rect.w;
 	line.aiButton=ai;
         line.colorButtons=colorsBtn;
 	line.player=player;
 	line.pseudoInput=pseudoInput;
+	array_TextInput_AddElement(&inproc->tabTextInput, pseudoInput);
 	return line;
 }
 
@@ -180,7 +195,7 @@ void freeCreateMenuLine(CreateMenuLine* line)
 	}
 }
 
-bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Font* font, int width, int height, Player players[], int* nbPlayers)
+bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioHandler* ah, TTF_Font* font, int width, int height, Player players[], int* nbPlayers)
 {
 	*nbPlayers = 2;
 	int const nbLabels = 5;
@@ -218,7 +233,6 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 	if(btnHoveredTexture == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
-		return false;
 	}
 	decrementBtn.texture = btnTexture;
 	decrementBtn.hoverTexture = btnHoveredTexture;
@@ -260,12 +274,11 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 	if(btnHoveredTexture == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
-		return false;
 	}
 	incrementBtn.texture = btnTexture;
 	incrementBtn.hoverTexture = btnHoveredTexture;
 
-
+	// AI label
 	SDL_Point aiLabelPos = {.x=titleLabel.textZone.x, .y=decrementBtn.rect.y+ decrementBtn.rect.h + 16};
 	TextLabel aiLabel = createTextLabel(
 		"IA", 
@@ -278,6 +291,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 		POSY_TOP
 	);
 
+	// Color label
 	SDL_Point colorLabelPos = {
 		.x=incrementBtn.rect.x+incrementBtn.rect.w,
 		decrementBtn.rect.y+ decrementBtn.rect.h + 16
@@ -293,6 +307,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 		POSY_TOP
 	);
 
+	// Pseudo input
 	SDL_Point pseudoLabelPos = {
 		.x=	(titleLabel.textZone.x+
 			aiLabel.textZone.w+
@@ -312,26 +327,35 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 	);
 
 
-	createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , *nbPlayers, lines);
 	
+	// Filling TextLabel array
 	labels[0] = &titleLabel;
 	labels[1] = &nbPlayerLabel;
 	labels[2] = &aiLabel;
 	labels[3] = &pseudoLabel;
 	labels[4] = &colorLabel;
+
+	
+	// Initializing InputProcessor
+	InputProcessor inputProcessor = createInputProcessor();
+	
+	// Creating 2 player lines (lines with a AI checkbox, a text input for the nickname, and a color chooser)
+	createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , *nbPlayers, lines, &inputProcessor, players);
+
 	DecrementParams dparams= {.nbPlayers=nbPlayers, .lines=lines, .renderer=renderer, .bg = &bg, .nbPlayersLbl=&nbPlayerLabel, .font=font};
 	decrementBtn.arg = &dparams;
 
-	IncrementParams iparams= {.nbPlayers=nbPlayers, .lines=lines, .minx=titleLabelPos.x, .maxx=incrementBtn.rect.x+incrementBtn.rect.w, .miny=colorLabelPos.y+colorLabel.textZone.h + 16, .font=font, .renderer=renderer, .nbPlayersLbl=&nbPlayerLabel, .bg=&bg};
+
+	IncrementParams iparams= {.nbPlayers=nbPlayers, .lines=lines, .minx=titleLabelPos.x, .maxx=incrementBtn.rect.x+incrementBtn.rect.w, .miny=colorLabelPos.y+colorLabel.textZone.h + 16, .font=font, .renderer=renderer, .nbPlayersLbl=&nbPlayerLabel, .bg=&bg, .inproc=&inputProcessor, .players = players};
 	incrementBtn.arg = &iparams;
 
 	buttons[0] = decrementBtn;
 	buttons[1] = incrementBtn;
 
-	InputProcessor inputProcessor = createInputProcessor();
 	array_P_Button_AddElement(&inputProcessor.tabButton, incrementBtn);
 	array_P_Button_AddElement(&inputProcessor.tabButton, decrementBtn);
 
+	// Displaying menu
 	drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
 	while(*generalState == GS_GameCreationMenu)
 	{
@@ -358,7 +382,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 			{
 				if(inputElement.data.buttonEvent.button == &incrementBtn || inputElement.data.buttonEvent.button == &decrementBtn)
 				{
-					nbPlayerLabel.text[0] = *nbPlayers + 48;
+					//nbPlayerLabel.text[0] = *nbPlayers + 48;
 					
 					drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
 				}
@@ -369,6 +393,12 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState,TTF_Fon
 			}
 		}
 		nbPlayerLabel.text[0] = *nbPlayers+48;
+		for (int i = 0; i < *nbPlayers; i++) {
+			drawTextInputOnRenderer(renderer, &inputProcessor.tabTextInput.elems[i]);
+		}
+
+		SDL_RenderPresent(renderer);
+		SDL_Delay(20);
 	}
 
 	

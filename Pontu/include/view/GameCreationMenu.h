@@ -10,6 +10,7 @@
 #include "engine/Colors.h"
 #include "model/Player.h"
 #include "engine/TextInput.h"
+#include "engine/AudioHandler.h"
 
 #define NB_COLORS 4
 #define NB_PLAYER_MAX 4
@@ -48,6 +49,8 @@ typedef struct
 	CreateMenuLine* lines;
 	SDL_Renderer* renderer;
 	SDL_Color* bg;
+	InputProcessor* inproc;
+	Player players[4];
 }IncrementParams;
 
 typedef struct
@@ -60,4 +63,4 @@ typedef struct
 	TTF_Font* font;
 }DecrementParams;
 
-bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, TTF_Font* font, int width, int height, Player players[], int* nbPlayers);
+bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioHandler* ah, TTF_Font* font, int width, int height, Player players[], int* nbPlayers);

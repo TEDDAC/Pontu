@@ -67,7 +67,9 @@ int testCreationMenu(void) {
     SDL_GetWindowSize(window, &w, &h);
     GeneralState generalState = GS_GameCreationMenu;
     printf("%d/%d\n", w, h);
-    gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_retro], w, h);
+    Player players[4];
+    int nbPlayers;
+    gameCreationMenu(renderer, &generalState, NULL, fontHandler.fonts[FONT_retro], w, h, players, &nbPlayers);
 
 Quit:
     freeFonts(fontHandler);

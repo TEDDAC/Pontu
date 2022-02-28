@@ -97,3 +97,6 @@ Documentation/doxygen/
 
 # .idea since only 1 person uses CLion
 Pontu/.idea/
+
+
+*.swp
