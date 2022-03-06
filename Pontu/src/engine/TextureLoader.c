@@ -67,6 +67,8 @@ SDL_Texture* createGenericButtonTexture(char* text, TTF_Font* font, int size, SD
     Message_rect.w = (int)(strlen(text)*size*2/3); // controls the width of the rect
     Message_rect.h = size; // controls the height of the rect
 
+	//    /!\ TTF_FontHeight(font)*factorSize; /!\
+
 	//pour les contour d'abord
 	SDL_Rect button_rect;
 	button_rect.x = 0;

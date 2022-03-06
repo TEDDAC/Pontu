@@ -2,11 +2,12 @@
 
 bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd)
 {
-	const size_t lenText = strlen(textInput->value);
 	if(textInput == NULL)
 	{
+		fprintf(stderr, "WARNING: Can't add text to NULL textInput\n");
 		return false;
 	}
+	const size_t lenText = strlen(textInput->value);
 	if(textInput->cursorPosition > lenText)
 	{
 		textInput->cursorPosition = lenText;
@@ -19,7 +20,7 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 	strcat(newValue, strToAdd);
 	strcat(newValue, textInput->value+textInput->cursorPosition);
 
-	textInput->value = (char*) realloc(textInput->value, strlen(newValue));
+	textInput->value = (char*) realloc(textInput->value, strlen(newValue)*sizeof(char));
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
@@ -41,7 +42,7 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 	if (lenText>removeSize) {
 		removeSize++;
 	}
-	
+
 
 	int textLen = 0;
 	if(textInput == NULL)
@@ -58,7 +59,7 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 	}
 
 	char tmp[lenText];
-	
+
 	if(textInput->cursorPosition-1 > lenText)
 	{
 		return false;
@@ -67,7 +68,7 @@ bool removeCharacterToInputTextValueAtCursor(TextInput* textInput)
 	{
 		return true;
 	}
-	
+
 	strcpy(tmp, textInput->value);
 	strcpy(textInput->value, "");
 	strncpy(textInput->value, tmp, textInput->cursorPosition-removeSize);
@@ -171,6 +172,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		return false;
 	}
 	SDL_DestroyTexture(textTexture);
+	SDL_DestroyTexture(inputTexture);
 	return true;
 }
 
@@ -207,7 +209,7 @@ bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* 
 	{
 		textInput->textColor = *textColor;
 	}
-	
+
 	if(font == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't create a TextIntput with a NULL font\n");
@@ -215,7 +217,7 @@ bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* 
 	}
 	textInput->textFont = font;
 	return true;
-	
+
 }
 
 bool destroyTextInput(TextInput* textInput)
