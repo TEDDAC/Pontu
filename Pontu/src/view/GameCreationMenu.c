@@ -54,7 +54,7 @@ bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabe
 	//Draw background (blue-ish)
 	SDL_SetRenderDrawColor(renderer, bg->r, bg->g, bg->b, bg->a);
 	SDL_RenderClear(renderer);
-	
+
 	// Buttons
 	for(int i=0; i<nbButtons; ++i)
 	{
@@ -125,7 +125,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 	int const hColorBtn = 32;
 	int const colorBtnXMargin = 8;
 	SDL_Texture* btnTexture, *btnTextureHover;
-	
+
 	P_Button* colorsBtn = (P_Button*) malloc(sizeof(P_Button)*NB_COLORS);
 	P_Button ai = createButton(NULL, NULL, xmin, y, 0, 0, NULL);
 
@@ -191,7 +191,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	TextLabel *labels[nbLabels];
 	P_Button* buttons = (P_Button*) malloc(sizeof(P_Button)*nbButtons);
 	SDL_Color bg = {55, 120, 175, 255};
-  bool viewChanged = false;
+	bool viewChanged = false;
 
 
 	// TextLabel  for "Nombre de joueur.euse.s" creation
@@ -199,9 +199,9 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	SDL_Color white = {225, 255, 255, 255};
 	CreateMenuLine lines[NB_PLAYER_MAX];
 	TextLabel titleLabel = createTextLabel(
-		"Nombre de joueur.euse.s", 
+		"Nombre de joueur.euse.s",
 		&titleLabelPos,
-		1, 
+		1,
 		&white,
 		font,
 		renderer,
@@ -237,9 +237,9 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	nbPlayerStr[0] = *nbPlayers + 48; // ASCII code of '0' is 48 and ASSCI code of '9' is 57 (48+9)
 	nbPlayerStr[1] = '\0';
 	TextLabel nbPlayerLabel = createTextLabel(
-		nbPlayerStr, 
+		nbPlayerStr,
 		&nbPlayerLabelPos,
-		1, 
+		1,
 		&white,
 		font,
 		renderer,
@@ -270,9 +270,9 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	// AI label
 	SDL_Point aiLabelPos = {.x=titleLabel.textZone.x, .y=decrementBtn.rect.y+ decrementBtn.rect.h + 16};
 	TextLabel aiLabel = createTextLabel(
-		"IA", 
+		"IA",
 		&aiLabelPos,
-		1, 
+		1,
 		&white,
 		font,
 		renderer,
@@ -286,9 +286,9 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 		decrementBtn.rect.y+ decrementBtn.rect.h + 16
 	};
 	TextLabel colorLabel = createTextLabel(
-		"Couleur", 
+		"Couleur",
 		&colorLabelPos,
-		1, 
+		1,
 		&white,
 		font,
 		renderer,
@@ -302,124 +302,123 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 			aiLabel.textZone.w+
 			colorLabelPos.x)
 			/2,
-		.y=decrementBtn.rect.y+ decrementBtn.rect.h + 16
-	};
-	TextLabel pseudoLabel = createTextLabel(
-		"Pseudonyme", 
-		&pseudoLabelPos,
-		1, 
-		&white,
-		font,
-		renderer,
-		POSX_CENTER,
-		POSY_TOP
-	);
+			.y=decrementBtn.rect.y+ decrementBtn.rect.h + 16
+		};
+		TextLabel pseudoLabel = createTextLabel(
+			"Pseudonyme",
+			&pseudoLabelPos,
+			1,
+			&white,
+			font,
+			renderer,
+			POSX_CENTER,
+			POSY_TOP
+		);
 
-  P_Button cancelBtn = createButton(NULL, NULL, titleLabelPos.x, height-64, 0, 0, cancelCreation);
-	btnTexture = createGenericButtonTexture("Anuler", font, 8,COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BORDER, 4, 8, &(cancelBtn.rect.w), &(cancelBtn.rect.h), renderer);
-	if(btnTexture == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't create texture: %s\n", SDL_GetError());
-		return false;
-	}
-	btnHoveredTexture = createGenericButtonTexture("Anuler", font, 8, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 8, &(cancelBtn.rect.w), &(cancelBtn.rect.h), renderer);
-	if(btnHoveredTexture == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
-	}
-	cancelBtn.texture = btnTexture;
-	cancelBtn.hoverTexture = btnHoveredTexture;
-  cancelBtn.arg = generalState;
-
-	P_Button validateBtn = createButton(NULL, NULL, incrementBtn.rect.x+incrementBtn.rect.w-calculateStringPixelLenght(font, "Jouer"), height-64, 0, 0, validateCreation);
-	btnTexture = createGenericButtonTexture("Jouer", font, 8,COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BORDER, 4, 8, &(validateBtn.rect.w), &(validateBtn.rect.h), renderer);
-	if(btnTexture == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't create texture: %s\n", SDL_GetError());
-		return false;
-	}
-	btnHoveredTexture = createGenericButtonTexture("Jouer", font, 8, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 8, &(validateBtn.rect.w), &(validateBtn.rect.h), renderer);
-	if(btnHoveredTexture == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
-	}
-	validateBtn.texture = btnTexture;
-	validateBtn.hoverTexture = btnHoveredTexture;
-  validateBtn.arg = generalState;
-
-	// Filling TextLabel array
-	labels[0] = &titleLabel;
-	labels[1] = &nbPlayerLabel;
-	labels[2] = &aiLabel;
-	labels[3] = &pseudoLabel;
-	labels[4] = &colorLabel;
-
-	
-	// Initializing InputProcessor
-	InputProcessor inputProcessor = createInputProcessor();
-	
-	// Creating 2 player lines (lines with a AI checkbox, a text input for the nickname, and a color chooser)
-	createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , NB_PLAYER_MAX, lines, &inputProcessor);
-
-	DecrementParams dparams= {.nbPlayers=nbPlayers, .viewChanged=&viewChanged};
-	decrementBtn.arg = &dparams;
-
-
-	IncrementParams iparams= {.nbPlayers=nbPlayers, .viewChanged=&viewChanged};
-	incrementBtn.arg = &iparams;
-
-	buttons[0] = decrementBtn;
-	buttons[1] = incrementBtn;
-  buttons[2] = validateBtn;
-  buttons[3] = cancelBtn;
-
-	array_P_Button_AddElement(&inputProcessor.tabButton, incrementBtn);
-	array_P_Button_AddElement(&inputProcessor.tabButton, decrementBtn);
-	array_P_Button_AddElement(&inputProcessor.tabButton, validateBtn);
-	array_P_Button_AddElement(&inputProcessor.tabButton, cancelBtn);
-
-	// Displaying menu
-	drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
-	while(*generalState == GS_GameCreationMenu)
-	{
-		InputElement inputElement;
-		while (InputType_None != (inputElement = proccessInput(&inputProcessor)).type) 
+		P_Button cancelBtn = createButton(NULL, NULL, titleLabelPos.x, height-64, 0, 0, cancelCreation);
+		btnTexture = createGenericButtonTexture("Anuler", font, 8,COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BORDER, 4, 8, &(cancelBtn.rect.w), &(cancelBtn.rect.h), renderer);
+		if(btnTexture == NULL)
 		{
-			switch (inputElement.type)
+			fprintf(stderr, "WARNING: Can't create texture: %s\n", SDL_GetError());
+			return false;
+		}
+		btnHoveredTexture = createGenericButtonTexture("Anuler", font, 8, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 8, &(cancelBtn.rect.w), &(cancelBtn.rect.h), renderer);
+		if(btnHoveredTexture == NULL)
+		{
+			fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
+		}
+		cancelBtn.texture = btnTexture;
+		cancelBtn.hoverTexture = btnHoveredTexture;
+		cancelBtn.arg = generalState;
+
+		P_Button validateBtn = createButton(NULL, NULL, incrementBtn.rect.x+incrementBtn.rect.w-calculateStringPixelLenght(font, "Jouer"), height-64, 0, 0, validateCreation);
+		btnTexture = createGenericButtonTexture("Jouer", font, 8,COLOR_GENERIC_BUTTON_BACKGROUND, COLOR_GENERIC_BUTTON_BORDER, 4, 8, &(validateBtn.rect.w), &(validateBtn.rect.h), renderer);
+		if(btnTexture == NULL)
+		{
+			fprintf(stderr, "WARNING: Can't create texture: %s\n", SDL_GetError());
+			return false;
+		}
+		btnHoveredTexture = createGenericButtonTexture("Jouer", font, 8, COLOR_GENERIC_BUTTON_BORDER, COLOR_GENERIC_BUTTON_BACKGROUND, 4, 8, &(validateBtn.rect.w), &(validateBtn.rect.h), renderer);
+		if(btnHoveredTexture == NULL)
+		{
+			fprintf(stderr, "WARNING: Can't create hover texture: %s\n", SDL_GetError());
+		}
+		validateBtn.texture = btnTexture;
+		validateBtn.hoverTexture = btnHoveredTexture;
+		validateBtn.arg = generalState;
+
+		// Filling TextLabel array
+		labels[0] = &titleLabel;
+		labels[1] = &nbPlayerLabel;
+		labels[2] = &aiLabel;
+		labels[3] = &pseudoLabel;
+		labels[4] = &colorLabel;
+
+
+		// Initializing InputProcessor
+		InputProcessor inputProcessor = createInputProcessor();
+
+		// Creating 2 player lines (lines with a AI checkbox, a text input for the nickname, and a color chooser)
+		createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , NB_PLAYER_MAX, lines, &inputProcessor);
+
+		DecrementParams dparams= {.nbPlayers=nbPlayers, .viewChanged=&viewChanged};
+		decrementBtn.arg = &dparams;
+
+
+		IncrementParams iparams= {.nbPlayers=nbPlayers, .viewChanged=&viewChanged};
+		incrementBtn.arg = &iparams;
+
+		buttons[0] = decrementBtn;
+		buttons[1] = incrementBtn;
+		buttons[2] = validateBtn;
+		buttons[3] = cancelBtn;
+
+		array_P_Button_AddElement(&inputProcessor.tabButton, incrementBtn);
+		array_P_Button_AddElement(&inputProcessor.tabButton, decrementBtn);
+		array_P_Button_AddElement(&inputProcessor.tabButton, validateBtn);
+		array_P_Button_AddElement(&inputProcessor.tabButton, cancelBtn);
+
+		// Displaying menu
+		drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
+		while(*generalState == GS_GameCreationMenu)
+		{
+			InputElement inputElement;
+			while (InputType_None != (inputElement = proccessInput(&inputProcessor)).type)
 			{
-			case InputType_ActivateUI:
-				switch (inputElement.data.uiAction)
+				switch (inputElement.type)
 				{
-				case UIAction_Quit:
-					*generalState = GS_Quit;
+					case InputType_ActivateUI:
+					switch (inputElement.data.uiAction)
+					{
+						case UIAction_Quit:
+						*generalState = GS_Quit;
+						break;
+						case UIAction_Validate:
+						break;
+						case UIAction_Cancel:
+						break;
+						default:
+						break;
+					}
 					break;
-				case UIAction_Validate:
-					break;
-				case UIAction_Cancel:
-					break;
-				default:
+					default:
 					break;
 				}
-				break;
-			default:
-				break;
 			}
-      if(viewChanged)
-      {
-        drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
-        viewChanged=false;
-      }
-		}
-	/*	nbPlayerLabel.text[0] = *nbPlayers+48;
-		for (int i = 0; i < *nbPlayers; i++) {
+			/*	nbPlayerLabel.text[0] = *nbPlayers+48;
+			for (int i = 0; i < *nbPlayers; i++) {
 			drawTextInputOnRenderer(renderer, &inputProcessor.tabTextInput.elems[i]);
 		}
-*/
-		SDL_RenderPresent(renderer);
+		*/
+		if(viewChanged)
+		{
+			drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
+			viewChanged=false;
+		}
 		SDL_Delay(20);
 	}
 
-	
+
 	//free
 	freeInputProcessor(&inputProcessor);
 	freeTextLabel(&titleLabel);
