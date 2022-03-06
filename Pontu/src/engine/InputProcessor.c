@@ -32,7 +32,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 
 			for (size_t i = 0; i<inputProcessor->tabButton.size; ++i) {
 				P_Button* b = &inputProcessor->tabButton.elems[i];
-				if (SDL_PointInRect(&mousePoint, &b->rect)) {
+				if (isHover(b)) {
 					b->onClick(b);
 				}
 			}
@@ -56,7 +56,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			if (!textInputClicked && inputProcessor->selectedTextInput != NULL) {
 				inputProcessor->selectedTextInput->isActive = false;
 				inputProcessor->selectedTextInput = NULL;
-				
+
 				SDL_StopTextInput();
 			}
 			return createInputElementNone();

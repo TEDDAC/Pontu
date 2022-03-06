@@ -41,9 +41,6 @@ InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL
 					gameInputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
 				}
 			}
-			else
-			{
-			}
 			break;
 		}
 		case SDL_MOUSEBUTTONUP:

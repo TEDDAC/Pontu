@@ -26,8 +26,8 @@ typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType
 typedef enum {UIAction_Validate, UIAction_Cancel, UIAction_Quit } UIAction;
 
 /**
- * \struct InputElement 
- * \brief Represent a input element 
+ * \struct InputElement
+ * \brief Represent a input element
  */
 typedef struct {
     /**
@@ -42,8 +42,9 @@ typedef struct {
             Coord start;
             Coord end;
         } move; ///< Pair of coordinates for move on the board
-        
-        UIAction uiAction; ///< L'action 
+
+        UIAction uiAction; ///< L'action
+
 		struct windowSize {
 			int w;
 			int h;
@@ -53,9 +54,9 @@ typedef struct {
             P_Button* button;
             ButtonEvent event;
         } buttonEvent;
-        
+
     } data; ///< Informations about the input
-    
+
     InputType type; ///< Type of input
 } InputElement;
 
@@ -88,7 +89,7 @@ InputElement createInputElementMoveBoard(const Coord start, const Coord end);
 
 /**
  * @brief Create a Input Element Resize Window
- * 
+ *
  * @return InputElement InputType_Window_Resize
  */
 InputElement createInputElementResizeWindow();
