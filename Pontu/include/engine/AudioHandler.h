@@ -67,6 +67,7 @@
  */
 #define MACRO_TO_SFX_PATH(P) "rsrc/sfx/"#P".wav",
 
+// TODO faire dans 2 enums
 /**
  * \enum EnumAudios
  * \brief Lists audios used in the program.
@@ -121,14 +122,14 @@ void freeAudioHandler(AudioHandler* audioHandler);
  * \param[in]	music		The music to be played. Should be a value of #EnumAudios starting with MUSIC_.
  * \param[in]	audioHandler	The AudioHandler used to store the musics.
  */
-void playMusic(EnumAudios music, AudioHandler audioHandler);
+void playMusic(EnumAudios music, const AudioHandler* audioHandler);
 
 /**
  * \brief Plays a sound effect.
  * \param[in]	sfx		The SFX to be played. Should be a value of #EnumAudios starting with SFX_.
  * \param[in]	audioHandler	The AudioHandler used to store the SFX.
  */
-void playSFX(EnumAudios sfx, AudioHandler audioHandler);
+void playSFX(EnumAudios sfx, const AudioHandler* audioHandler);
 
 
 #endif // AUDIO_H
