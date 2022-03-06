@@ -4,10 +4,10 @@
 #include "engine/Button.h"
 #include "engine/TextureLoader.h"
 #include "engine/Colors.h"
+#include "engine/ColorPicker.h"
 #include "engine/FontUtils.h"
 #include "engine/GeneralState.h"
 #include "engine/InputProcessor.h"
-#include "engine/Colors.h"
 #include "model/Player.h"
 #include "engine/TextInput.h"
 #include "engine/AudioHandler.h"
@@ -23,9 +23,8 @@ bool drawGameCreationMenu(SDL_Renderer* renderer, P_Button* incrementBtn, P_Butt
 typedef struct
 {
 	P_Button aiButton;
-	P_Button* colorButtons;
 	TextInput pseudoInput;
-	Player* player;
+  ColorPicker colorPicker;
 	int w;
 	int h;
 	int x;
@@ -41,26 +40,13 @@ typedef struct
 typedef struct
 {
 	int* nbPlayers;
-	TextLabel* nbPlayersLbl;
-	TTF_Font* font;
-	int minx;
-	int maxx;
-	int miny;
-	CreateMenuLine* lines;
-	SDL_Renderer* renderer;
-	SDL_Color* bg;
-	InputProcessor* inproc;
-	Player players[4];
+  bool* viewChanged;
 }IncrementParams;
 
 typedef struct
 {
 	int* nbPlayers;
-	CreateMenuLine* lines;
-	SDL_Renderer* renderer;
-	TextLabel* nbPlayersLbl;
-	SDL_Color* bg;
-	TTF_Font* font;
+  bool* viewChanged;
 }DecrementParams;
 
 bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioHandler* ah, TTF_Font* font, int width, int height, Player players[], int* nbPlayers);
