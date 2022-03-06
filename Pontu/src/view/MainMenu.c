@@ -18,14 +18,13 @@ void generalStateToNewGame(P_Button* buttonCaller) {
     *((GeneralState*)(buttonCaller->arg)) = GS_GameCreationMenu;
 }
 
-P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, unsigned int* nb, const SDL_Rect* windowSize, GeneralState* generalState)
+P_Button* createMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, unsigned int* nb, const SDL_Rect* windowSize, GeneralState* generalState)
 {
     P_Button* buttons = (P_Button*)malloc(sizeof(P_Button)*3);
     *nb = 0;
     SDL_Color lightBlue = {.r = 0,.g = 195,.b = 255,.a = 0}; //0, 195, 255
     SDL_Color darkBlue = {.r = 0,.g = 123,.b = 161,.a = 0}; //0, 123, 161
 
-    SDL_SetRenderTarget(renderer, NULL);
     TTF_Font* font = fontHandler.fonts[FONT_PublicPixel];
 
     int fontSize = 80;
@@ -63,8 +62,6 @@ P_Button* drawMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, uns
     buttons[QUIT].rect.x = (windowSize->w/2)-(buttons[QUIT].rect.w/2);
     buttons[QUIT].arg = generalState;
 
-
-    SDL_SetRenderTarget(renderer,NULL);
 	return buttons;
 }
 
@@ -87,8 +84,8 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
 
     SDL_Rect windowSize = {.x = 0, .y = 0, .w = 0, .h = 0};
     SDL_GetWindowSize(window,&(windowSize.w),&(windowSize.h));
-    if(!(buttons = drawMainMenu(renderer,fontHandler,&nb,&windowSize, generalState))){
-        fprintf(stderr, "Le menu principale ne s'est pas déssiné correctement\n");
+    if(!(buttons = createMainMenu(renderer,fontHandler,&nb,&windowSize, generalState))){
+        fprintf(stderr, "Le menu principale ne s'est pas instancié correctement\n");
         return statut;
     }
     SDL_Event event;
