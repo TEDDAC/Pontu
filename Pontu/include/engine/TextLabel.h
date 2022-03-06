@@ -24,4 +24,7 @@ void clearTextLabel(SDL_Renderer* renderer, const TextLabel* label, SDL_Color co
 
 void replaceTextAndTextureOfTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* font, char* text, SDL_Color* bg);
 
+void copyTextIntoTextLabel(TextLabel* label, const char text[]);
+void attachTextureToTextLabel(SDL_Renderer* renderer, TextLabel* label, TTF_Font* font);
+
 #endif //TEXT_LABEL_INCLUDED

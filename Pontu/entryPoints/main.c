@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	if(icon == NULL)
 	{
 		fprintf(stderr, "WARNNING: %s\n", SDL_GetError());
-		return NULL;
+		return EXIT_FAILURE;
 	}
 	//icon->w = 64;
 	//icon->h = 64;
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 				};
 				//players[2] = ;
 
-				bool crashed = gameCreationMenu(renderer, &generalState, fontHandler.fonts[FONT_PublicPixel], windowW, windowH, players, &nbPlayers);
+				bool crashed = gameCreationMenu(renderer, &generalState, &audioHandler, fontHandler.fonts[FONT_PublicPixel], windowW, windowH, players, &nbPlayers);
 
 				/*if (crashed) {
 					fprintf(stderr,"sorry");
