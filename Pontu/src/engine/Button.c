@@ -65,13 +65,16 @@ bool changeButtonHoverTexture(P_Button* button, SDL_Texture* texture)
 void freeButton(P_Button * button){
 	SDL_DestroyTexture(button->texture);
 	SDL_DestroyTexture(button->hoverTexture);
+	button->enable = false;
+	button->texture = NULL;
+	button->hoverTexture = NULL;
 }
 
 bool isHover(P_Button * button) {
 	return button->hover;
 }
 
-int isButtonInteractWithCursor(P_Button * button,const int x,const int y){
+ButtonEvent isButtonInteractWithCursor(P_Button * button,const int x,const int y){
 	if (!button->enable) return BUTTON_NOTHING;
 
 	SDL_Point coord;

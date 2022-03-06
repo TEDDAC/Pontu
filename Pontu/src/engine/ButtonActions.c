@@ -4,6 +4,7 @@
 
 
 void action_none(P_Button* caller) {
+	//return nothing
 }
 
 
@@ -25,4 +26,3 @@ void action_muteSound(P_Button* caller)
 	//Change Icon -> Mute icon
 	//caller->texture = createTextureFromPath(renderer,"rsrc/img/MuteResized.png");
 }
-

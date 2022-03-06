@@ -3,8 +3,7 @@
 
 int calculateStringPixelLenght(TTF_Font* font, char* str)
 {
-	char curentChar;
-	int lenght = 0;
+	int length = 0;
 	int minx, maxx;
 	int i=0;
 
@@ -19,12 +18,11 @@ int calculateStringPixelLenght(TTF_Font* font, char* str)
 		return 0;
 	}
 
-	curentChar = *str;
 	while(i < textLenght)
 	{
-		TTF_GlyphMetrics(font, curentChar, &minx, &maxx, NULL, NULL, NULL);
-		lenght += maxx-minx;
+		TTF_GlyphMetrics(font, str[i], &minx, &maxx, NULL, NULL, NULL);
+		length += maxx-minx;
 		++i;
 	}
-	return lenght;
+	return length;
 }
