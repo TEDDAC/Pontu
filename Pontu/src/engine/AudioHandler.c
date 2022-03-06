@@ -1,4 +1,5 @@
 #include "engine/AudioHandler.h"
+#include <SDL2/SDL.h>
 
 // A channel represents the number of SFX we can play at the same time.
 // We normally should use only 1 channel, and we add one for safety.
@@ -13,7 +14,7 @@
  * but should actually be a pointer to Mix_Music.
  * It is the music we want to play next;
  */
-int fadeOut(void* args) {
+int switchMusic_impl(void* args) {
 	// Since args is a pointer to void
 	// (the way C handles undefined types),
 	// casting args to a pointer to Mix_Music
@@ -21,9 +22,7 @@ int fadeOut(void* args) {
 	int ret;
 
 	if(Mix_FadeOutMusic(500) == 1) { // Starting the fadeout
-		while (Mix_PlayingMusic()) {
-			; // Waiting until it's done
-		}
+		SDL_Delay(500); // Waiting until it's done
 	} else {
 		fprintf(stderr,"WARNING: couldn't fade out");
 		Mix_HaltMusic();
@@ -40,7 +39,6 @@ int fadeOut(void* args) {
 }
 
 // Global functions
-
 AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	AudioHandler audioHandler;
 	int nb_SFX = NB_AUDIO_DEFINED - NB_MUSIC_DEFINED - 1;
@@ -48,11 +46,11 @@ AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	// Generating paths to musics and SFX files using macros
 	char* musicsPaths[] = {MACRO_FOR_ALL_MUSICS(MACRO_TO_MUSIC_PATH)};
 	char* sfxPaths[]    = {MACRO_FOR_ALL_SFX(MACRO_TO_SFX_PATH)};
-	audioHandler.canPlayAudio = true;
 
 	// Initialize + verify opening audio device
 	if (0 != Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)) {
-		fprintf(stderr,"Error when initializing audio.\n");
+		fprintf(stderr,"Error when initializing audio: %s.\n", Mix_GetError());
+        audioHandler.canPlayAudio = false;
 		return audioHandler;
 	}
 
@@ -87,7 +85,6 @@ AudioHandler newAudioHandler(int masterVol, int volMusic, int volSFX) {
 	}
 
 	changeSFXVol(&audioHandler, volSFX);
-	changeMasterVol(&audioHandler, masterVol);
 	return audioHandler;
 }
 
@@ -142,7 +139,7 @@ void freeAudioHandler(AudioHandler* audioHandler) {
 	audioHandler->canPlayAudio = false;
 }
 
-void playMusic(EnumAudios music, AudioHandler audioHandler) {
+void playMusic(EnumAudios music, const AudioHandler* audioHandler) {
 	// music should be a value of EnumAudios that starts by MUSIC_
 	// In other words, it should be an enumerator before NB_MUSIC_DEFINED.
 	if (music >= NB_MUSIC_DEFINED) {
@@ -151,7 +148,7 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 	}
 
 	// Checking if audio has been opened.
-	if (!(audioHandler.canPlayAudio)) {
+	if (!(audioHandler->canPlayAudio)) {
 		fprintf(stderr,"WARNING: tried to play a music with an unusable AudioHandler\n");
 		return;
 	}
@@ -159,7 +156,7 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 	// If another music is playing, fading the previous one out
 	if (Mix_PlayingMusic()) {
 		// Creating the thread, passing the music as parameter
-		SDL_Thread* thread = SDL_CreateThread(&fadeOut, "Fade out", audioHandler.musics[music]);
+		SDL_Thread* thread = SDL_CreateThread(&switchMusic_impl, "Fade out", audioHandler->musics[music]);
 		if (thread == NULL) {
 			fprintf(stderr,"WARNING: couldn't create thread to fade out music\n");
 		}
@@ -167,13 +164,13 @@ void playMusic(EnumAudios music, AudioHandler audioHandler) {
 		SDL_DetachThread(thread);
 	// No other music is playing: starting a music normally.
 	} else {
-		if (Mix_PlayMusic(audioHandler.musics[music],-1) != 0) {
+		if (Mix_PlayMusic(audioHandler->musics[music],-1) != 0) {
 			fprintf(stderr,"WARNING: %s\n",Mix_GetError());
 		}
 	}
 }
 
-void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
+void playSFX(EnumAudios sfx, const AudioHandler* audioHandler) {
 	int channel;
 	Mix_Chunk* chunkSFX;
 
@@ -185,13 +182,13 @@ void playSFX(EnumAudios sfx, AudioHandler audioHandler) {
 	}
 
 	// Checking if SFX has been opened.
-	if (!(audioHandler.canPlayAudio)) {
+	if (!(audioHandler->canPlayAudio)) {
 		fprintf(stderr,"WARNING: tried to play an SFX with an unusable AudioHandler\n");
 		return;
 	}
 
 	// Getting actual chunk
-	chunkSFX = audioHandler.sfx[sfx - NB_MUSIC_DEFINED - 1];
+	chunkSFX = audioHandler->sfx[sfx - NB_MUSIC_DEFINED - 1];
 	// Getting first available channel
 	channel = Mix_GroupAvailable(-1);
 	if (channel == -1) {
