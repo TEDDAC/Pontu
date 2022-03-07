@@ -10,12 +10,10 @@
 
 
 struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState, AudioHandler audioHandler) {
-	SDL_Color menuBorderColor= {0,0,255,255};
+    	
+    SDL_Color menuBorderColor= {0,0,255,255};
     SDL_Color menuBackgroundColor = {0,255,0,255};
-    //SDL_Color menuBackgroundColor = {0,0,255,255};
 
-    //struct argsBouton
-	
 	int sizex=20,sizey=20;
 
 	SDL_Texture *menuButtonTexture = createGenericButtonTexture("Menu", fontHandler->fonts[FONT_retro], 15, menuBorderColor,menuBackgroundColor,13,5,&sizex,&sizey,renderer);
@@ -38,9 +36,9 @@ struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHan
 	array_P_Button_AddElement(&buttons, createButton(settingsButtonTexture, settingsButtonHoverTexture, 750,10,50,50,&action_print)); //top right corner (square or circle)
 
     // Mute/Unmute
+    argsSoundButton argsSoundButt = {audioHandler, renderer};
 	array_P_Button_AddElement(&buttons, createButton(muteButtonTexture, muteButtonHoverTexture, 825,10,50,50,&action_muteSound)); //top right cornre (square or circle)
-    array_P_Button_Last(&buttons)->arg = (void*)&audioHandler;
-
+    array_P_Button_Last(&buttons)->arg = (void*)&argsSoundButt;
 	return buttons;
 }
 
