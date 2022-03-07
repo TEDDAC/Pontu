@@ -34,6 +34,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				P_Button* b = &inputProcessor->tabButton.elems[i];
 				if (isHover(b)) {
 					b->onClick(b);
+                                	break; 
 				}
 			}
 			bool textInputClicked = false;
