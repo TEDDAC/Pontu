@@ -26,7 +26,7 @@ void incrementNbPlayer(P_Button* caller)
 		return;
 	}
 	++(*nbPlayers);
-  *params->viewChanged = true;
+        *params->viewChanged = true;
 }
 void decrementNbPlayer(P_Button* caller)
 {
@@ -38,7 +38,7 @@ void decrementNbPlayer(P_Button* caller)
 		return;
 	}
 	--(*nbPlayers);
-  *params->viewChanged = true;
+	*params->viewChanged = true;
 }
 
 void changePlayerColor(P_Button* caller)
@@ -102,7 +102,7 @@ bool drawCreateMenuLine(SDL_Renderer* renderer, CreateMenuLine* line)
 	// AI checkbox
 	drawButtonOnRenderer(renderer, &line->aiButton);
 	// Color chooser
-  drawColorPicker(renderer, line->colorPicker);
+	drawColorPicker(renderer, line->colorPicker);
 	// TextInput
 	drawTextInputOnRenderer(renderer, &line->pseudoInput);
 	return true;
@@ -146,13 +146,13 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 
 	// Color chooser
 	ChangeColorParams* params;
-  ColorPicker picker;
+	ColorPicker picker;
 
 	for(int i=0; i<NB_COLORS; ++i)
 	{
 		params = (ChangeColorParams*) malloc(sizeof(ChangeColorParams));
-	  params->color=playersColors[i];
-    picker.colorButtons[i] = createButton(NULL, NULL, xmax-wColorBtn*(i+1), y, wColorBtn, hColorBtn, changePlayerColor);
+		params->color=playersColors[i];
+		picker.colorButtons[i] = createButton(NULL, NULL, xmax-wColorBtn*(i+1), y, wColorBtn, hColorBtn, changePlayerColor);
 		picker.colorButtons[i].arg = params;
 		btnTexture = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BORDER, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
 		btnTextureHover = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BACKGROUND, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
@@ -378,6 +378,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 		array_P_Button_AddElement(&inputProcessor.tabButton, validateBtn);
 		array_P_Button_AddElement(&inputProcessor.tabButton, cancelBtn);
 
+
 		// Displaying menu
 		drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
 		while(*generalState == GS_GameCreationMenu)
@@ -415,7 +416,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 			drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
 			viewChanged=false;
 		}
-		SDL_Delay(20);
+		SDL_Delay(5);
 	}
 
 
