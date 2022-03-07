@@ -1,5 +1,23 @@
 #include "engine/TextInput.h"
 
+bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd) {
+	if(textInput == NULL)
+	{
+		fprintf(stderr, "WARNING: Can't add text to NULL textInput\n");
+		return false;
+	}
+
+	const size_t lenText = strlen(textInput->value);
+	const size_t lenStrToAdd = strlen(strToAdd);
+	char* lastValue = textInput->value;
+
+	textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
+	strcpy(textInput->value, lastValue);
+	strcat(textInput->value, strToAdd);
+	textInput->cursorPosition += lenStrToAdd;
+	return true;
+}
+
 bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd)
 {
 	if(textInput == NULL)

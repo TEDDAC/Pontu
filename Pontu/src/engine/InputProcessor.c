@@ -79,7 +79,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			}
 			break;
 		case SDL_TEXTINPUT:
-			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);
+			addStringToInputTextValue(inputProcessor->selectedTextInput, event.text.text);
 			return createInputElementTextInput(inputProcessor->selectedTextInput);
 			break;
 		case SDL_TEXTEDITING:

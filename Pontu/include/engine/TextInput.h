@@ -35,6 +35,8 @@ typedef struct
 	TTF_Font* textFont;
 }TextInput;
 
+bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd);
+
 /**
  * \brief Add a character on the right place on the textInput
  * \param[in,out]	textInput	Memmory address of the TextInput to modify
