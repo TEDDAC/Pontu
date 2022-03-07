@@ -8,7 +8,7 @@
 
 typedef struct
 {
-	char* text;
+	char* text; 
 	SDL_Rect textZone;
 	SDL_Color color;
 	SDL_Texture* texture;
