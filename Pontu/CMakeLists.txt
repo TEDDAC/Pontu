@@ -4,9 +4,8 @@ SET(PROJECT_NAME Pontu)
 
 project(${PROJECT_NAME})
 
-file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
-add_executable(${PROJECT_NAME} ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/main.c)
-add_executable(Test ${MY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/test.c)
+add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/main.c)
+add_executable(Test ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/test.c)
 
 
 
@@ -18,21 +17,11 @@ find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
-
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
 target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SDL2_INCLUDE_DIR})
 
-SET(OptionGCC -Wall -Wextra -pedantic -Wconversion -std=c17 -Og -g)
-
-if (MINGW)
-	target_link_options(${PROJECT_NAME} PRIVATE -lmingw32 -lSDL2main -lSDL2 -mwindows)
-	target_compile_options(${PROJECT_NAME} PRIVATE ${OptionGCC} -Dmain=SDL_main -fdiagnostics-color=always)
-	target_link_options(Test PRIVATE -lmingw32 -lSDL2main -lSDL2 -mwindows)
-	target_compile_options(Test PRIVATE ${OptionGCC} -Dmain=SDL_main -fdiagnostics-color=always)
-elseif(UNIX)
-    target_compile_options(${PROJECT_NAME} PRIVATE ${OptionGCC} -D_REENTRANT)
-    target_compile_options(Test PRIVATE ${OptionGCC} -D_REENTRANT)
-endif()
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
 target_link_libraries(Test SDL2::Main)
@@ -42,3 +31,8 @@ target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
 target_link_libraries(Test SDL2::Mixer)
 target_link_libraries(${PROJECT_NAME} SDL2::TTF)
 target_link_libraries(Test SDL2::TTF)
+
+add_subdirectory(src/debug)
+add_subdirectory(src/engine)
+add_subdirectory(src/model)
+add_subdirectory(src/view)

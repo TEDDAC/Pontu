@@ -23,6 +23,7 @@
  *	Functions in header must be marked as inline
  *	Don't forget antislashes
  */
+
 #define GENERATE_DYNAMIC_ARRAY(T) \
 struct array_##T { \
 	T* elems; \
@@ -30,14 +31,14 @@ struct array_##T { \
 	size_t space; \
 }; \
 \
-/*Contruct an empty array*/\
-inline struct array_##T array_##T##_Create() { \
+/*Contruct an empty array*/ \
+static struct array_##T array_##T##_Create() { \
 	struct array_##T array = {.elems=NULL, .size=0, .space=0}; \
 	return array; \
 } \
 \
 /*Free an array*/ \
-inline void array_##T##_Free(struct array_##T* array) { \
+static void array_##T##_Free(struct array_##T* array) { \
 	free(array->elems); \
 	array->elems = NULL; \
 	array->size = 0; \
@@ -45,7 +46,7 @@ inline void array_##T##_Free(struct array_##T* array) { \
 } \
 \
 /*Reserve space for an array*/\
-inline void array_##T##_Reserve(struct array_##T* array, const size_t space) { \
+static void array_##T##_Reserve(struct array_##T* array, const size_t space) { \
 	array->space = space; \
 	array->elems = realloc(array->elems, sizeof(T)*(array->space)); \
 	if (array->elems == NULL) { \
@@ -54,7 +55,7 @@ inline void array_##T##_Reserve(struct array_##T* array, const size_t space) { \
 } \
 \
 /*Fit space to size for an array*/\
-inline void array_##T##_FitToSize(struct array_##T* array) { \
+static void array_##T##_FitToSize(struct array_##T* array) { \
 	array->space = array->size; \
 	array->elems = realloc(array->elems, sizeof(T)*(array->space)); \
 	if (array->elems == NULL) { \
@@ -63,7 +64,7 @@ inline void array_##T##_FitToSize(struct array_##T* array) { \
 } \
 \
 /*Add an element to an array*/\
-inline void array_##T##_AddElement(struct array_##T* array, const T element) { \
+static void array_##T##_AddElement(struct array_##T* array, const T element) { \
 	++(array->size); \
 	if (array->size > array->space) { \
 		++(array->space); \
@@ -77,7 +78,7 @@ inline void array_##T##_AddElement(struct array_##T* array, const T element) { \
 } \
 \
 /*Remove an element from an array*/\
-inline bool array_##T##_RemoveElement(struct array_##T* array, const T element, bool (*areEqual)(const T, const T)) { \
+static bool array_##T##_RemoveElement(struct array_##T* array, const T element, bool (*areEqual)(const T, const T)) { \
 	for (size_t i=0; i<array->size; ++i) { \
 		if (areEqual(array->elems[i], element)) { \
 			for (;i<array->size-1; ++i) { \
@@ -91,7 +92,7 @@ inline bool array_##T##_RemoveElement(struct array_##T* array, const T element, 
 } \
 \
 /*Check if an array contains an element*/\
-inline bool array_##T##_Contains(const struct array_##T* const array, const T element, bool (*areEqual)(const T, const T)) { \
+static bool array_##T##_Contains(const struct array_##T* const array, const T element, bool (*areEqual)(const T, const T)) { \
 	for (size_t i = 0; i < array->size; i++) { \
 		if (areEqual(array->elems[i], element)) { \
 			return true; \
@@ -101,19 +102,19 @@ inline bool array_##T##_Contains(const struct array_##T* const array, const T el
 }\
 \
 /*Apply a function to each element in the array*/\
-inline void array_##T##_Foreach(const struct array_##T* const array, void (*func)(const T)) { \
+static void array_##T##_Foreach(const struct array_##T* const array, void (*func)(const T)) { \
 	for(size_t i = 0; i<array->size; ++i) { \
 		func(array->elems[i]);\
 	}\
 }\
 \
 /*Return last element*/\
-inline T* array_##T##_First(const struct array_##T* const array) {\
+static T* array_##T##_First(const struct array_##T* const array) {\
 	return &array->elems[0];\
 }\
 \
 /*Return last element*/\
-inline T* array_##T##_Last(const struct array_##T* const array) {\
+static T* array_##T##_Last(const struct array_##T* const array) {\
 	return &array->elems[array->size-1];\
 }\
 

@@ -1,6 +1,6 @@
 #include "model/Game.h"
 #include "model/IslandOrBridge.h"
-#include "engine/ArrayUtils.h"
+#include "model/arrayCoord.h"
 #include <assert.h>
 
 // Not defined in header to not pollute inferface
