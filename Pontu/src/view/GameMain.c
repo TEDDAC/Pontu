@@ -5,6 +5,7 @@
 #include "engine/TextureHandler.h"
 #include "engine/arrayButton.h"
 #include "engine/arrayTextLabel.h"
+#include "engine/TextLabel.h"
 #include "model/Game.h"
 #include "model/arrayCoord.h"
 
@@ -105,6 +106,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				break;
 			}
 			case InputType_ClickGame: {
+				int nbRounds= game.nb_rounds; //Store nb_round 
+
 				if(!array_Coord_Contains(&interactiveCases, inputElement.data.coord, *coordEqual)) {
 					inputProcessor.selectedCase = newCoord(-1,-1);
 				}
@@ -127,7 +130,20 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					if (game.phase == GAME_ENDED) {
 						*generalState = GS_EndOfGameMenu;
 					}
+					if(nbRounds != game.nb_rounds) //Redraw nbTurn if has changed 
+					{
+						char newNbTurn[20];
+						TextLabel nbTurnTextLabel = tabLabel.elems[0]; //First element -> nbTurn label
+						sprintf(newNbTurn,"Turn : ",game.nb_rounds); //Concatenate Turn with nbTurn
+						replaceTextAndTextureOfTextLabel(renderer, &nbTurnTextLabel, fontHandler->fonts[FONT_retro], newNbTurn, &nbTurnTextLabel.color);	
+						drawTextLabel(renderer,&nbTurnTextLabel);
+						//Nouv text label ->nbTurn (replace texture) => replaceTextAndTextureOfTextLabel
+						//Redraw text label 
+						SDL_RenderPresent(renderer);
+					}
+ 
 				}
+
 
 				break;
 			}
