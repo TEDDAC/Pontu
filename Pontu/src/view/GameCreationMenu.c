@@ -402,6 +402,10 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 						break;
 					}
 					break;
+					case InputType_TextInput:
+						drawTextInputOnRenderer(renderer, inputElement.data.textInput);
+						SDL_RenderPresent(renderer);
+					break;
 					default:
 					break;
 				}
