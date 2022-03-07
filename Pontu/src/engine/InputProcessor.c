@@ -76,6 +76,9 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 				return createInputElementResizeWindow(event.window.data1, event.window.data2);
 			}
+			if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
+				return createInputElementCloseWindow();
+			}
 			break;
 		case SDL_TEXTINPUT:
 			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);

@@ -17,7 +17,7 @@
  * \enum InputType
  * \brief Different types for input
 */
-typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize, InputType_ButtonChanged} InputType;
+typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize, InputType_Window_Close, InputType_ButtonChanged} InputType;
 
 /**
  * \enum UIAction
@@ -93,6 +93,8 @@ InputElement createInputElementMoveBoard(const Coord start, const Coord end);
  * @return InputElement InputType_Window_Resize
  */
 InputElement createInputElementResizeWindow();
+
+InputElement createInputElementCloseWindow();
 
 
 InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent event);

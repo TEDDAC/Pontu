@@ -10,6 +10,12 @@
 
 enum {NEWGAME, OPTION, QUIT};
 
+struct optionArgs{
+    SDL_Window* parent;
+    AudioHandler* ah;
+    FontHandler* fh;
+};
+
 void quit(P_Button* buttonCaller) {
     *((GeneralState*)(buttonCaller->arg)) = GS_Quit;
 }
@@ -18,6 +24,11 @@ void generalStateToNewGame(P_Button* buttonCaller) {
     *((GeneralState*)(buttonCaller->arg)) = GS_GameCreationMenu;
 }
 
+void settingsViewAction(P_Button* buttonCaller){
+    struct optionArgs* argStruct = (struct optionArgs*)buttonCaller->arg;
+    printf("Menu d'option\n");
+    settingsView(argStruct->parent, argStruct->ah, argStruct->fh);
+}
 P_Button* createMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, unsigned int* nb, const SDL_Rect* windowSize, GeneralState* generalState)
 {
     P_Button* buttons = (P_Button*)malloc(sizeof(P_Button)*3);
@@ -43,8 +54,8 @@ P_Button* createMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, u
     buttons[NEWGAME].rect.x = (windowSize->w/2)-(buttons[NEWGAME].rect.w/2);
     buttons[NEWGAME].arg = generalState;
 
-    buttons[OPTION] = createButton(NULL,NULL,20, buttons[NEWGAME].rect.y+buttons[NEWGAME].rect.h+20, 20, 20, NULL);
 
+    buttons[OPTION] = createButton(NULL,NULL,20, buttons[NEWGAME].rect.y+buttons[NEWGAME].rect.h+20, 20, 20, settingsViewAction);
     SDL_Texture* optionButtonTexture = createGenericButtonTexture("Options",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[OPTION].rect.w),&(buttons[OPTION].rect.h),renderer);
     SDL_Texture* optionButtonTextureHover = createGenericButtonTexture("Options",font,fontSize,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
 
@@ -52,8 +63,8 @@ P_Button* createMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, u
     buttons[OPTION].hoverTexture = optionButtonTextureHover;
     buttons[OPTION].rect.x = (windowSize->w/2)-(buttons[OPTION].rect.w/2);
 
-    buttons[QUIT] = createButton(NULL,NULL,20, buttons[OPTION].rect.y+buttons[OPTION].rect.h+20, 20, 20, quit);
 
+    buttons[QUIT] = createButton(NULL,NULL,20, buttons[OPTION].rect.y+buttons[OPTION].rect.h+20, 20, 20, quit);
     SDL_Texture* quitButtonTexture = createGenericButtonTexture("Quitter",font,fontSize,darkBlue,lightBlue,5, 10,&(buttons[QUIT].rect.w),&(buttons[QUIT].rect.h),renderer);
     SDL_Texture* quitButtonTextureHover = createGenericButtonTexture("Quitter",font,fontSize,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
 
@@ -66,6 +77,7 @@ P_Button* createMainMenu(SDL_Renderer* renderer,const FontHandler fontHandler, u
 }
 
 int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * generalState,FontHandler fontHandler, AudioHandler audioHandler){
+    // passer les handler par pointeur
     int statut = EXIT_FAILURE;
 
 
@@ -88,6 +100,10 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
         fprintf(stderr, "Le menu principale ne s'est pas instancié correctement\n");
         return statut;
     }
+
+    struct optionArgs optionArgs = {.parent = window, .ah = &audioHandler, .fh = &fontHandler};
+    buttons[OPTION].arg = &optionArgs;
+
     SDL_Event event;
 
     drawButtonOnRenderer(renderer,&(buttons[NEWGAME]));
@@ -117,7 +133,7 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                     switch (isButtonInteractWithCursor(&(buttons[i]),event.motion.x,event.motion.y)) {
                         case 1:
                             drawButtonOnRenderer(renderer,&(buttons[i]));
-                            playSFX(SFX_menu_sound_effect, audioHandler);
+                            playSFX(SFX_menu_sound_effect, &audioHandler);
                             drawSomething = true;
                             break;
                         case 2:

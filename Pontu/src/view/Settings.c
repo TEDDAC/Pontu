@@ -1,111 +1,64 @@
 #include "view/Settings.h"
-
-#define NB_TEXT_LABEL 7
-#define NB_TEXTURES 2
-#define NB_BUTTONS 7 
-
-void onClick(P_Button* buttonCaller) {
-	printf("j'ai perdu %d\n",buttonCaller->rect.x);
-}
+#include "engine/InputProcessor.h"
+#include "engine/InputElement.h"
+#include "engine/arrayTextLabel.h"
+#include <SDL2/SDL.h>
 
 // Global functions
 
-RetValues drawSettingsView(SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh) {
-	RetValues retValues = { .arr_textLabel = NULL};	
-	struct array_P_Button arr_buttons = array_P_Button_Create();
-	SDL_Point title_point = {150,25};
-	SDL_Point masterVolTitle_point = {150,75};
-	SDL_Color blue = {52,158,235,255};
-	SDL_Color black = {0,0,0,255};
-	int hMinus, wMinus, hPlus, wPlus, wBack, hBack;
-	TextLabel* arr_textLabel;
-	if (NULL == (arr_textLabel = (TextLabel*)malloc(NB_TEXT_LABEL*sizeof(TextLabel)))) {
-		fprintf(stderr, "Malloc error with TextLabel\n");
-		return retValues;
-	}
-	SDL_Texture** arr_textures;
-	if (NULL == (arr_textures = (SDL_Texture**)malloc(NB_TEXTURES*sizeof(SDL_Texture*)))) {
-		fprintf(stderr, "Malloc error with Textures\n");
-		return retValues;
-	}
-	char tmp_str[4];
+enum nameTextLabel {TITRE, MUSIC_VOLUME, SFX_VOLUME, MASTER_VOLUME};
 
-	array_P_Button_Reserve(&arr_buttons, NB_BUTTONS);
+void createSettingsView(SDL_Window * window, SDL_Renderer* renderer, AudioHandler* ah, const FontHandler* fh, const InputProcessor * inputProcessor, struct array_TextLabel * arrayTextLabel, SDL_Texture * numberTexture) {
+	TTF_Font* font = fh->fonts[FONT_PublicPixel];
+	SDL_Color white = {.r = 255, .g = 255, .b = 255, .a = 255};
+	int windowWidth, windowHeight;
+	SDL_GetWindowSize(window, &windowWidth,&windowHeight);
+	SDL_Color lightBlue = {.r = 0,.g = 195,.b = 255,.a = 0}; //0, 195, 255
+	SDL_Color darkBlue = {.r = 0,.g = 123,.b = 161,.a = 0}; //0, 123, 161
 
-	arr_textLabel[0] = createTextLabel("Parametres", &title_point, 2.0, &black,
-                                           fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 
-	arr_textures[0] = createGenericButtonTexture("-",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wMinus, &hMinus, renderer);
-	arr_textures[1] = createGenericButtonTexture("+",fh->fonts[FONT_retro],32,black,blue, 0, 5, &wPlus, &hPlus, renderer);
-	arr_textures[2] = createGenericButtonTexture("Retour", fh->fonts[FONT_retro],32,black,blue,0,20,&wBack,&hBack,renderer);
-	
-	/* Master volume */
-	// Title
-	arr_textLabel[1] = createTextLabel("Volume principal", &masterVolTitle_point, 1.25, &black,
-                                           fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+	//titre;
+	SDL_Point titre_point = {.x = windowWidth/2, .y = 30};
+	TextLabel titre = createTextLabel("Options", &titre_point, 4,&white, font, renderer, POSX_CENTER, POSY_CENTER);
+	array_TextLabel_AddElement(arrayTextLabel, titre);
 
-	// - button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[0], NULL, 0, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wMinus, hMinus, onClick));
 
-	// + button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[1], NULL, 270, arr_textLabel[1].textZone.y+arr_textLabel[1].textZone.h+20, wPlus, hPlus, onClick));
 
-	// Current value
-	sprintf(tmp_str, "%d", ah->masterVol);
-	arr_textLabel[2] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[1].rect.y+arr_buttons.elems[1].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+	int padding_Label_Left = 20;
+	//Music volume label
+	SDL_Point musicVolumeLabelPoint = {.x = padding_Label_Left, .y = titre.textZone.h + 50 + titre.textZone.y};
+	TextLabel musicVolumeLabel = createTextLabel("Music Volume", &musicVolumeLabelPoint, 1.5,&white, font, renderer, POSX_LEFT, POSY_CENTER);
+	array_TextLabel_AddElement(arrayTextLabel, musicVolumeLabel);
 
-	/* Music volume */
-	// Title
-	arr_textLabel[3] = createTextLabel("Volume musique", &((SDL_Point) {150, arr_buttons.elems[1].rect.y+arr_buttons.elems[1].rect.h+20}), 1.5, &black,
-					   fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 
-	// - button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[0], NULL, 0, arr_textLabel[3].textZone.y+arr_textLabel[3].textZone.h+20, wMinus, hMinus, onClick));
+	//SFX volume label
+	SDL_Point sfxVolumeLabelPoint = {.x = padding_Label_Left, .y = musicVolumeLabel.textZone.h + 50 + musicVolumeLabel.textZone.y};
+	TextLabel sfxVolumeLabel = createTextLabel("Effect Volume", &sfxVolumeLabelPoint, 1.5,&white, font, renderer, POSX_LEFT, POSY_CENTER);
+	array_TextLabel_AddElement(arrayTextLabel, sfxVolumeLabel);
 
-	// + button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[1], NULL, 270, arr_textLabel[3].textZone.y+arr_textLabel[3].textZone.h+20, wPlus, hPlus, onClick));
 
-	// Current value
-	sprintf(tmp_str, "%d", ah->volMusic);
-	arr_textLabel[4] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[3].rect.y+arr_buttons.elems[3].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
+	//SFX volume label
+	SDL_Point masterVolumeLabelPoint = {.x = padding_Label_Left, .y = sfxVolumeLabel.textZone.h + 50 + sfxVolumeLabel.textZone.y};
+	TextLabel masterVolumeLabel = createTextLabel("Master Volume", &masterVolumeLabelPoint, 1.5,&white, font, renderer, POSX_LEFT, POSY_CENTER);
+	array_TextLabel_AddElement(arrayTextLabel, masterVolumeLabel);
 
-	/* SFX Volume */
-	// Title
-	arr_textLabel[5] = createTextLabel("Volume sons", &((SDL_Point) {150, arr_buttons.elems[3].rect.y+arr_buttons.elems[3].rect.h + 20}), 1.5, &black,
-					   fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
 
-	// - button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[0], NULL, 0, arr_textLabel[5].textZone.y+arr_textLabel[5].textZone.h+20, wMinus, hMinus, onClick));
 
-	// + button
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[1], NULL, 270, arr_textLabel[5].textZone.y+arr_textLabel[5].textZone.h+20, wPlus, hPlus, onClick));
-
-	// Current value
-	sprintf(tmp_str, "%d", ah->volSFX);
-	arr_textLabel[6] = createTextLabel(tmp_str, &((SDL_Point) {150, arr_buttons.elems[5].rect.y+arr_buttons.elems[5].rect.h/2}), 1.5, &black, fh->fonts[FONT_retro], renderer, POSX_CENTER, POSY_CENTER);
-
-	/* Return button */
-	array_P_Button_AddElement(&arr_buttons, createButton(arr_textures[2], NULL, 150 - wBack/2, arr_buttons.elems[5].rect.y+arr_buttons.elems[5].rect.h + 20, wBack, hBack, onClick));
-
-	retValues.arr_buttons = arr_buttons;
-	retValues.arr_textLabel = arr_textLabel;
-
-	return retValues;
-	
+	//quit button
+	P_Button quitButton = createButton(NULL,NULL,0, 0, 20, 20, NULL);
+    quitButton.texture = createGenericButtonTexture("Quitter",font,50,darkBlue,lightBlue,5, 10,&(quitButton.rect.w),&(quitButton.rect.h),renderer);
+    quitButton.hoverTexture =  createGenericButtonTexture("Quitter",font,50,lightBlue,darkBlue,5, 10,NULL,NULL,renderer);
+	quitButton.rect.y = windowHeight - quitButton.rect.h - 50;
+	quitButton.rect.x = windowWidth/2 - quitButton.rect.w/2;
+	array_P_Button_AddElement(&inputProcessor->tabButton,quitButton);
 }
 
 void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	SDL_Color white = {255,255,255,255};
-	SDL_Color blue = {52,158,235,255};
-	SDL_Rect title_area = {0,0,300,50};
-	RetValues retValues;
 	struct array_P_Button array_buttons;
-	bool stayInLoop = true;
-	SDL_Event event;
 
-	if (0 != SDL_CreateWindowAndRenderer(300,600,SDL_WINDOW_SHOWN, &window, &renderer)) {
+	if (0 != SDL_CreateWindowAndRenderer(500,600,SDL_WINDOW_SHOWN, &window, &renderer)) {
 		fprintf(stderr,"Error when trying to create window or renderer: %s\n", SDL_GetError());
 		return;
 	}
@@ -114,28 +67,34 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 		fprintf(stderr,"Warning: Can't set window as modal: %s\n",SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(renderer, white.r, white.g, white.b, white.a);
+	SDL_Color bg = {55, 120, 175, 255};
+
+    SDL_SetRenderDrawColor(renderer, bg.r,bg.g,bg.b,bg.a);
 	SDL_RenderClear(renderer);
-	SDL_SetRenderDrawColor(renderer, blue.r, blue.g, blue.b, blue.a);
-	SDL_RenderFillRect(renderer,&title_area);
 
-	retValues = drawSettingsView(renderer,ah,fh);
+	InputProcessor inputProcessor = createInputProcessor();
+	struct array_TextLabel arrayTextLabel = array_TextLabel_Create();
+	SDL_Texture * numberTexture[11];
+	createSettingsView(window, renderer, ah, fh, &inputProcessor, &arrayTextLabel, numberTexture);
 
-	for (size_t i = 0; i < retValues.arr_buttons.size; i++) {
-		drawButtonOnRenderer(renderer, &(retValues.arr_buttons.elems[i]));
-	}
-	
-	for (size_t i = 0; i < NB_TEXT_LABEL; i++) {
-		drawTextLabel(renderer, &retValues.arr_textLabel[i]);
-	}
 
-	while (stayInLoop) {
+	//Title position and drawing
+	drawTextLabel(renderer,&arrayTextLabel.elems[TITRE]);
+	drawTextLabel(renderer,&arrayTextLabel.elems[MUSIC_VOLUME]);
+	drawTextLabel(renderer,&arrayTextLabel.elems[SFX_VOLUME]);
+	drawTextLabel(renderer,&arrayTextLabel.elems[MASTER_VOLUME]);
+	drawButtonOnRenderer(renderer,&inputProcessor.tabButton.elems[0]);
+
+
+	SDL_Event event;
+	bool etat = true;
+	while (etat) {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 				case SDL_WINDOWEVENT:
 					switch (event.window.event) {
 						case SDL_WINDOWEVENT_CLOSE:
-							stayInLoop = false;
+							etat = false;
 							printf("Quit\n");
 							fflush(stdout);
 							break;
@@ -143,20 +102,6 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 						break;
 					}
 					break;
-				case SDL_MOUSEBUTTONUP:
-					printf("MOUSEBUTTONUP\n");
-					for (int i = 0; i < NB_BUTTONS; i++) {
-						printf("%d\n",i);
-						if (isButtonInteractWithCursor(&(retValues.arr_buttons.elems[i]),event.button.x,event.button.y)) {
-							printf("isHover\n");
-							retValues.arr_buttons.elems[i].onClick(&(retValues.arr_buttons.elems[i]));
-							fflush(stdout);
-							break;
-						}
-					}
-					break;
-				default:
-				break;	
 			}
 
 		}
@@ -164,5 +109,8 @@ void settingsView(SDL_Window* parent, AudioHandler* ah, const FontHandler* fh) {
 		SDL_RenderPresent(renderer);
 		SDL_Delay(20);
 	}
-}
 
+quit:
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+}

@@ -73,7 +73,7 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float f
     switch (posXType)
     {
     case POSX_LEFT:
-        label.textZone.x = pos->x;    
+        label.textZone.x = pos->x;
         break;
     case POSX_CENTER:
         label.textZone.x = pos->x-label.textZone.w/2;
@@ -88,7 +88,7 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float f
     switch (posYType)
     {
     case POSY_TOP:
-        label.textZone.y = pos->y;    
+        label.textZone.y = pos->y;
         break;
     case POSY_CENTER:
         label.textZone.y = pos->y-label.textZone.h/2;
@@ -105,7 +105,7 @@ TextLabel createTextLabel(const char text[], const SDL_Point* pos, const float f
 
 void freeTextLabel(TextLabel* label) {
 	if (label == NULL) return;
-	
+
 	if (label->text != NULL){
 		free(label->text);
 		label->text = NULL;
@@ -125,4 +125,3 @@ void clearTextLabel(SDL_Renderer* renderer, const TextLabel* label, SDL_Color co
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderFillRect(renderer, &label->textZone);
 }
-

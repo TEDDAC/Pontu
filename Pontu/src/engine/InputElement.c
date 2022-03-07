@@ -38,3 +38,8 @@ InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent
 	};
 	return i;
 }
+
+InputElement createInputElementCloseWindow(){
+    InputElement i = {.type = InputType_Window_Close};
+    return i;
+}
