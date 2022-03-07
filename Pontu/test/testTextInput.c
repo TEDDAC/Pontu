@@ -92,7 +92,7 @@ int testTextInput(void) {
 
     // TextInput
     SDL_Rect size = {.x=10, .y=10, .w=90, .h=20};
-    if(!initTextInput(&textInput, &size, NULL, fontHandler.fonts[FONT_retro]))
+    if(!initTextInput(&textInput, &size, NULL, fontHandler.fonts[FONT_retro], 3))
     {
 	fprintf(stderr, "WARNING: can't init TextInput\n");
 	goto Quit;
@@ -129,11 +129,11 @@ int testTextInput(void) {
 		}
 	}
 	else
-	{
+	{/*
 		if(!addCharacterToInputTextValueAtCursor(&textInput, writeErina(i)))
 		{
 			fprintf(stderr, "WARINING: can't add character in TextInput\n");
-		};
+		};*/
 	}
 	SDL_RenderPresent(renderer);
         SDL_Delay(500);

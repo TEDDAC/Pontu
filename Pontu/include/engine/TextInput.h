@@ -33,6 +33,7 @@ typedef struct
 	bool isActive;
 	SDL_Color textColor;
 	TTF_Font* textFont;
+	size_t maxTextSize;
 }TextInput;
 
 bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd);
@@ -82,7 +83,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
  * \author Allan POINT
  * \date 05/01/2022
  */
-bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* textFont);
+bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* textFont, size_t maxTextSize);
 
 /*
  * \brief Free what is needed to be free and clear all data in the TextInput

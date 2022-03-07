@@ -142,7 +142,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 
 	// Text input of nickname
 	TextInput pseudoInput;
-	initTextInput(&pseudoInput, &rect, NULL, font);
+	initTextInput(&pseudoInput, &rect, NULL, font, 12);
 
 	// Color chooser
 	ChangeColorParams* params;
