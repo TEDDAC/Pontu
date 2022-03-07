@@ -38,3 +38,12 @@ InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent
 	};
 	return i;
 }
+
+
+InputElement createInputElementTextInput(TextInput* textInput) {
+    InputElement i = {
+        .type = InputType_TextInput,
+		.data.textInput=textInput
+	};
+	return i;
+}

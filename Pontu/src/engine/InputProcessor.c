@@ -79,13 +79,16 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			break;
 		case SDL_TEXTINPUT:
 			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);
+			return createInputElementTextInput(inputProcessor->selectedTextInput);
 			break;
 		case SDL_TEXTEDITING:
 			inputProcessor->selectedTextInput->cursorPosition = event.edit.start;
+			return createInputElementTextInput(inputProcessor->selectedTextInput);
 			break;
 		case SDL_KEYDOWN:
 			if (inputProcessor->selectedTextInput != NULL && event.key.keysym.sym == SDLK_BACKSPACE) {
 				removeCharacterToInputTextValueAtCursor(inputProcessor->selectedTextInput);
+				return createInputElementTextInput(inputProcessor->selectedTextInput);
 			}
 			break;
 	}

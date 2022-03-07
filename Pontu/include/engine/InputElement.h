@@ -11,13 +11,14 @@
 
 #include "model/Coord.h"
 #include "engine/Button.h"
+#include "engine/TextInput.h"
 
 
 /**
  * \enum InputType
  * \brief Different types for input
 */
-typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize, InputType_ButtonChanged} InputType;
+typedef enum {InputType_None, InputType_ClickGame, InputType_MoveGame, InputType_ActivateUI,  InputType_Window_Resize, InputType_ButtonChanged, InputType_TextInput} InputType;
 
 /**
  * \enum UIAction
@@ -54,6 +55,8 @@ typedef struct {
             P_Button* button;
             ButtonEvent event;
         } buttonEvent;
+
+        TextInput* textInput;
 
     } data; ///< Informations about the input
 
@@ -96,5 +99,7 @@ InputElement createInputElementResizeWindow();
 
 
 InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent event);
+
+InputElement createInputElementTextInput(TextInput* textInput);
 
 #endif // INPUT_ELEMENT_INCLUDED
