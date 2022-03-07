@@ -9,10 +9,8 @@ bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd) {
 
 	const size_t lenText = strlen(textInput->value);
 	const size_t lenStrToAdd = strlen(strToAdd);
-	char* lastValue = textInput->value;
 
 	textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
-	strcpy(textInput->value, lastValue);
 	strcat(textInput->value, strToAdd);
 	textInput->cursorPosition += lenStrToAdd;
 	return true;
@@ -117,7 +115,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		fprintf(stderr, "WARNING: Can't create TextInput texture: %s\n", SDL_GetError());
 		return false;
 	}
-	char textValue[strlen(textInput->value)+1];
+	char textValue[strlen(textInput->value)+2];
 	SDL_Rect size = {.x=0, .y=0, .w=textInput->size.w, .h=textInput->size.h};
 	if(textInput->textFont == NULL)
 	{
