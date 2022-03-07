@@ -39,6 +39,15 @@ InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent
 	return i;
 }
 
+
+InputElement createInputElementTextInput(TextInput* textInput) {
+    InputElement i = {
+        .type = InputType_TextInput,
+		.data.textInput=textInput
+	};
+	return i;
+}
+
 InputElement createInputElementCloseWindow(){
     InputElement i = {.type = InputType_Window_Close};
     return i;

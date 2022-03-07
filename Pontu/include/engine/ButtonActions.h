@@ -2,7 +2,17 @@
 #define BUTTON_ACTION_INCLUDED
 
 #include "engine/Button.h"
+#include "engine/AudioHandler.h"
+#include <SDL2/SDL.h>
 
+/**
+ * @brief Args for the SoundButton
+ */
+typedef struct 
+{
+    AudioHandler audio; //Audio from which we change masterVolume
+    SDL_Renderer* renderer; 
+}argsSoundButton; 
 
 void action_none(P_Button* caller);
 
@@ -15,7 +25,7 @@ void action_print(P_Button* caller);
 void action_setStateToMainMenu(P_Button* caller);
 
 /**
- * @brief Button handle wich mute the sound
+ * @brief Button handle wich mute and unmute the master volume
  * @param caller The button clicked
  */
 void action_muteSound(P_Button* caller);

@@ -1,0 +1,9 @@
+Package: pontu-game
+Description: A board game by Grain de créa on your computer
+Version: 0.8
+Maintainer: Théotime "LR06" Maillarbaux, Érina Point, Ms Hater, Martin Rouault MANM, Jack Thomas
+Architecture: all
+Depends: libsdl2-2.0-0, libsdl2-mixer-2.0-0, libsdl2-ttf-2.0-0, libsdl2-image-2.0-0
+Built-Using: gcc-8.3.0 (= 8.3.0-6)
+Section: games
+

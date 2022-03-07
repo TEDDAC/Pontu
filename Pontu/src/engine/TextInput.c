@@ -1,5 +1,21 @@
 #include "engine/TextInput.h"
 
+bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd) {
+	if(textInput == NULL)
+	{
+		fprintf(stderr, "WARNING: Can't add text to NULL textInput\n");
+		return false;
+	}
+
+	const size_t lenText = strlen(textInput->value);
+	const size_t lenStrToAdd = strlen(strToAdd);
+
+	textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
+	strcat(textInput->value, strToAdd);
+	textInput->cursorPosition += lenStrToAdd;
+	return true;
+}
+
 bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAdd)
 {
 	if(textInput == NULL)
@@ -99,7 +115,7 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 		fprintf(stderr, "WARNING: Can't create TextInput texture: %s\n", SDL_GetError());
 		return false;
 	}
-	char textValue[strlen(textInput->value)+1];
+	char textValue[strlen(textInput->value)+2];
 	SDL_Rect size = {.x=0, .y=0, .w=textInput->size.w, .h=textInput->size.h};
 	if(textInput->textFont == NULL)
 	{

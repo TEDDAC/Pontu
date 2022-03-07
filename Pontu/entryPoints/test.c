@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	//testAudioHandler();
 	//testFontLoader();
 	//testGenerateurTexture();
-  //testTextInputProcessor();
+	//testTextInputProcessor();
 	//testButtonTextureLoader();
 	//testConnectionMenu();
 	//testMenuEndGame();

@@ -94,6 +94,9 @@ void testTextInputProcessor() {
 					
 					break;
 				}
+				case InputType_TextInput:
+					drawTextInputOnRenderer(renderer, inputElement.data.textInput);
+					needToPresent = true;
 				default:
 					break;
 				}
@@ -101,8 +104,6 @@ void testTextInputProcessor() {
 		}
 
 
-        drawTextInputOnRenderer(renderer, textInput);
-        needToPresent = true;
 
 		if (needToPresent) {
 			SDL_RenderPresent(renderer);

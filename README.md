@@ -22,33 +22,20 @@ Nous développerons successivement les versions suivantes :
 
 ## Comment télécharger, compiler et executer Pontu
 
-### Sur Linux:
+Utiliser l'option -DCMAKE_BUILD_TYPE=Debug pour build en debug
+                  -DCMAKE_BUILD_TYPE=Release pour build en release
 
 ```BASH
 git clone [urlToThisRepo]
 cd [thisRepo]/Pontu
 git submodule init
 git submodule update
-mkdir bin
+mkdir bin #ou un autre nom de fichier comme "build_debug" ou "build_release"
 cd bin
 cmake ..
-make
+make # ou mingw32-make avec Mingw
 cd .. #Se mettre dans le dossier Pontu
 ./bin/Pontu
 ```
 
-### Sur Windows:
-
-```BASH
-git clone [urlToThisRepo]
-cd [thisRepo]/Pontu
-git submodule init
-git submodule update
-mkdir bin
-cd bin
-cmake ..
-mingw32-make
-cd .. #Se mettre dans le dossier Pontu
-./bin/Pontu.exe
-```
 

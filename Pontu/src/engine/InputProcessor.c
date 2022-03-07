@@ -34,6 +34,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				P_Button* b = &inputProcessor->tabButton.elems[i];
 				if (isHover(b)) {
 					b->onClick(b);
+                                	break; 
 				}
 			}
 			bool textInputClicked = false;
@@ -81,14 +82,17 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 			}
 			break;
 		case SDL_TEXTINPUT:
-			addStringToInputTextValueAtCursor(inputProcessor->selectedTextInput, event.text.text);
+			addStringToInputTextValue(inputProcessor->selectedTextInput, event.text.text);
+			return createInputElementTextInput(inputProcessor->selectedTextInput);
 			break;
 		case SDL_TEXTEDITING:
 			inputProcessor->selectedTextInput->cursorPosition = event.edit.start;
+			return createInputElementTextInput(inputProcessor->selectedTextInput);
 			break;
 		case SDL_KEYDOWN:
 			if (inputProcessor->selectedTextInput != NULL && event.key.keysym.sym == SDLK_BACKSPACE) {
 				removeCharacterToInputTextValueAtCursor(inputProcessor->selectedTextInput);
+				return createInputElementTextInput(inputProcessor->selectedTextInput);
 			}
 			break;
 	}
