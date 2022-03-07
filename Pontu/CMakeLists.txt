@@ -23,6 +23,14 @@ target_include_directories(Test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${SD
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 11)
 
+if(MSVC)
+target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
+target_compile_options(Test PRIVATE /W4 /WX)
+else()
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(Test PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
 target_link_libraries(Test SDL2::Main)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
