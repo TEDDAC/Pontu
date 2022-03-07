@@ -71,6 +71,8 @@ _deps
 
 ### binaries ###
 bin/
+build_debug/
+build_release/
 
 
 Documentation/doxygen/
