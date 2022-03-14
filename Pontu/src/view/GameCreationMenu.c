@@ -436,7 +436,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	
   // Filling player array
   if (*generalState == GS_Game)
-    fillPlayerArray(players, lines, nbPlayers);
+    fillPlayerArray(players, lines, *nbPlayers);
 
   //free
 	freeInputProcessor(&inputProcessor);
@@ -446,7 +446,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	free(buttons);
 
 
-	for (size_t i=0; i<*nbPlayers; ++i) {
+	for (size_t i=0; i < *nbPlayers; ++i) {
 		freeCreateMenuLine(&lines[i]);
 	}
 	return true;
