@@ -26,7 +26,7 @@ bool drawMenuConnection(const SDL_Renderer* renderer, TTF_Font* font,  int w, in
 	SDL_Point colorPos = {.x=w*0.05, .y=h*0.55};
 	TextLabel colorLabel = createTextLabel(colorText, &colorPos, &black, font, renderer);
 	
-	if(!initTextInput(&pseudoInput, &pseudoInputRect, NULL, font))
+	if(!initTextInput(&pseudoInput, &pseudoInputRect, NULL, font, 0)) // TODO set fixed size
 	{
 		fprintf(stderr, "WARNING: Can't init TextInput\n");
 		return false;

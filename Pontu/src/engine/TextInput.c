@@ -9,8 +9,19 @@ bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd) {
 
 	const size_t lenText = strlen(textInput->value);
 	const size_t lenStrToAdd = strlen(strToAdd);
-
+	/*
 	textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
+	strcat(textInput->value, strToAdd);*/
+
+	if (textInput->maxTextSize != 0) {
+	  if (lenText + lenStrToAdd > textInput->maxTextSize) {
+		  fprintf(stderr, "WARNING: text to be added is too long\n");
+		  return false;
+	  }
+	}
+	else {
+	    textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
+	}
 	strcat(textInput->value, strToAdd);
 	textInput->cursorPosition += lenStrToAdd;
 	return true;
@@ -23,12 +34,15 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 		fprintf(stderr, "WARNING: Can't add text to NULL textInput\n");
 		return false;
 	}
-	const size_t lenText = strlen(textInput->value);
+
+  const size_t lenText = strlen(textInput->value);
+  const size_t lenStrToAdd = strlen(textInput->value);
+
 	if(textInput->cursorPosition > lenText)
 	{
 		textInput->cursorPosition = lenText;
 	}
-	const size_t lenStrToAdd = strlen(strToAdd);
+  
 	char newValue[lenText+lenStrToAdd+1];
 
 	strcpy(newValue, "");
@@ -36,12 +50,20 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 	strcat(newValue, strToAdd);
 	strcat(newValue, textInput->value+textInput->cursorPosition);
 
-	textInput->value = (char*) realloc(textInput->value, strlen(newValue)*sizeof(char));
-	if(textInput->value == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
-		return false;
-	}
+
+  if (textInput->maxTextSize != 0) {
+    if (lenText + lenStrToAdd > textInput->maxTextSize) {
+      fprintf(stderr, "WARNING: text to be added is too long\n");
+      return false;
+    }
+  } else {
+	  textInput->value = (char*) realloc(textInput->value, strlen(newValue)*sizeof(char));
+  	if(textInput->value == NULL)
+	  {
+		  fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
+		  return false;
+	  }
+  }
 	strcpy(textInput->value, newValue);
 	textInput->cursorPosition += lenStrToAdd;
 
@@ -192,15 +214,17 @@ bool drawTextInputOnRenderer(SDL_Renderer* renderer, const TextInput* textInput)
 	return true;
 }
 
-bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* font)
+bool initTextInput(TextInput* textInput, const SDL_Rect* size, const SDL_Color* textColor, TTF_Font* font, size_t maxTextSize)
 {
+    	size_t sizeToMalloc;
 	if(textInput == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't assign value to NULL to create TextInput\n");
 		return false;
 	}
-
-	textInput->value = (char*) malloc(sizeof(char));
+	textInput->maxTextSize = maxTextSize <= 0 ? 0 : maxTextSize;
+	sizeToMalloc = textInput->maxTextSize == 0  ? sizeof(char) : maxTextSize * sizeof(char);
+	textInput->value = (char*) malloc(sizeToMalloc);
 	if(textInput->value == NULL)
 	{
 		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
