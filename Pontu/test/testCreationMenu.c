@@ -79,5 +79,10 @@ Quit:
         SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();
+    if (generalState == GS_Game) {
+      for (int i = 0; i < nbPlayers; i++) {
+        printf("%s\n", players[i].pseudo);
+      }
+    }
     return statut;
 }

@@ -8,7 +8,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#define PSEUDO_LENMAX 50
+#define PSEUDO_LENMAX 13
 
 #include "model/PlayersColors.h"
 #include <string.h>
