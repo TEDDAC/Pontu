@@ -14,10 +14,10 @@ bool addStringToInputTextValue(TextInput* textInput, const char* strToAdd) {
 	strcat(textInput->value, strToAdd);*/
 
 	if (textInput->maxTextSize != 0) {
-	    if (lenText + lenStrToAdd > textInput->maxTextSize) {
-		fprintf(stderr, "WARNING: text to be added is too long");
-		return false;
-	    }
+	  if (lenText + lenStrToAdd > textInput->maxTextSize) {
+		  fprintf(stderr, "WARNING: text to be added is too long\n");
+		  return false;
+	  }
 	}
 	else {
 	    textInput->value = (char*) realloc(textInput->value, sizeof(char) * (lenText+lenStrToAdd+1));
@@ -34,12 +34,15 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 		fprintf(stderr, "WARNING: Can't add text to NULL textInput\n");
 		return false;
 	}
-	const size_t lenText = strlen(textInput->value);
+
+  const size_t lenText = strlen(textInput->value);
+  const size_t lenStrToAdd = strlen(textInput->value);
+
 	if(textInput->cursorPosition > lenText)
 	{
 		textInput->cursorPosition = lenText;
 	}
-	const size_t lenStrToAdd = strlen(strToAdd);
+  
 	char newValue[lenText+lenStrToAdd+1];
 
 	strcpy(newValue, "");
@@ -47,12 +50,20 @@ bool addStringToInputTextValueAtCursor(TextInput* textInput, const char* strToAd
 	strcat(newValue, strToAdd);
 	strcat(newValue, textInput->value+textInput->cursorPosition);
 
-	textInput->value = (char*) realloc(textInput->value, strlen(newValue)*sizeof(char));
-	if(textInput->value == NULL)
-	{
-		fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
-		return false;
-	}
+
+  if (textInput->maxTextSize != 0) {
+    if (lenText + lenStrToAdd > textInput->maxTextSize) {
+      fprintf(stderr, "WARNING: text to be added is too long\n");
+      return false;
+    }
+  } else {
+	  textInput->value = (char*) realloc(textInput->value, strlen(newValue)*sizeof(char));
+  	if(textInput->value == NULL)
+	  {
+		  fprintf(stderr, "WARNING: Can't allocate memory space to TextInput\n");
+		  return false;
+	  }
+  }
 	strcpy(textInput->value, newValue);
 	textInput->cursorPosition += lenStrToAdd;
 
