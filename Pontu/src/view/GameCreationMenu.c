@@ -429,6 +429,9 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 		*/
 		if(viewChanged)
 		{
+      nbPlayerStr[0] = *nbPlayers + 48; // ASCII code of '0' is 48 and ASSCI code of '9' is 57 (48+9)
+      nbPlayerStr[1] = '\0';
+      replaceTextAndTextureOfTextLabel(renderer, &nbPlayerLabel, font, nbPlayerStr, &bg);
 			drawGameCreationMenu(renderer, labels, nbLabels, buttons, nbButtons, lines, *nbPlayers, &bg);
 			viewChanged=false;
 		}
