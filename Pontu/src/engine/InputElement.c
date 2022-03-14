@@ -31,7 +31,7 @@ InputElement createInputElementResizeWindow(const int w, const int h) {
 	return i;
 }
 
-InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent event) {
+InputElement createInputElementButtonChanged(P_Button* button, const ButtonEvent event) {
     InputElement i = {
 		.type = InputType_ButtonChanged,
 		.data.buttonEvent={.event=event, .button = button}

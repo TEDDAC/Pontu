@@ -34,7 +34,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				P_Button* b = &inputProcessor->tabButton.elems[i];
 				if (isHover(b)) {
 					b->onClick(b);
-                                	break; 
+                                	break;
 				}
 			}
 			bool textInputClicked = false;
@@ -68,7 +68,7 @@ InputElement proccessInput(InputProcessor *inputProcessor)
 				P_Button* b = &inputProcessor->tabButton.elems[i];
 				int res = isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
 				if (res != BUTTON_NOTHING) {
-					return createInputElementButtonClicked(b, res);
+					return createInputElementButtonChanged(b, res);
 				}
 			}
 			break;

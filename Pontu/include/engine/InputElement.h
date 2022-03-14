@@ -100,7 +100,7 @@ InputElement createInputElementResizeWindow();
 InputElement createInputElementCloseWindow();
 
 
-InputElement createInputElementButtonClicked(P_Button* button, const ButtonEvent event);
+InputElement createInputElementButtonChanged(P_Button* button, const ButtonEvent event);
 
 InputElement createInputElementTextInput(TextInput* textInput);
 
