@@ -11,6 +11,7 @@
 #include "model/Player.h"
 #include "engine/TextInput.h"
 #include "engine/AudioHandler.h"
+#include "engine/arrayTextLabel.h"
 
 #define NB_COLORS 4
 #define NB_PLAYER_MAX 4
@@ -41,12 +42,7 @@ typedef struct
 {
 	int* nbPlayers;
   bool* viewChanged;
-}IncrementParams;
+}IncrementParams, DecrementParams;
 
-typedef struct
-{
-	int* nbPlayers;
-  bool* viewChanged;
-}DecrementParams;
 
 bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioHandler* ah, TTF_Font* font, int width, int height, Player players[], int* nbPlayers);

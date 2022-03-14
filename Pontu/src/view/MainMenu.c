@@ -117,7 +117,7 @@ int mainMenu(SDL_Renderer * renderer,SDL_Window * window, GeneralState * general
                     switch (isButtonInteractWithCursor(&(buttons[i]),event.motion.x,event.motion.y)) {
                         case 1:
                             drawButtonOnRenderer(renderer,&(buttons[i]));
-                            playSFX(SFX_menu_sound_effect, audioHandler);
+                            playSFX(SFX_menu_sound_effect, &audioHandler);
                             drawSomething = true;
                             break;
                         case 2:
