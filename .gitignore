@@ -73,7 +73,8 @@ _deps
 bin/
 build_debug/
 build_release/
-
+buildDebug/
+buildRelease/
 
 Documentation/doxygen/
 
