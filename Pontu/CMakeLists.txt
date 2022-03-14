@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 SET(PROJECT_NAME Pontu)
 
-project(${PROJECT_NAME})
+project(${PROJECT_NAME} C)
 
 add_executable(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/main.c)
 add_executable(Test ${CMAKE_CURRENT_SOURCE_DIR}/entryPoints/test.c)

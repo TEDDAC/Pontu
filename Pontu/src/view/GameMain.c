@@ -65,8 +65,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	for (size_t i=0; i<tabLabel.size; ++i){
 		drawTextLabel(renderer,&tabLabel.elems[i]);
 	}
-	SDL_RenderPresent(renderer);
 
+	bool needToPresent=true;
 
 	while(*generalState == GS_Game)
 	{
@@ -96,7 +96,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				{
 				case GameAction_MovePiece:
 					drawMovePiece(renderer, &boardRect, &inputElement.data.move.start, &inputElement.data.move.end, &textureHandler, game.arrPlayers[game.currentPlayerID].color);
-					SDL_RenderPresent(renderer);
+					needToPresent=true;
 					if (game.phase == GAME_ENDED) {
 						*generalState = GS_EndOfGameMenu;
 					}
@@ -117,11 +117,11 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				{
 				case GameAction_PlacePiece:
 					drawPlacePiece(renderer, &boardRect, &textureHandler, game.arrPlayers[(game.currentPlayerID<game.nbPlayers-1) ? game.currentPlayerID+1 : 0].color, &inputElement.data.coord);
-					SDL_RenderPresent(renderer);
+					needToPresent=true;
 					break;
 				case GameAction_RemoveBridge:
 					drawRemoveBridge(renderer, &boardRect, textureHandler.textures[TEXTURE_Water], &inputElement.data.coord);
-					SDL_RenderPresent(renderer);
+					needToPresent=true;
 					break;
 				}
 
@@ -132,18 +132,19 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 					}
 					if(nbRounds != game.nb_rounds) //Redraw nbTurn if has changed 
 					{
+						
 						char newNbTurn[20];
-						TextLabel nbTurnTextLabel = tabLabel.elems[0]; //First element -> nbTurn label
-						sprintf(newNbTurn,"Turn : ",game.nb_rounds); //Concatenate Turn with nbTurn
-						replaceTextAndTextureOfTextLabel(renderer, &nbTurnTextLabel, fontHandler->fonts[FONT_retro], newNbTurn, &nbTurnTextLabel.color);	
-						drawTextLabel(renderer,&nbTurnTextLabel);
-						//Nouv text label ->nbTurn (replace texture) => replaceTextAndTextureOfTextLabel
-						//Redraw text label 
-						SDL_RenderPresent(renderer);
+						TextLabel nbTurnTextLabel = tabLabel.elems[2]; //Third element -> Number of nbTurn
+						sprintf(newNbTurn,"%d",game.nb_rounds); //Concatenate Turn with nbTurn
+						replaceTextAndTextureOfTextLabel(renderer, &nbTurnTextLabel, fontHandler->fonts[FONT_retro], newNbTurn, &nbTurnTextLabel.color);
+						SDL_SetRenderDrawColor(renderer, 50,10,10, SDL_ALPHA_OPAQUE);
+						SDL_RenderFillRect(renderer,&nbTurnTextLabel.textZone);
+						fprintf(stderr,"%s\n",nbTurnTextLabel.text);	
+						drawTextLabel(renderer,&nbTurnTextLabel); 
+						needToPresent=true;
 					}
  
 				}
-
 
 				break;
 			}
@@ -159,7 +160,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				for (size_t i=0; i<tabLabel.size; ++i){
 					drawTextLabel(renderer,&tabLabel.elems[i]);
 				}
-				SDL_RenderPresent(renderer);
+				needToPresent=true;
 			}
 			case InputType_None:
 			default:
@@ -170,6 +171,11 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
 		}
 
+		if(needToPresent)
+		{
+			SDL_RenderPresent(renderer);
+			needToPresent=false;
+		}
 		SDL_Delay(5);
 	}
 
