@@ -9,7 +9,7 @@ SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path)
 	SDL_Surface* picture = IMG_Load(path);
 	if(picture == NULL)
 	{
-		fprintf(stderr, "WARNNING: %s\n", SDL_GetError());
+		fprintf(stderr, "WARNING: %s\n", SDL_GetError());
 		return NULL;
 	}
 
@@ -17,7 +17,7 @@ SDL_Texture* createTextureFromPath(SDL_Renderer* renderer, char* path)
 	SDL_FreeSurface(picture);
 	if(texture == NULL)
 	{
-		fprintf(stderr, "WARNNING: %s\n", SDL_GetError());
+		fprintf(stderr, "WARNING: %s\n", SDL_GetError());
 		return NULL;
 	}
 	return texture;

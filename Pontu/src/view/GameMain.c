@@ -34,7 +34,7 @@ void redrawGameBoard(SDL_Renderer* renderer, const Player players[], const size_
 	}
 }
 
-void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler, AudioHandler audioHandler)
+void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler, AudioHandler* audioHandler)
 {
 	if (*generalState != GS_Game) {
 		return;

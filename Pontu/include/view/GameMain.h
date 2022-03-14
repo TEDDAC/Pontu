@@ -7,6 +7,6 @@
 #include "engine/FontLoader.h"
 #include "engine/AudioHandler.h"
 
-void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler, AudioHandler audioHandler);
+void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* renderer, Player players[], size_t nbPlayers, FontHandler* fontHandler, AudioHandler* audioHandler);
 
 #endif //GAME_MAIN_INCLUDED

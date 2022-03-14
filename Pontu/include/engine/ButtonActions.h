@@ -4,13 +4,14 @@
 #include "engine/Button.h"
 #include "engine/AudioHandler.h"
 #include <SDL2/SDL.h>
+#include "engine/arrayButton.h"
 
 /**
  * @brief Args for the SoundButton
  */
 typedef struct 
 {
-    AudioHandler audio; //Audio from which we change masterVolume
+    AudioHandler* audio; //Audio from which we change masterVolume
     SDL_Renderer* renderer; 
 }argsSoundButton; 
 

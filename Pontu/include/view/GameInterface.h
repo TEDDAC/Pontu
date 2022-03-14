@@ -22,7 +22,7 @@
  * \param fontHandler The fontHandler to apply 
  * \return an array of P_Button to draw on the renderer
  */
-struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState, AudioHandler audioHandler);
+struct array_P_Button createGameInterfaceButtons(SDL_Renderer* renderer, FontHandler* fontHandler, GeneralState* generalState, AudioHandler* audioHandler);
 
 
 /**

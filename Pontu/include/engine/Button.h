@@ -69,6 +69,7 @@ bool isHover(P_Button* button);// dit si le bouton est survolé en donnant les c
  */
 ButtonEvent isButtonInteractWithCursor(P_Button * button,const int x,const int y);
 
+
 /**
  * \brief Free the texture of a button.
  * \param[in]   button	the button you want to destroy the texture
