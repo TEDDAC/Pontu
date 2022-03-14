@@ -51,6 +51,7 @@ void changePlayerColor(P_Button* caller)
 
 bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabels, P_Button* buttons, int nbButtons, CreateMenuLine* lines, int nbPlayer, const SDL_Color* bg)
 {
+  SDL_SetRenderTarget(renderer, NULL);
 	//Draw background (blue-ish)
 	SDL_SetRenderDrawColor(renderer, bg->r, bg->g, bg->b, bg->a);
 	SDL_RenderClear(renderer);
@@ -151,9 +152,20 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
 	for(int i=0; i<NB_COLORS; ++i)
 	{
 		params = (ChangeColorParams*) malloc(sizeof(ChangeColorParams));
+    if (params == NULL) {
+      fprintf(stderr, "WARNING: can't malloc! (ChangeColorParams)\n");
+      fflush(stderr);
+      break;
+    }
 		params->color=playersColors[i];
+    params->p = (Player*) malloc(sizeof(Player));
+    if (params->p == NULL) {
+      fprintf(stderr, "WARNING: can't malloc! (Player)\n");
+      fflush(stderr);
+      break;
+    }
 		picker.colorButtons[i] = createButton(NULL, NULL, xmax-wColorBtn*(i+1), y, wColorBtn, hColorBtn, changePlayerColor);
-		picker.colorButtons[i].arg = params;
+		picker.colorButtons[i].arg = (void*)params;
 		btnTexture = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BORDER, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
 		btnTextureHover = createGenericButtonTexture("", font, 0, COLOR_GENERIC_BUTTON_BACKGROUND, PLAYER_SDL_COLORS[i], 4, 8, NULL, NULL, renderer);
 		picker.colorButtons[i].texture = btnTexture;
