@@ -3,8 +3,8 @@
 #include <SDL2/SDL_ttf.h>
 
 void freeCreateMenuLine(CreateMenuLine* line);
-CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, InputProcessor* inproc);
-void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc);
+CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, InputProcessor* inproc, bool* colorChanged);
+void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc, bool* colorChanged);
 bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabels, P_Button* buttons, int nbButtons, CreateMenuLine* lines, int nbPlayer, const SDL_Color* bg);
 bool drawCreateMenuLine(SDL_Renderer* renderer, CreateMenuLine* line);
 void changePlayerColor(P_Button* caller);
@@ -45,6 +45,7 @@ void changePlayerColor(P_Button* caller)
 {
 	ChangeColorParams* params = (ChangeColorParams*)caller->arg;
 	params->p->color = params->color;
+  *params->colorChanged = true;
 	printf("change color %d\n", params->p->color);
 	fflush(stdout);
 }
@@ -81,17 +82,17 @@ bool drawGameCreationMenu(SDL_Renderer* renderer, TextLabel** labels, int nbLabe
 }
 
 
-void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc)
+void createPlayersLines(SDL_Renderer* renderer, TTF_Font* font, int minx, int maxx, int miny,int nbPlayer, CreateMenuLine* lines, InputProcessor* inproc, bool* colorChanged)
 {
 	for(int i=0; i<nbPlayer; ++i)
 	{
 		if(i==0)
 		{
 			// Position of first line is absolute
-			lines[i] = createCreateMenuLine(renderer, minx, miny + 16, maxx,font, inproc);
+			lines[i] = createCreateMenuLine(renderer, minx, miny + 16, maxx,font, inproc, colorChanged);
 		}else{
 			// Position of other lines is relative to the first one (16 px (margin) + nb_lines_already_drawn * height of AI checkbox)
-			lines[i] = createCreateMenuLine(renderer, minx, miny + 16 + 16 + i* lines[i-1].aiButton.rect.h, maxx,font, inproc);
+			lines[i] = createCreateMenuLine(renderer, minx, miny + 16 + 16 + i* lines[i-1].aiButton.rect.h, maxx,font, inproc, colorChanged);
 		}
 	}
 
@@ -120,7 +121,7 @@ void cancelCreation(P_Button* caller)
   *gs = GS_MainMenu;
 }
 
-CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, InputProcessor* inproc)
+CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int xmax, TTF_Font* font, InputProcessor* inproc, bool* colorChanged)
 {
 	int const wColorBtn = 32;
 	int const hColorBtn = 32;
@@ -158,6 +159,7 @@ CreateMenuLine createCreateMenuLine(SDL_Renderer* renderer, int xmin, int y, int
       break;
     }
 		params->color=playersColors[i];
+    params->colorChanged = colorChanged;
     params->p = (Player*) malloc(sizeof(Player));
     if (params->p == NULL) {
       fprintf(stderr, "WARNING: can't malloc! (Player)\n");
@@ -204,6 +206,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 	P_Button* buttons = (P_Button*) malloc(sizeof(P_Button)*nbButtons);
 	SDL_Color bg = {55, 120, 175, 255};
 	bool viewChanged = false;
+  bool colorChanged = false;
 
 
 	// TextLabel  for "Nombre de joueur.euse.s" creation
@@ -371,7 +374,7 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 		InputProcessor inputProcessor = createInputProcessor();
 
 		// Creating 2 player lines (lines with a AI checkbox, a text input for the nickname, and a color chooser)
-		createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , NB_PLAYER_MAX, lines, &inputProcessor);
+		createPlayersLines(renderer, font, titleLabelPos.x, incrementBtn.rect.x+incrementBtn.rect.w, colorLabel.textZone.y+colorLabel.textZone.h , NB_PLAYER_MAX, lines, &inputProcessor, &colorChanged);
 
 		DecrementParams dparams= {.nbPlayers=nbPlayers, .viewChanged=&viewChanged};
 		decrementBtn.arg = &dparams;
@@ -427,6 +430,11 @@ bool gameCreationMenu(SDL_Renderer* renderer, GeneralState* generalState, AudioH
 			drawTextInputOnRenderer(renderer, &inputProcessor.tabTextInput.elems[i]);
 		}
 		*/
+    if(colorChanged)
+    {
+
+      colorChanged = false;
+    }
 		if(viewChanged)
 		{
       nbPlayerStr[0] = *nbPlayers + 48; // ASCII code of '0' is 48 and ASSCI code of '9' is 57 (48+9)

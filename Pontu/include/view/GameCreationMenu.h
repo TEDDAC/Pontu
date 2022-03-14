@@ -35,6 +35,7 @@ typedef struct
 {
 	Player* p;
 	PlayersColors color;
+  bool* colorChanged;
 } ChangeColorParams;
 
 typedef struct
