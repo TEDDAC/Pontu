@@ -34,7 +34,7 @@ Game newGame(const size_t nbPlayers, const Player player[])
 {
 	Game g = { // In Placement phase, the last player initialized is the 1st to play
 		.currentPlayerID = nbPlayers - 1,
-		.nb_rounds = 0,
+		.nb_rounds = 1,
 		.phase = PLACEMENT,
 		.board = newBoard(nbPlayers),
 		.nbPlayers = nbPlayers,
