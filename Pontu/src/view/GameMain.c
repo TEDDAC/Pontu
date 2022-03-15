@@ -39,13 +39,13 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	if (*generalState != GS_Game) {
 		return;
 	}
-	GameInputProcessor inputProcessor = createGameInputProcessor();
+	GameInputProcessor gameInputProcessor = createGameInputProcessor();
 	struct array_Coord interactiveCases = array_Coord_Create();
 
 	Game game = newGame(nbPlayers, players);
 	TextureHandler textureHandler = newTextureHandler(renderer);
 
-	inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler, generalState,audioHandler);
+	gameInputProcessor.inputProcessor.tabButton = createGameInterfaceButtons(renderer, fontHandler, generalState,audioHandler);
 	struct array_TextLabel tabLabel = createGameInterfaceLabels(renderer,fontHandler);
 
 	
@@ -59,8 +59,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	SDL_SetRenderDrawColor(renderer, 50,10,10, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 	redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
-	for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
-		drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
+	for (size_t i=0; i<gameInputProcessor.inputProcessor.tabButton.size; ++i) {
+		drawButtonOnRenderer(renderer, &gameInputProcessor.inputProcessor.tabButton.elems[i]);
 	}
 	for (size_t i=0; i<tabLabel.size; ++i){
 		drawTextLabel(renderer,&tabLabel.elems[i]);
@@ -72,7 +72,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 	{
 		// Event handling
 		InputElement inputElement;
-		while (InputType_None != (inputElement = proccessGameInput(&inputProcessor, &boardRect)).type) {
+		while (InputType_None != (inputElement = proccessGameInput(&gameInputProcessor, &boardRect)).type) {
 
 			switch (inputElement.type)
 			{
@@ -109,7 +109,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				int nbRounds= game.nb_rounds; //Store nb_round 
 
 				if(!array_Coord_Contains(&interactiveCases, inputElement.data.coord, *coordEqual)) {
-					inputProcessor.selectedCase = newCoord(-1,-1);
+					gameInputProcessor.selectedCase = newCoord(-1,-1);
 				}
 
 				const GameAction actionRealized = clickOnBoard(inputElement.data.coord, &game);
@@ -126,7 +126,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				}
 
 				if (actionRealized != GameAction_None) {
-					inputProcessor.selectedCase = newCoord(-1,-1);
+					gameInputProcessor.selectedCase = newCoord(-1,-1);
 					if (game.phase == GAME_ENDED) {
 						*generalState = GS_EndOfGameMenu;
 					}
@@ -154,8 +154,8 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 				boardRect = adaptPosToRect(&boardRPositionSpecifier, &windowRect);
 
 				redrawGameBoard(renderer, game.arrPlayers, game.nbPlayers, &textureHandler, &boardRect, &game.board);
-				for (size_t i=0; i<inputProcessor.tabButton.size; ++i) {
-					drawButtonOnRenderer(renderer, &inputProcessor.tabButton.elems[i]);
+				for (size_t i=0; i<gameInputProcessor.inputProcessor.tabButton.size; ++i) {
+					drawButtonOnRenderer(renderer, &gameInputProcessor.inputProcessor.tabButton.elems[i]);
 				}
 				for (size_t i=0; i<tabLabel.size; ++i){
 					drawTextLabel(renderer,&tabLabel.elems[i]);
@@ -168,7 +168,7 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 			}
 
 			array_Coord_Free(&interactiveCases);
-			interactiveCases = getInteractiveCases(&game, inputProcessor.selectedCase);
+			interactiveCases = getInteractiveCases(&game, gameInputProcessor.selectedCase);
 		}
 
 		if(needToPresent)
@@ -186,5 +186,5 @@ void gameView(GeneralState* generalState, SDL_Window* window, SDL_Renderer* rend
 
 	freeTextureHandler(&textureHandler);
 	array_Coord_Free(&interactiveCases);
-	freeGameInputProcessor(&inputProcessor);
+	freeGameInputProcessor(&gameInputProcessor);
 }

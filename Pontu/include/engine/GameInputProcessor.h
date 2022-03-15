@@ -11,6 +11,7 @@
 #include "engine/Button.h"
 #include "engine/arrayButton.h"
 #include "engine/InputElement.h"
+#include "engine/InputProcessor.h"
 #include "model/Coord.h"
 
 /**
@@ -19,7 +20,7 @@
  */
 typedef struct
 {
-	struct array_P_Button tabButton;
+	InputProcessor inputProcessor;
 	Coord selectedCase; ///< A case in Board (used to handle move actions) , (-1;-1) si inexistant
 } GameInputProcessor;
 
@@ -55,5 +56,8 @@ Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect);
  * \return InputElement : an event for Pontu
  */
 InputElement proccessGameInput(GameInputProcessor* gameInputProcessor, const SDL_Rect* boardRect);
+
+
+InputElement interpretSDL_EventGameInput(GameInputProcessor* gameInputProcessor, const SDL_Rect* boardRect, const SDL_Event* event);
 
 #endif // GAME_INPUT_PROCESSOR_INCLUDED

@@ -1,43 +1,37 @@
 #include "engine/GameInputProcessor.h"
 
-Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect){
-	Coord coord = {
-		coord.x = (point->x-boardRect->x)*9/boardRect->w,
-		coord.y = (point->y-boardRect->y)*9/boardRect->h
-	};
+Coord screenCoordToGameCoord(const SDL_Point* point, const SDL_Rect* boardRect)
+{
+	Coord coord = { coord.x = (point->x - boardRect->x) * 9 / boardRect->w,
+					coord.y = (point->y - boardRect->y) * 9 / boardRect->h };
 	return coord;
 }
 
-GameInputProcessor createGameInputProcessor() {
-	GameInputProcessor gameInputProcessor = {
-		.selectedCase = {.x=-1, .y=-1},
-		.tabButton = array_P_Button_Create()
-	};
+GameInputProcessor createGameInputProcessor()
+{
+	GameInputProcessor gameInputProcessor = { .selectedCase	  = { .x = -1, .y = -1 },
+											  .inputProcessor = createInputProcessor() };
 	return gameInputProcessor;
 }
 
-void freeGameInputProcessor(GameInputProcessor* gameInputProcessor) {
-	array_P_Button_Free(&gameInputProcessor->tabButton);
+void freeGameInputProcessor(GameInputProcessor* gameInputProcessor)
+{
+	freeInputProcessor(&gameInputProcessor->inputProcessor);
 }
 
-InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL_Rect* boardRect)
+InputElement interpretSDL_EventGameInput(GameInputProcessor* gameInputProcessor,
+										 const SDL_Rect* boardRect,
+										 const SDL_Event* event)
 {
-	SDL_Event event;
-	if (!SDL_PollEvent(&event))
+	switch (event->type)
 	{
-		return createInputElementNone();
-	}
-
-	switch (event.type)
-	{
-		case SDL_QUIT:
-			return createInputElementUIQuit();
 		case SDL_MOUSEBUTTONDOWN:
 		{
-			const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
+			const SDL_Point mousePoint = { .x = event->button.x, .y = event->button.y };
 			if (SDL_PointInRect(&mousePoint, boardRect))
 			{
-				if (!coordValid(gameInputProcessor->selectedCase)) {
+				if (!coordValid(gameInputProcessor->selectedCase))
+				{
 					gameInputProcessor->selectedCase = screenCoordToGameCoord(&mousePoint, boardRect);
 				}
 			}
@@ -45,49 +39,44 @@ InputElement proccessGameInput(GameInputProcessor *gameInputProcessor, const SDL
 		}
 		case SDL_MOUSEBUTTONUP:
 		{
-			const SDL_Point mousePoint = {.x = event.button.x, .y = event.button.y};
+			const SDL_Point mousePoint = { .x = event->button.x, .y = event->button.y };
 			if (SDL_PointInRect(&mousePoint, boardRect))
 			{
 				if (coordValid(gameInputProcessor->selectedCase))
 				{
 					Coord newCoords = screenCoordToGameCoord(&mousePoint, boardRect);
-					if (coordEqual(gameInputProcessor->selectedCase, newCoords)) {
+					if (coordEqual(gameInputProcessor->selectedCase, newCoords))
+					{
 						gameInputProcessor->selectedCase = newCoords;
 						return createInputElementClickBoard(newCoords);
 					}
-					else {
-						const Coord oldCoord = gameInputProcessor->selectedCase;
-						gameInputProcessor->selectedCase = newCoord(-1,-1);
+					else
+					{
+						const Coord oldCoord			 = gameInputProcessor->selectedCase;
+						gameInputProcessor->selectedCase = newCoord(-1, -1);
 						return createInputElementMoveBoard(oldCoord, newCoords);
 					}
 				}
 			}
-			else
-			{
-				for (size_t i = 0; i<gameInputProcessor->tabButton.size; ++i) {
-					P_Button* b = &gameInputProcessor->tabButton.elems[i];
-					if (SDL_PointInRect(&mousePoint, &b->rect)) {
-						b->onClick(b);
-					}
-				}
-				return createInputElementNone();
-			}
 			break;
 		}
-		case SDL_MOUSEMOTION:
-		{
-			for (size_t i = 0; i<gameInputProcessor->tabButton.size; ++i) {
-				P_Button* b = &gameInputProcessor->tabButton.elems[i];
-				isButtonInteractWithCursor(b, event.motion.x, event.motion.y);
-			}
-			break;
-		}
-		case SDL_WINDOWEVENT:
-			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-				return createInputElementResizeWindow(event.window.data1, event.window.data2);
-			}
-			break;
 	}
 
 	return createInputElementNone();
+}
+
+InputElement proccessGameInput(GameInputProcessor* gameInputProcessor, const SDL_Rect* boardRect)
+{
+	SDL_Event event;
+	if (!SDL_PollEvent(&event))
+	{
+		return createInputElementNone();
+	}
+
+	InputElement ret = interpretSDL_EventGameInput(gameInputProcessor, boardRect, &event);
+	if (ret.type == InputType_None)
+	{
+		return interpretSDL_EventInput(&gameInputProcessor->inputProcessor, &event);
+	}
+	return ret;
 }

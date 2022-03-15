@@ -49,4 +49,6 @@ void freeInputProcessor(InputProcessor* inputProcessor);
  */
 InputElement proccessInput(InputProcessor* inputProcessor);
 
+InputElement interpretSDL_EventInput(InputProcessor* inputProcessor, const SDL_Event* event);
+
 #endif // INPUT_PROCESSOR_INCLUDED
