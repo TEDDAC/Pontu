@@ -38,4 +38,12 @@ cd .. #Se mettre dans le dossier Pontu
 ./bin/Pontu
 ```
 
+## Comment jouer
+Une fois le jeu lancé :
+* Cliquez sur le bouton "Nouvelle partie"
+* Choisissez avec les boutons + et - le nombre de joueur
+* Saisissez les pseudonymes de chaque joueur et affectez leur une couleur, puis cliquez sur "Jouer"
+* Lorsque la partie est lancée, chaque joueur va, à chacun tour, déplacer son joueur avec un glisser-déposer, puis supprimer un pont en cliquant sur celui désiré
+* De plus, il est également possible de retourner au menu principal et de couper le son du jeu via les boutons associés
+* Une fois la partie terminée, un tableau des scores avec le classement des joueurs est affiché 
 
